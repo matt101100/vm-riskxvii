@@ -18,7 +18,7 @@ $(TARGET):$(OBJ)
 	 $(CC) $(CFLAGS) $(ASAN_FLAGS) $<
 
 run:
-	./$(TARGET)
+	./$(TARGET) $(ARGS)
 
 test:
 	echo what are we testing?!
