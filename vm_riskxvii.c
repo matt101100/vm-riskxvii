@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        printf("Invalid number of arguments.\n");
+        printf("Invalid number of arguments supplied.\n");
         return 1;
     }
 
@@ -41,140 +41,176 @@ int main(int argc, char *argv[]) {
         int instruction_label = determine_instruction_label(opcode, additional_opcodes);
         printf("instr: %x\n", instruction);
         printf("opcode: %x\n", opcode);
+        uint32_t imm_num;
 
         // executing instructions
         switch (instruction_label)
         {
             case (add):
                 // execute add
+                printf("add\n");
                 break;
             
             case (addi):
                 // execute addi
+                imm_num = extract_immediate_number(instruction, I);
+                printf("imm: %d\n", imm_num);
+                printf("addi\n");
                 break;
             
             case (sub):
                 //execute sub
+                printf("sub\n");
                 break;
             
             case (lui):
                 //execute lui
+                printf("lui\n");
                 break;
             
             case (xor):
                 // execute xor
+                printf("xor\n");
                 break;
             
             case (xori):
                 // execute xori
+                printf("xori\n");
                 break;
             
             case (or):
                 // execute or
+                printf("or\n");
                 break;
             
             case (ori):
                 // execute ori
+                printf("ori\n");
                 break;
             
             case (and):
                 // execute and
+                printf("and\n");
                 break;
             
             case (andi):
                 // execute andi
+                printf("andi\n");
                 break;
             
             case (sll):
                 // execute sll
+                printf("sll\n");
                 break;
             
             case (srl):
                 // execute srl
+                printf("srl\n");
                 break;
             
             case (sra):
                 // execute sra
+                printf("sra\n");
                 break;
             
             case (lb):
                 // execute lb
+                printf("lb\n");
                 break;
             
             case (lh):
                 // execute lh
+                printf("lh\n");
                 break;
             
             case (lw):
                 // execute lw
+                printf("lw\n");
                 break;
             
             case (lbu):
                 // execute lbh
+                printf("lbh\n");
                 break;
 
             case (lhu):
                 // execute lhu
+                printf("lhu\n");
                 break;
             
             case (sb):
                 // execute sb
+                printf("sb\n");
                 break;
             
             case (sh):
                 // execute sh
+                printf("sh\n");
                 break;
             
             case (sw):
                 // execute sw
+                printf("sw\n");
                 break;
             
             case (slt):
                 // execute slt
+                printf("slt\n");
                 break;
             
             case (slti):
                 // execute slti
+                printf("slti\n");
                 break;
             
             case (sltu):
                 // execute sltu
+                printf("sltu\n");
                 break;
             
             case (sltiu):
                 // execute sltiu
+                printf("sltiu\n");
                 break;
             
             case (beq):
                 // execute beq
+                printf("beq\n");
                 break;
             
             case (bne):
                 // execute bne
+                printf("bne\n");
                 break;
 
             case (blt):
                 // execute blt
+                printf("blt\n");
                 break;
             
             case (bltu):
                 // execute bltu
+                printf("bltu\n");
                 break;
             
             case (bge):
                 // execute bge
+                printf("bge\n");
                 break;
             
             case (bgeu):
                 // execute bgeu
+                printf("bgeu\n");
                 break;
             
             case (jal):
                 // execute jal
+                printf("jal\n");
                 break;
             
             case (jalr):
                 // execute jalr
+                printf("jalr\n");
                 break;
         }
         
@@ -225,6 +261,37 @@ size_t load_image_into_memory(FILE *fp , uint32_t memory[]) {
     return bytes_read;
 }
 
+
+// NOTE: binary is in little endian so the binary operations account for this
+
+uint8_t get_opcode(uint32_t instruction) {
+    // apply a bit mask to get the first 6 bits of the 32-bit instruction
+    uint32_t mask = 0x7F;
+    return instruction & mask;
+}
+
+void get_additional_opcode(uint32_t instruction, int instruction_type,
+                            uint8_t additional_opcodes[]) {
+    additional_opcodes[0] = instruction & 0x7000;
+    additional_opcodes[1] = 0; // default value that does not overlap
+    if (instruction_type == R) {
+        // extract the func7 bits in the case of an R-type instruction
+        additional_opcodes[1] = instruction & 0xFE000000;
+    }
+}
+
+uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
+    uint32_t immediate_number = 0x0;
+    if (instruction_type == I) {
+        // bits imm[11:0] are found at bits instruction[31:20] for R-types
+        uint32_t mask = 0xFFF00000;
+        uint32_t pre_shifted_bits = instruction & mask;
+        immediate_number = pre_shifted_bits >> 20;
+    }
+
+    return immediate_number;
+}
+
 int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
     switch (opcode) 
     {
@@ -263,10 +330,6 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
                     
                     case (0x3):
                         return sltu;
-                    
-                    default:
-                        // invalid instruction type
-                        return -1;
                 }
             }
 
@@ -290,10 +353,7 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
                     return slti;
 
                 case (0x3):
-                    return sltiu;
-
-                default:
-                    return -1;   
+                    return sltiu; 
             }
             
         case (0x03):
@@ -311,9 +371,6 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
             
                 case (0x5):
                     return lhu;
-            
-                default:
-                    return -1;
             }
 
         case (0x67):
@@ -340,9 +397,6 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
                 
                 case (0x2):
                     return sw;
-                
-                default:
-                    return -1;
             }
         
         case (0x63):
@@ -366,33 +420,22 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
                 
                 case (0x7):
                     return bgeu;
-                
-                default:
-                    return -1;
             }
         
         case (0x6F):
             // type UJ -- jal
             return jal;
     }
-
+    // invalid instruction label
     return -1;
 }
 
-// NOTE: binary is in little endian so the binary operations account for this
+// !! executes for each machine instruction defined below !!
 
-uint8_t get_opcode(uint32_t instruction) {
-    // apply a bit mask to get the first 6 bits of the 32-bit instruction
-    uint32_t mask = 0x7F;
-    return instruction & mask;
+void execute_add(uint32_t instruction, virtual_machine *vm) {
+
 }
 
-void get_additional_opcode(uint32_t instruction, int instruction_type,
-                            uint8_t additional_opcodes[]) {
-    additional_opcodes[0] = instruction & 0x7000;
-    additional_opcodes[1] = 0; // default value that does not overlap
-    if (instruction_type == R) {
-        // extract the func7 bits in the case of an R-type instruction
-        additional_opcodes[1] = instruction & 0xFE000000;
-    }
+void execute_addi(uint32_t instruction, virtual_machine *vm) {
+
 }

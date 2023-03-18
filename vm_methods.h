@@ -3,37 +3,86 @@
 
 #include "vm_memory.h"
 
-enum instruction_type {
-    R = 0,
-    I,
-    U,
-    S,
-    SB,
-    UJ
-};
-
 /*
  * Desc: initializes the virtual machine
  * Params: pointer to the virtual machine struct
  */
 void initialize_virtual_machine(virtual_machine *vm);
 
-/*
- * Desc: Extracts the opcode from the first 6 bits of a 32-bit instruction
- * Params: a 32-bit instruction binary
- * Return: an 8-bit opcode
- */
-uint8_t get_opcode(uint32_t instruction);
+// !! executions for each machine instruction label are declared below !!
 
 /*
- * Desc: Extracts the func3 or func7 bits from a 32-bit instruction
- *       and stores in an array. Note that only R-type instructions have a 
- *       func7 and so the only time two values are read into opcode_arr is when
- *       we have a R-type instruction.
- * Params: a 32-bit instruction binary, an instruction type int enumerated above
- *         and a pointer to the opcode array to update
+ * Executes for each machine instruction are declared below.
+ * Desc: see Section 4 of the specs.
+ * Params: the 32-bit instructions, a pointer to the virtual machine
  */
-void get_additional_opcode(uint32_t instruction, int instruction_type, 
-                              uint8_t aditional_opcodes[]);
+
+void execute_add(uint32_t instruction, virtual_machine *vm);
+
+void execute_addi(uint32_t instruction, virtual_machine *vm);
+
+void execute_sub(uint32_t instruction, virtual_machine *vm);
+
+void execute_lui(uint32_t instruction, virtual_machine *vm);
+
+void execute_xor(uint32_t instruction, virtual_machine *vm);
+
+void execute_xori(uint32_t instruction, virtual_machine *vm);
+
+void execute_or(uint32_t instruction, virtual_machine *vm);
+
+void execute_ori(uint32_t instruction, virtual_machine *vm);
+
+void execute_and(uint32_t instruction, virtual_machine *vm);
+
+void execute_andi(uint32_t instruction, virtual_machine *vm);
+
+void execute_sll(uint32_t instruction, virtual_machine *vm);
+
+void execute_slr(uint32_t instruction, virtual_machine *vm);
+
+void execute_sra(uint32_t instruction, virtual_machine *vm);
+
+void execute_lb(uint32_t instruction, virtual_machine *vm);
+
+void execute_lh(uint32_t instruction, virtual_machine *vm);
+
+void execute_lw(uint32_t instruction, virtual_machine *vm);
+
+void execute_lbu(uint32_t instruction, virtual_machine *vm);
+
+void execute_lhu(uint32_t instruction, virtual_machine *vm);
+
+void execute_lui(uint32_t instruction, virtual_machine *vm);
+
+void execute_sb(uint32_t instruction, virtual_machine *vm);
+
+void execute_sh(uint32_t instruction, virtual_machine *vm);
+
+void execute_sw(uint32_t instruction, virtual_machine *vm);
+
+void execute_slt(uint32_t instruction, virtual_machine *vm);
+
+void execute_slti(uint32_t instruction, virtual_machine *vm);
+
+void execute_sltu(uint32_t instruction, virtual_machine *vm);
+
+void execute_sltiu(uint32_t instruction, virtual_machine *vm);
+
+void execute_beq(uint32_t instruction, virtual_machine *vm);
+
+void execute_bne(uint32_t instruction, virtual_machine *vm);
+
+void execute_blt(uint32_t instruction, virtual_machine *vm);
+
+void execute_bltu(uint32_t instruction, virtual_machine *vm);
+
+void execute_bge(uint32_t instruction, virtual_machine *vm);
+
+void execute_bgeu(uint32_t instruction, virtual_machine *vm);
+
+void execute_jal(uint32_t instruction, virtual_machine *vm);
+
+void execute_jalr(uint32_t instruction, virtual_machine *vm);
 
 #endif
