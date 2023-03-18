@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         int instruction_label = determine_instruction_label(opcode, additional_opcodes);
         printf("instr: %x\n", instruction);
         printf("opcode: %x\n", opcode);
-        uint32_t imm_num;
+        int32_t imm_num;
 
         // executing instructions
         switch (instruction_label)
@@ -141,6 +141,9 @@ int main(int argc, char *argv[]) {
             case (sb):
                 // execute sb
                 printf("sb\n");
+                imm_num = extract_immediate_number(instruction, I);
+                printf("imm: %d\n", imm_num);
+                printf("addi\n");
                 break;
             
             case (sh):
@@ -261,7 +264,6 @@ size_t load_image_into_memory(FILE *fp , uint32_t memory[]) {
     return bytes_read;
 }
 
-
 // NOTE: binary is in little endian so the binary operations account for this
 
 uint8_t get_opcode(uint32_t instruction) {
@@ -280,16 +282,75 @@ void get_additional_opcode(uint32_t instruction, int instruction_type,
     }
 }
 
-uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
-    uint32_t immediate_number = 0x0;
+int32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
+    int32_t res = 0;
     if (instruction_type == I) {
         // bits imm[11:0] are found at bits instruction[31:20] for R-types
-        uint32_t mask = 0xFFF00000;
-        uint32_t pre_shifted_bits = instruction & mask;
-        immediate_number = pre_shifted_bits >> 20;
+        // shift since we want these as bits 11:0 for the immediate
+        int32_t pre_shifted_bits = instruction & 0xFFF00000; // bits in-place
+        res = pre_shifted_bits >> 20;
+    } else if (instruction_type == S) {
+        // imm[11:5] = instruction[31:25] and imm[4:0] = instruction[11:7]
+        /*
+         * part_1 = instruction[11:7]
+         * part_2 = instruction[31:25]
+         * both pre-shifting so we are just getting the bits in-place
+         */
+        // 11111110000000000000000000000000
+        int32_t pre_shifted_part_1 = instruction & 0xF80;
+        int32_t pre_shifted_part_2 = instruction & 0xFE000000;
+        // shifting
+        int32_t shifted_1 = pre_shifted_part_1 >> 7;
+        int32_t shifted_2 = pre_shifted_part_2 >> 20;
+        // bitwise or to carry over set bits
+        res = shifted_1 | shifted_2;
+    } else if (instruction_type == SB) {
+        // imm[12] = instruction[31], imm[10:5] = instruction[30:25]
+        // imm[11] = instruction[7], imm[4:1] = instruction[11:8]
+        /*
+         * part_1 = instruction[31]
+         * part_2 = instruction[30:25]
+         * part_3 = instruction[7]
+         * part_4 = instruction[11:8]
+         */
+        uint32_t pre_shifted_part_1 = instruction & 0x80000000;
+        uint32_t pre_shifted_part_2 = instruction & 0x7E000000;
+        uint32_t pre_shifted_part_3 = instruction & 0x80;
+        uint32_t pre_shifted_part_4 = instruction & 0xF00;
+        // shifting
+        uint32_t shifted_1 = pre_shifted_part_1 >> 31;
+        uint32_t shifted_2 = pre_shifted_part_2 >> 25;
+        uint32_t shifted_3 = pre_shifted_part_3 >> 7;
+        uint32_t shifted_4 = pre_shifted_part_4 >> 8;
+        // bitwise or to carry over set bits
+        res = shifted_1 | shifted_2 | shifted_3 | shifted_4;
+    } else if (instruction_type == U) {
+
+    } else if (instruction_type == UJ) {
+
     }
 
-    return immediate_number;
+    return res;
+}
+
+// int32_t sign_extend(int32_t num) {
+//     int32_t res = (int32_t)num;
+//     /*
+//      * note we use the mask below as it represents the MSB of
+//      * a 32-bit unsigned int
+//      */
+//     if (num & 0x80000000) { // check if the number is negative
+//         // sign extend negative numbers with 1s
+//         res |= 0xffffff80;
+//     }
+//     return res;
+// }
+
+int32_t sign_extend(int32_t x) {
+    int64_t m = 1UL << (sizeof(x) * 8 - 1);
+    int64_t r = (int64_t)x & ((1UL << sizeof(x) * 8) - 1);
+    r = (r ^ m) - m;
+    return (int32_t)r;
 }
 
 int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {

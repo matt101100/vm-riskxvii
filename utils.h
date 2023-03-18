@@ -94,6 +94,13 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]);
  * Params: the 32-bit instruction and an int representing the instruction type
  * Return: the sign extended 32-bit immediate number number 
  */
-uint32_t extract_immediate_number(uint32_t instruction, int instruction_type);
+int32_t extract_immediate_number(uint32_t instruction, int instruction_type);
+
+/*
+ * Desc: sign extends a 32-bit unsigned number, used on immediate numbers
+ * Params: a 32-bit unsigned number
+ * Return: a signed 32-bit number, with the sign being extended from num
+ */
+int32_t sign_extend(int32_t num);
 
 #endif
