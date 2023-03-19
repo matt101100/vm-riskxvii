@@ -83,6 +83,21 @@ void get_additional_opcode(uint32_t instruction, int instruction_type,
                               uint8_t aditional_opcodes[]);
 
 /*
+ * Desc: gets the target register, specified in the instruction bits
+ * Params: the 32-bit instruction
+ * Return: the target register stored using 8 bits
+ */
+uint8_t get_target_register(uint32_t instruction);
+
+/*
+ * Desc: gets the source registers and stores them in a 2-tuple
+ * Params: the 32-bit instructions, an instruction type flag and the
+ *         2-tuple to update
+ */
+void get_source_registers(uint32_t instruction, int instruction_type,
+                               uint8_t source_registers[]);
+
+/*
  * Desc: determines the specific instruction based on the opcodes provided
  * Params: the 8-bit opcode and addtional func3 and func7 opcodes
  * Return: int mapped to the specific instruction label enumerated above
@@ -94,13 +109,13 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]);
  * Params: the 32-bit instruction and an int representing the instruction type
  * Return: the sign extended 32-bit immediate number number 
  */
-int32_t extract_immediate_number(uint32_t instruction, int instruction_type);
+uint32_t extract_immediate_number(uint32_t instruction, int instruction_type);
 
 /*
  * Desc: sign extends a 32-bit unsigned number, used on immediate numbers
- * Params: a 32-bit unsigned number
- * Return: a signed 32-bit number, with the sign being extended from num
+ * Params: a 32-bit unsigned number, the number of bits that were extracted
+ * Return: a sign extended 32-bit number
  */
-int32_t sign_extend(int32_t num);
+uint32_t sign_extend(int32_t num, int original_bit_count);
 
 #endif

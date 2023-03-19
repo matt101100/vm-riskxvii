@@ -53,9 +53,7 @@ void execute_lbu(uint32_t instruction, virtual_machine *vm);
 
 void execute_lhu(uint32_t instruction, virtual_machine *vm);
 
-void execute_lui(uint32_t instruction, virtual_machine *vm);
-
-void execute_sb(uint32_t instruction, virtual_machine *vm);
+int execute_sb(uint32_t instruction, virtual_machine *vm);
 
 void execute_sh(uint32_t instruction, virtual_machine *vm);
 

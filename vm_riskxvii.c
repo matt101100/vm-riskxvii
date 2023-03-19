@@ -41,7 +41,8 @@ int main(int argc, char *argv[]) {
         int instruction_label = determine_instruction_label(opcode, additional_opcodes);
         printf("instr: %x\n", instruction);
         printf("opcode: %x\n", opcode);
-        int32_t imm_num;
+        printf("running: %d\n", running);
+        printf("pc: %d\n", vm.pc);
 
         // executing instructions
         switch (instruction_label)
@@ -53,9 +54,7 @@ int main(int argc, char *argv[]) {
             
             case (addi):
                 // execute addi
-                imm_num = extract_immediate_number(instruction, I);
-                printf("imm: %d\n", imm_num);
-                printf("addi\n");
+                execute_addi(instruction, &vm);
                 break;
             
             case (sub):
@@ -65,7 +64,7 @@ int main(int argc, char *argv[]) {
             
             case (lui):
                 //execute lui
-                printf("lui\n");
+                execute_lui(instruction, &vm);
                 break;
             
             case (xor):
@@ -140,10 +139,7 @@ int main(int argc, char *argv[]) {
             
             case (sb):
                 // execute sb
-                printf("sb\n");
-                imm_num = extract_immediate_number(instruction, I);
-                printf("imm: %d\n", imm_num);
-                printf("addi\n");
+                running = execute_sb(instruction, &vm);
                 break;
             
             case (sh):
@@ -208,18 +204,14 @@ int main(int argc, char *argv[]) {
             
             case (jal):
                 // execute jal
-                printf("jal\n");
+                execute_jal(instruction, &vm);
                 break;
             
             case (jalr):
                 // execute jalr
-                printf("jalr\n");
+                execute_jalr(instruction, &vm);
                 break;
         }
-        
-
-        // update program counter
-        vm.pc++;
     }
 
     return 0;
@@ -268,8 +260,7 @@ size_t load_image_into_memory(FILE *fp , uint32_t memory[]) {
 
 uint8_t get_opcode(uint32_t instruction) {
     // apply a bit mask to get the first 6 bits of the 32-bit instruction
-    uint32_t mask = 0x7F;
-    return instruction & mask;
+    return instruction & 0x7F;
 }
 
 void get_additional_opcode(uint32_t instruction, int instruction_type,
@@ -282,75 +273,53 @@ void get_additional_opcode(uint32_t instruction, int instruction_type,
     }
 }
 
-int32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
+uint8_t get_target_register(uint32_t instruction) {
+    return (instruction & 0xF80) >> 7;
+}
+
+void get_source_registers(uint32_t instruction, int instruction_type,
+                               uint8_t source_registers[]) {
+    source_registers[0] = (instruction & 0xF8000) >> 15; // rs1
+    source_registers[1] = -1; // default rs2
+    if (instruction_type != I) {
+        // extract second source register for types R, S, SB but not I
+        source_registers[1] = (instruction & 0x1F00000) >> 20;
+    }
+
+}
+
+uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
     int32_t res = 0;
     if (instruction_type == I) {
         // bits imm[11:0] are found at bits instruction[31:20] for R-types
-        // shift since we want these as bits 11:0 for the immediate
-        int32_t pre_shifted_bits = instruction & 0xFFF00000; // bits in-place
-        res = pre_shifted_bits >> 20;
+        // there are 12 bits in the immediate of an R-type
+        res = sign_extend((instruction & 0xFFF00000) >> 20, 12);
     } else if (instruction_type == S) {
         // imm[11:5] = instruction[31:25] and imm[4:0] = instruction[11:7]
-        /*
-         * part_1 = instruction[11:7]
-         * part_2 = instruction[31:25]
-         * both pre-shifting so we are just getting the bits in-place
-         */
-        // 11111110000000000000000000000000
-        int32_t pre_shifted_part_1 = instruction & 0xF80;
-        int32_t pre_shifted_part_2 = instruction & 0xFE000000;
-        // shifting
-        int32_t shifted_1 = pre_shifted_part_1 >> 7;
-        int32_t shifted_2 = pre_shifted_part_2 >> 20;
-        // bitwise or to carry over set bits
-        res = shifted_1 | shifted_2;
+        // also 12 bits in immediate of an I-type
+        res = sign_extend(((instruction & 0xF80) >> 7) |
+                          ((instruction & 0xFE000000) >> 20), 12);
     } else if (instruction_type == SB) {
         // imm[12] = instruction[31], imm[10:5] = instruction[30:25]
         // imm[11] = instruction[7], imm[4:1] = instruction[11:8]
-        /*
-         * part_1 = instruction[31]
-         * part_2 = instruction[30:25]
-         * part_3 = instruction[7]
-         * part_4 = instruction[11:8]
-         */
-        uint32_t pre_shifted_part_1 = instruction & 0x80000000;
-        uint32_t pre_shifted_part_2 = instruction & 0x7E000000;
-        uint32_t pre_shifted_part_3 = instruction & 0x80;
-        uint32_t pre_shifted_part_4 = instruction & 0xF00;
-        // shifting
-        uint32_t shifted_1 = pre_shifted_part_1 >> 31;
-        uint32_t shifted_2 = pre_shifted_part_2 >> 25;
-        uint32_t shifted_3 = pre_shifted_part_3 >> 7;
-        uint32_t shifted_4 = pre_shifted_part_4 >> 8;
-        // bitwise or to carry over set bits
-        res = shifted_1 | shifted_2 | shifted_3 | shifted_4;
+        res = sign_extend(((instruction & 0x80000000) >> 19) | ((instruction & 0x7E000000) >> 15) | ((instruction & 0x80) >> 7) | ((instruction & 0xF00) << 4), 13);
     } else if (instruction_type == U) {
-
+        // imm[31:12] = instruction[31:12]
+        res = sign_extend((instruction & 0xFFFFF000) >> 12, 20);
     } else if (instruction_type == UJ) {
-
+        // imm[20] = instruction[31], imm[10:1] = instruction[30:21]
+        // imm[11] = instruction[20], imm[19:12] = instruction[19:12]
+        res = sign_extend(((instruction & 0x80000000) >> 11) | ((instruction & 0x7FE00000) >> 20) | ((instruction & 0x100000) >> 9) | ((instruction & 0xFF000)), 20);
     }
 
     return res;
 }
 
-// int32_t sign_extend(int32_t num) {
-//     int32_t res = (int32_t)num;
-//     /*
-//      * note we use the mask below as it represents the MSB of
-//      * a 32-bit unsigned int
-//      */
-//     if (num & 0x80000000) { // check if the number is negative
-//         // sign extend negative numbers with 1s
-//         res |= 0xffffff80;
-//     }
-//     return res;
-// }
-
-int32_t sign_extend(int32_t x) {
-    int64_t m = 1UL << (sizeof(x) * 8 - 1);
-    int64_t r = (int64_t)x & ((1UL << sizeof(x) * 8) - 1);
-    r = (r ^ m) - m;
-    return (int32_t)r;
+uint32_t sign_extend(int32_t num, int original_bit_count) {
+    if ((num >> (original_bit_count - 1)) & 1) { // check if the sign bit is set
+        num |= (0xFFFFFFFF << original_bit_count); // sign extend if set
+    }
+    return num;
 }
 
 int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
@@ -498,5 +467,211 @@ void execute_add(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_addi(uint32_t instruction, virtual_machine *vm) {
+    // get registers and immediate
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, I, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
 
+    // add the immediate to source and store at target
+    vm->registers[target] = vm->registers[source[0]] + immediate;
+
+    // update pc to move onto next instruction
+    vm->pc++;
+}
+
+void execute_sub(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_lui(uint32_t instruction, virtual_machine *vm) {
+    // get target and immediate
+    uint8_t target = get_target_register(instruction);
+    uint32_t immediate = extract_immediate_number(instruction, U);
+
+    // store the immediate in the target register
+    vm->registers[target] = immediate;
+
+    // update pc to move onto next instruction
+    vm->pc++;
+}
+
+void execute_xor(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_xori(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_or(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_ori(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_and(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_andi(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_sll(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_slr(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_sra(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_lb(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_lh(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_lw(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_lbu(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_lhu(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+int execute_sb(uint32_t instruction, virtual_machine *vm) {
+    // get source registers, immediate
+    uint8_t source[2];
+    get_source_registers(instruction, S, source);
+    uint32_t immediate = extract_immediate_number(instruction, S);
+
+    uint32_t memory_address = source[0] + immediate; // to write to
+    switch (memory_address)
+    {
+        case (0x0800):
+            /*
+             * console write char
+             * --> output written value as char to stdout
+             */
+            printf("%c\n", vm->registers[source[1]]);
+        
+        case (0x0804):
+            /*
+             * console write signed int
+             * --> output written value as signed 32-bit decimal number
+             */ 
+            printf("%d\n", vm->registers[source[1]]);
+        
+        case (0x0808):
+            /*
+             * console write unsigned int
+             * --> output written value as unsigned 32-bit decimal number
+             */
+            printf("%d\n", (uint32_t)vm->registers[source[1]]);
+        
+        case (0x080C):
+            /*
+            * Halt
+            * --> print message to stdout and send a flag signalling end of program
+            */
+            printf("CPU Halt Requested\n");
+            return 0;
+        
+        default:
+            // update requested data memory address
+            printf("%d\n", vm->registers[source[0]] );
+            printf("%d\n", source[0]);
+            vm->data_memory[(vm->registers[source[0]] + immediate) / 32] = source[1];
+    }
+    // update pc to move onto next instruction
+    vm->pc++;
+    return 1;
+
+}
+
+void execute_sh(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_sw(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_slt(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_slti(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_sltu(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_sltiu(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_beq(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_bne(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_blt(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_bltu(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_bge(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_bgeu(uint32_t instruction, virtual_machine *vm) {
+
+}
+
+void execute_jal(uint32_t instruction, virtual_machine *vm) {
+    // get target and immediate
+    uint8_t target = get_target_register(instruction);
+    uint32_t immediate = extract_immediate_number(instruction, UJ);
+    /*
+     * The target reg should store the pc of the NEXT instruction
+     * Hence, we +1 and store that
+     * Note: +1 since each index in instruction memory is 32 bits (4 bytes)
+     * so we should only jump 1 index == jumping 4 bytes
+     */
+    vm->registers[target] = vm->pc + 1;
+    vm->pc = (vm->pc + (immediate / 4)) ; // immediate is already shifted
+}
+
+void execute_jalr(uint32_t instruction, virtual_machine *vm) {
+    // get registers and immediate
+    int8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, I, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
+
+    // update pc
+    vm->registers[target] = vm->pc + 1;
+    vm->pc = (vm->registers[source[0]] + immediate) / 4;
 }
