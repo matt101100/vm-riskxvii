@@ -39,10 +39,6 @@ int main(int argc, char *argv[]) {
          */
         uint8_t additional_opcodes[2] = { 0 };
         int instruction_label = determine_instruction_label(opcode, additional_opcodes);
-        printf("instr: %x\n", instruction);
-        printf("opcode: %x\n", opcode);
-        printf("running: %d\n", running);
-        printf("pc: %d\n", vm.pc);
 
         // executing instructions
         switch (instruction_label)
@@ -305,7 +301,7 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
         res = sign_extend(((instruction & 0x80000000) >> 19) | ((instruction & 0x7E000000) >> 15) | ((instruction & 0x80) >> 7) | ((instruction & 0xF00) << 4), 13);
     } else if (instruction_type == U) {
         // imm[31:12] = instruction[31:12]
-        res = sign_extend((instruction & 0xFFFFF000) >> 12, 20);
+        res = sign_extend((instruction & 0xFFFFF000), 20);
     } else if (instruction_type == UJ) {
         // imm[20] = instruction[31], imm[10:1] = instruction[30:21]
         // imm[11] = instruction[20], imm[19:12] = instruction[19:12]
@@ -489,7 +485,7 @@ void execute_lui(uint32_t instruction, virtual_machine *vm) {
     uint8_t target = get_target_register(instruction);
     uint32_t immediate = extract_immediate_number(instruction, U);
 
-    // store the immediate in the target register
+    // store the upper 31:12 immediate bits into the target register
     vm->registers[target] = immediate;
 
     // update pc to move onto next instruction
@@ -558,7 +554,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
 
-    uint32_t memory_address = source[0] + immediate; // to write to
+    uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
     switch (memory_address)
     {
         case (0x0800):
@@ -567,6 +563,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
              * --> output written value as char to stdout
              */
             printf("%c\n", vm->registers[source[1]]);
+            break;
         
         case (0x0804):
             /*
@@ -574,6 +571,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
              * --> output written value as signed 32-bit decimal number
              */ 
             printf("%d\n", vm->registers[source[1]]);
+            break;
         
         case (0x0808):
             /*
@@ -581,6 +579,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
              * --> output written value as unsigned 32-bit decimal number
              */
             printf("%d\n", (uint32_t)vm->registers[source[1]]);
+            break;
         
         case (0x080C):
             /*
@@ -592,11 +591,9 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            printf("%d\n", vm->registers[source[0]] );
-            printf("%d\n", source[0]);
-            vm->data_memory[(vm->registers[source[0]] + immediate) / 32] = source[1];
+            vm->data_memory[(vm->registers[source[0]] + immediate) / 32] = vm->registers[source[1]];
+            break;
     }
-    // update pc to move onto next instruction
     vm->pc++;
     return 1;
 
@@ -671,7 +668,9 @@ void execute_jalr(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
 
-    // update pc
-    vm->registers[target] = vm->pc + 1;
-    vm->pc = (vm->registers[source[0]] + immediate) / 4;
+    if (target != 0) {
+        // ignore writes to zero register
+        vm->registers[target] = vm->pc + 1;
+    }
+    vm->pc = (vm->registers[source[0]] + immediate); // update pc
 }
