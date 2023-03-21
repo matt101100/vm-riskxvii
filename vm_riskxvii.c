@@ -9,10 +9,9 @@ int main(int argc, char *argv[]) {
         printf("Invalid number of arguments supplied.\n");
         return 1;
     }
-
-    virtual_machine vm;
-
+    
     // initializing vm
+    virtual_machine vm;
     initialize_virtual_machine(&vm);
 
     // open the instruction file and read the data into instruction memory
@@ -33,7 +32,6 @@ int main(int argc, char *argv[]) {
          * This array stores the func3 and func7 bytes with
          * func3 = additional_opcode[0], func7 = addtional_opcode[1]
          */
-        // uint8_t additional_opcodes[2] = { 0 };
         int instruction_label = determine_instruction_label(opcode, instruction);
 
         // executing instructions
