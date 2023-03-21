@@ -25,10 +25,6 @@ int main(int argc, char *argv[]) {
     // main virtual machine loop
     int running = 1;
     while (running) {
-        if (vm.pc == 32) { // temporaray halting for TESTING !! REMOVE !!
-            // reached end of instructions
-            running = 0;
-        }
 
         // get the current instruction and extract the opcode from it
         uint32_t instruction = vm.instruction_memory[vm.pc];
@@ -37,15 +33,15 @@ int main(int argc, char *argv[]) {
          * This array stores the func3 and func7 bytes with
          * func3 = additional_opcode[0], func7 = addtional_opcode[1]
          */
-        uint8_t additional_opcodes[2] = { 0 };
-        int instruction_label = determine_instruction_label(opcode, additional_opcodes);
+        // uint8_t additional_opcodes[2] = { 0 };
+        int instruction_label = determine_instruction_label(opcode, instruction);
 
         // executing instructions
         switch (instruction_label)
         {
             case (add):
                 // execute add
-                printf("add\n");
+                execute_add(instruction, &vm);
                 break;
             
             case (addi):
@@ -120,7 +116,7 @@ int main(int argc, char *argv[]) {
             
             case (lw):
                 // execute lw
-                printf("lw\n");
+                execute_lw(instruction, &vm);
                 break;
             
             case (lbu):
@@ -145,7 +141,7 @@ int main(int argc, char *argv[]) {
             
             case (sw):
                 // execute sw
-                printf("sw\n");
+                execute_sw(instruction, &vm);
                 break;
             
             case (slt):
@@ -207,7 +203,21 @@ int main(int argc, char *argv[]) {
                 // execute jalr
                 execute_jalr(instruction, &vm);
                 break;
+            
+            default:
+                // invalid
+                printf("Invalid\n");
+                return 1;
         }
+        // printf("pc: %d\n", 4 * (vm.pc));
+        // for (int i = 0; i < NUM_REGISTERS; i++) {
+        //     if (vm.registers[i] == 0) {
+        //         continue;
+        //     }
+        //     printf("reg %d = %d\n", i, vm.registers[i]);
+        // }
+        // printf("\n");
+
     }
 
     return 0;
@@ -217,7 +227,8 @@ void initialize_virtual_machine(virtual_machine *vm) {
     // initialize memory and registers to 0
     memset(vm->instruction_memory, 0, MEMORY_SIZE * sizeof(uint32_t));
     memset(vm->data_memory, 0, MEMORY_SIZE * sizeof(uint32_t));
-    memset(vm->registers, 0, MEMORY_SIZE);
+    memset(vm->registers, 0, NUM_REGISTERS * sizeof(int));
+
     vm->pc = 0; // start of the instruction memory
     vm->head = NULL; // no other blocks assigned
 }
@@ -261,11 +272,11 @@ uint8_t get_opcode(uint32_t instruction) {
 
 void get_additional_opcode(uint32_t instruction, int instruction_type,
                             uint8_t additional_opcodes[]) {
-    additional_opcodes[0] = instruction & 0x7000;
+    additional_opcodes[0] = (instruction & 0x7000) >> 12;
     additional_opcodes[1] = 0; // default value that does not overlap
     if (instruction_type == R) {
         // extract the func7 bits in the case of an R-type instruction
-        additional_opcodes[1] = instruction & 0xFE000000;
+        additional_opcodes[1] = (instruction & 0xFE000000) >> 25;
     }
 }
 
@@ -287,8 +298,8 @@ void get_source_registers(uint32_t instruction, int instruction_type,
 uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
     int32_t res = 0;
     if (instruction_type == I) {
-        // bits imm[11:0] are found at bits instruction[31:20] for R-types
-        // there are 12 bits in the immediate of an R-type
+        // bits imm[11:0] are found at bits instruction[31:20] for I-types
+        // there are 12 bits in the immediate of an I-type
         res = sign_extend((instruction & 0xFFF00000) >> 20, 12);
     } else if (instruction_type == S) {
         // imm[11:5] = instruction[31:25] and imm[4:0] = instruction[11:7]
@@ -318,20 +329,22 @@ uint32_t sign_extend(int32_t num, int original_bit_count) {
     return num;
 }
 
-int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
+int determine_instruction_label(uint8_t opcode, uint32_t instruction) {
+    uint8_t additional_opcodes[2] = { 0 };
     switch (opcode) 
     {
         case (0x33):
             // type R
-            if (addtional_opcodes[1] == 0x20) {
-                if (addtional_opcodes[0] == 0x0) {
+            get_additional_opcode(instruction, R, additional_opcodes);
+            if (additional_opcodes[1] == 0x20) {
+                if (additional_opcodes[0] == 0x0) {
                     return sub;
-                } else if (addtional_opcodes[0] == 0x5) {
+                } else if (additional_opcodes[0] == 0x5) {
                     return sra;
                 }
-            } else if (addtional_opcodes[1] == 0x0) {
+            } else if (additional_opcodes[1] == 0x0) {
                 // all others have func7 = 0
-                switch (addtional_opcodes[0])
+                switch (additional_opcodes[0])
                 {
                     case (0x0):
                         return add;
@@ -361,7 +374,8 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
 
         case (0x13):
             // type I, opcode = 0010011
-            switch (addtional_opcodes[0])
+            get_additional_opcode(instruction, I, additional_opcodes);
+            switch (additional_opcodes[0])
             {
                 case (0x0):
                     return addi;
@@ -384,13 +398,17 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
             
         case (0x03):
             // type I, opcode = 0000011
-            switch (addtional_opcodes[0])
+            get_additional_opcode(instruction, I, additional_opcodes);
+            switch (additional_opcodes[0])
             {
                 case (0x0):
                     return lb;
             
                 case (0x1):
                     return lh;
+                
+                case (0x2):
+                    return lw;
             
                 case (0x4):
                     return lbu;
@@ -401,10 +419,9 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
 
         case (0x67):
             // type I -- jalr
-            if (addtional_opcodes[0] == 0x0) {
+            get_additional_opcode(instruction, I, additional_opcodes);
+            if (additional_opcodes[0] == 0x0) {
                 return jalr;
-            } else {
-                return -1;
             }
         
         case (0x37):
@@ -413,7 +430,8 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
         
         case (0x23):
             // type S
-            switch (addtional_opcodes[0])
+            get_additional_opcode(instruction, S, additional_opcodes);
+            switch (additional_opcodes[0])
             {
                 case (0x0):
                     return sb;
@@ -427,7 +445,8 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
         
         case (0x63):
             // type SB
-            switch (addtional_opcodes[0])
+            get_additional_opcode(instruction, SB, additional_opcodes);
+            switch (additional_opcodes[0])
             {
                 case (0x0):
                     return beq;
@@ -459,7 +478,15 @@ int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]) {
 // !! executes for each machine instruction defined below !!
 
 void execute_add(uint32_t instruction, virtual_machine *vm) {
+    // get registers
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
 
+    // add the nums in source registers and store in target
+    vm->registers[target] = vm->registers[source[0]] + vm->registers[source[1]];
+
+    vm->pc++;
 }
 
 void execute_addi(uint32_t instruction, virtual_machine *vm) {
@@ -486,7 +513,7 @@ void execute_lui(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, U);
 
     // store the upper 31:12 immediate bits into the target register
-    vm->registers[target] = immediate;
+    vm->registers[target] = immediate & 0xFFFFF000;
 
     // update pc to move onto next instruction
     vm->pc++;
@@ -536,7 +563,54 @@ void execute_lh(uint32_t instruction, virtual_machine *vm) {
 
 }
 
-void execute_lw(uint32_t instruction, virtual_machine *vm) {
+int execute_lw(uint32_t instruction, virtual_machine *vm) {
+    // get registers and immediate
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, I, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
+
+    // save the memory address we are loading from for comparison
+    uint32_t memory_address = (vm->registers[source[0]] + immediate);
+    char read_char = 0;
+    int read_int = 0;
+    switch (memory_address)
+    {
+        case (0x0812):
+            /*
+             * Console read char
+             * --> Scan stdin for char input and load into target
+             */
+            if (scanf("%c", &read_char) != 1) {
+                // failed to read input
+                printf("Error reading input.\n");
+                return 0;
+            }
+            
+            // store input into target register
+            vm->registers[target] = read_char;
+            break;
+        
+        case (0x0816):
+            /*
+             * Console read signed int
+             * --> Scan stdin for signed int input and load into target
+             */
+            if (scanf("%d", &read_int) != 1) {
+                printf("Error reading input.\n");
+                return 0;
+            }
+
+            // store input value into target register
+            vm->registers[target] = read_int;
+            break;
+        
+        default:
+            // load the 32-bit value into target register
+            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
+    }
+    vm->pc++;
+    return 1;
 
 }
 
@@ -591,20 +665,65 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->data_memory[(vm->registers[source[0]] + immediate) / 32] = vm->registers[source[1]];
+            vm->data_memory[(vm->registers[source[0]] + (immediate / 4))] = (uint8_t)vm->registers[source[1]];
             break;
     }
     vm->pc++;
     return 1;
-
 }
 
 void execute_sh(uint32_t instruction, virtual_machine *vm) {
 
 }
 
-void execute_sw(uint32_t instruction, virtual_machine *vm) {
+int execute_sw(uint32_t instruction, virtual_machine *vm) {
+    // get source registers, immediate
+    uint8_t source[2];
+    get_source_registers(instruction, S, source);
+    uint32_t immediate = extract_immediate_number(instruction, S);
 
+    uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
+    switch (memory_address)
+    {
+        case (0x0800):
+            /*
+             * console write char
+             * --> output written value as char to stdout
+             */
+            printf("%c\n", vm->registers[source[1]]);
+            break;
+        
+        case (0x0804):
+            /*
+             * console write signed int
+             * --> output written value as signed 32-bit decimal number
+             */ 
+            printf("%d\n", vm->registers[source[1]]);
+            break;
+        
+        case (0x0808):
+            /*
+             * console write unsigned int
+             * --> output written value as unsigned 32-bit decimal number
+             */
+            printf("%d\n", (uint32_t)vm->registers[source[1]]);
+            break;
+        
+        case (0x080C):
+            /*
+            * Halt
+            * --> print message to stdout and send a flag signalling end of program
+            */
+            printf("CPU Halt Requested\n");
+            return 0;
+        
+        default:
+            // update requested data memory address
+            vm->data_memory[(vm->registers[source[0]] + (immediate / 4))] = vm->registers[source[1]];
+            break;
+    }
+    vm->pc++;
+    return 1;
 }
 
 void execute_slt(uint32_t instruction, virtual_machine *vm) {

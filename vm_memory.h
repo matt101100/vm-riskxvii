@@ -3,8 +3,9 @@
 
 #include <stdint.h>
 
-#define MEMORY_SIZE 32 // number of 32-bit chunks in 1024 bytes
+#define MEMORY_SIZE 256 // number of 4-byte instruction lines in 1024 bytes
 #define BLOCK_SIZE 64 // size of a heap block
+#define NUM_REGISTERS 32 // 32 registers
 
 /*
  * 32 registers in total

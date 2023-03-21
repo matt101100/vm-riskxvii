@@ -102,7 +102,7 @@ void get_source_registers(uint32_t instruction, int instruction_type,
  * Params: the 8-bit opcode and addtional func3 and func7 opcodes
  * Return: int mapped to the specific instruction label enumerated above
  */
-int determine_instruction_label(uint8_t opcode, uint8_t addtional_opcodes[]);
+int determine_instruction_label(uint8_t opcode, uint32_t instruction);
 
 /*
  * Desc: extracts the immediate bits depending on the type of instruction given

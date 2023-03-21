@@ -47,7 +47,7 @@ void execute_lb(uint32_t instruction, virtual_machine *vm);
 
 void execute_lh(uint32_t instruction, virtual_machine *vm);
 
-void execute_lw(uint32_t instruction, virtual_machine *vm);
+int execute_lw(uint32_t instruction, virtual_machine *vm);
 
 void execute_lbu(uint32_t instruction, virtual_machine *vm);
 
@@ -57,7 +57,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm);
 
 void execute_sh(uint32_t instruction, virtual_machine *vm);
 
-void execute_sw(uint32_t instruction, virtual_machine *vm);
+int execute_sw(uint32_t instruction, virtual_machine *vm);
 
 void execute_slt(uint32_t instruction, virtual_machine *vm);
 
