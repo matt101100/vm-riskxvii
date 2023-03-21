@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
         printf("Invalid file path provided or error loading image.\n");
         return 1;
     }
+    fclose(machine_instruction_ptr);
 
     // main virtual machine loop
     int running = 1;
@@ -207,14 +208,14 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        printf("pc: %d\n", 4 * (vm.pc));
-        for (int i = 0; i < NUM_REGISTERS; i++) {
-            if (vm.registers[i] == 0) {
-                continue;
-            }
-            printf("reg %d = %d\n", i, vm.registers[i]);
-        }
-        printf("\n");
+        // printf("pc: %d\n", 4 * (vm.pc));
+        // for (int i = 0; i < NUM_REGISTERS; i++) {
+        //     if (vm.registers[i] == 0) {
+        //         continue;
+        //     }
+        //     printf("reg %d = %d\n", i, vm.registers[i]);
+        // }
+        // printf("\n");
 
     }
 
@@ -244,8 +245,6 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
         // file contains invalid data
         return NULL;
     }
-
-    fclose(fp);
 
     return fp;
 
