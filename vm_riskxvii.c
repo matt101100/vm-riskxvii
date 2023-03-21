@@ -207,14 +207,14 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        // printf("pc: %d\n", 4 * (vm.pc));
-        // for (int i = 0; i < NUM_REGISTERS; i++) {
-        //     if (vm.registers[i] == 0) {
-        //         continue;
-        //     }
-        //     printf("reg %d = %d\n", i, vm.registers[i]);
-        // }
-        // printf("\n");
+        printf("pc: %d\n", 4 * (vm.pc));
+        for (int i = 0; i < NUM_REGISTERS; i++) {
+            if (vm.registers[i] == 0) {
+                continue;
+            }
+            printf("reg %d = %d\n", i, vm.registers[i]);
+        }
+        printf("\n");
 
     }
 
@@ -253,7 +253,7 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
 
 size_t load_image_into_memory(FILE *fp , uint32_t memory[]) {
     size_t bytes_read = fread(memory, sizeof(uint32_t), MEMORY_SIZE, fp);
-    if (bytes_read < 32) {
+    if (bytes_read < MEMORY_SIZE) {
         // file did not contain the valid amount of data 
         // ie: it contained less than 1024 bytes
         return -1;
