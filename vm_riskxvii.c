@@ -687,7 +687,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
              * console write char
              * --> output written value as char to stdout
              */
-            printf("%c\n", vm->registers[source[1]]);
+            printf("%c", vm->registers[source[1]]);
             break;
         
         case (0x0804):
@@ -695,7 +695,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
              * console write signed int
              * --> output written value as signed 32-bit decimal number
              */ 
-            printf("%d\n", vm->registers[source[1]]);
+            printf("%d", vm->registers[source[1]]);
             break;
         
         case (0x0808):
@@ -703,7 +703,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
              * console write unsigned int
              * --> output written value as unsigned 32-bit decimal number
              */
-            printf("%d\n", (uint32_t)vm->registers[source[1]]);
+            printf("%d", (uint32_t)vm->registers[source[1]]);
             break;
         
         case (0x080C):
