@@ -43,167 +43,134 @@ int main(int argc, char *argv[]) {
         switch (instruction_label)
         {
             case (add):
-                // execute add
                 execute_add(instruction, &vm);
                 break;
             
             case (addi):
-                // execute addi
                 execute_addi(instruction, &vm);
                 break;
             
             case (sub):
-                //execute sub
                 printf("sub\n");
                 break;
             
             case (lui):
-                //execute lui
                 execute_lui(instruction, &vm);
                 break;
             
             case (xor):
-                // execute xor
                 printf("xor\n");
                 break;
             
             case (xori):
-                // execute xori
                 printf("xori\n");
                 break;
             
             case (or):
-                // execute or
                 printf("or\n");
                 break;
             
             case (ori):
-                // execute ori
                 printf("ori\n");
                 break;
             
             case (and):
-                // execute and
                 printf("and\n");
                 break;
             
             case (andi):
-                // execute andi
                 printf("andi\n");
                 break;
             
             case (sll):
-                // execute sll
                 printf("sll\n");
                 break;
             
             case (srl):
-                // execute srl
                 printf("srl\n");
                 break;
             
             case (sra):
-                // execute sra
                 printf("sra\n");
                 break;
             
             case (lb):
-                // execute lb
                 printf("lb\n");
                 break;
             
             case (lh):
-                // execute lh
                 printf("lh\n");
                 break;
             
             case (lw):
-                // execute lw
                 execute_lw(instruction, &vm);
                 break;
             
             case (lbu):
-                // execute lbh
-                printf("lbh\n");
+                execute_lbu(instruction, &vm);
                 break;
 
             case (lhu):
-                // execute lhu
                 printf("lhu\n");
                 break;
             
             case (sb):
-                // execute sb
                 running = execute_sb(instruction, &vm);
                 break;
             
             case (sh):
-                // execute sh
                 printf("sh\n");
                 break;
             
             case (sw):
-                // execute sw
                 execute_sw(instruction, &vm);
                 break;
             
             case (slt):
-                // execute slt
                 printf("slt\n");
                 break;
             
             case (slti):
-                // execute slti
                 printf("slti\n");
                 break;
             
             case (sltu):
-                // execute sltu
                 printf("sltu\n");
                 break;
             
             case (sltiu):
-                // execute sltiu
                 printf("sltiu\n");
                 break;
             
             case (beq):
-                // execute beq
                 execute_beq(instruction, &vm);
                 break;
             
             case (bne):
-                // execute bne
                 execute_bne(instruction, &vm);
                 break;
 
             case (blt):
-                // execute blt
                 printf("blt\n");
                 break;
             
             case (bltu):
-                // execute bltu
                 printf("bltu\n");
                 break;
             
             case (bge):
-                // execute bge
                 printf("bge\n");
                 break;
             
             case (bgeu):
-                // execute bgeu
                 printf("bgeu\n");
                 break;
             
             case (jal):
-                // execute jal
                 execute_jal(instruction, &vm);
                 break;
             
             case (jalr):
-                // execute jalr
                 execute_jalr(instruction, &vm);
                 break;
             
@@ -585,6 +552,9 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
             if (scanf("%c", &read_char) != 1) {
                 // failed to read input
                 printf("Error reading input.\n");
+                // clears the buffer
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
                 return 0;
             }
             
@@ -599,6 +569,8 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
              */
             if (scanf("%d", &read_int) != 1) {
                 printf("Error reading input.\n");
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
                 return 0;
             }
 
