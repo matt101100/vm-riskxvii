@@ -27,10 +27,10 @@ int main(int argc, char *argv[]) {
     while (running) {
 
         // get the current instruction and extract the opcode from it
-        // if (vm.pc < 0) {
-        //     printf("Invalid program position reached.\n");
-        //     return 1;
-        // }
+        if (vm.pc < 0) {
+            printf("Invalid program position reached.\n");
+            return 1;
+        }
         uint32_t instruction = vm.instruction_memory[vm.pc / 4];
         uint8_t opcode = get_opcode(instruction);
         /*
@@ -310,7 +310,7 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
     } else if (instruction_type == SB) {
         // imm[12] = instruction[31], imm[10:5] = instruction[30:25]
         // imm[11] = instruction[7], imm[4:1] = instruction[11:8]
-        res = sign_extend(((instruction & 0x80000000) >> 19) | ((instruction & 0x7E000000) >> 15) | ((instruction & 0x80) >> 7) | ((instruction & 0xF00) << 4), 13);
+        res = sign_extend(((instruction & 0x80000000) >> 19) | ((instruction & 0x7E000000) >> 20) | ((instruction & 0x80) << 4) | ((instruction & 0xF00) >> 7), 13);
     } else if (instruction_type == U) {
         // imm[31:12] = instruction[31:12]
         res = sign_extend((instruction & 0xFFFFF000), 20);
