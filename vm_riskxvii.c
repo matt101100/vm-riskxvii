@@ -660,7 +660,6 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
              * console write char
              * --> output written value as char to stdout
              */
-            printf("here\n");
             printf("%c", vm->registers[source[1]]);
             break;
         
