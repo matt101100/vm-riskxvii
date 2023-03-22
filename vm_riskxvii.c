@@ -180,14 +180,14 @@ int main(int argc, char *argv[]) {
                 return 1;
         }
         // printf("instru: %0x\n", instruction);
-        // printf("pc: %d\n", (vm.pc));
-        // for (int i = 0; i < NUM_REGISTERS; i++) {
-        //     if (vm.registers[i] == 0) {
-        //         continue;
-        //     }
-        //     printf("reg %d = %d\n", i, vm.registers[i]);
-        // }
-        // printf("\n");
+        printf("pc: %d\n", (vm.pc));
+        for (int i = 0; i < NUM_REGISTERS; i++) {
+            if (vm.registers[i] == 0) {
+                continue;
+            }
+            printf("reg %d = %d\n", i, vm.registers[i]);
+        }
+        printf("\n");
 
     }
 
@@ -775,7 +775,7 @@ void execute_beq(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, SB, source);
 
     if (vm->registers[source[0]] == vm->registers[source[1]]) {
-        vm->pc += immediate << 1;
+        vm->pc += immediate;
         return;
     }
     vm->pc += 4;
@@ -787,7 +787,7 @@ void execute_bne(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, SB, source);
 
     if (vm->registers[source[0]] != vm->registers[source[1]]) {
-        vm->pc += immediate << 1;
+        vm->pc += immediate;
         return;
     }
     vm->pc += 4;
