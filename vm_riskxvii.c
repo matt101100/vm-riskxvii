@@ -654,7 +654,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
-    printf("source2_val = %d, memory_add = %0x\n", vm->registers[source[1]], memory_address)
+    printf("source2_val = %d, memory_add = %0x\n", vm->registers[source[1]], memory_address);
     switch (memory_address)
     {
         case (0x0800):
