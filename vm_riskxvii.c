@@ -466,7 +466,9 @@ void execute_addi(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, I);
 
     // add the immediate to source and store at target
-    vm->registers[target] = vm->registers[source[0]] + immediate;
+    if (target != 0) {
+        vm->registers[target] = vm->registers[source[0]] + immediate;
+    }
 
     // update pc to move onto next instruction
     vm->pc += 4;
