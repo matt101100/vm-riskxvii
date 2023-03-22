@@ -702,7 +702,6 @@ void execute_sh(uint32_t instruction, virtual_machine *vm) {
 
 int execute_sw(uint32_t instruction, virtual_machine *vm) {
     // get source registers, immediate
-    printf("herre\n");
     uint8_t source[2];
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
@@ -712,6 +711,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
     switch (memory_address)
     {
         case (0x0800):
+            printf("herre\n");
             /*
              * console write char
              * --> output written value as char to stdout
