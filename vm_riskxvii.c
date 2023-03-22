@@ -27,10 +27,10 @@ int main(int argc, char *argv[]) {
     while (running) {
 
         // get the current instruction and extract the opcode from it
-        if (vm.pc < 0) {
-            printf("Invalid program position reached.\n");
-            return 1;
-        }
+        // if (vm.pc < 0) {
+        //     printf("Invalid program position reached.\n");
+        //     return 1;
+        // }
         uint32_t instruction = vm.instruction_memory[vm.pc / 4];
         uint8_t opcode = get_opcode(instruction);
         /*
