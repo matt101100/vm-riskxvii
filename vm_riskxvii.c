@@ -179,14 +179,15 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        // printf("pc: %d\n", (vm.pc));
-        // for (int i = 0; i < NUM_REGISTERS; i++) {
-        //     if (vm.registers[i] == 0) {
-        //         continue;
-        //     }
-        //     printf("reg %d = %d\n", i, vm.registers[i]);
-        // }
-        // printf("\n");
+        printf("instru: %0x\n", instruction);
+        printf("pc: %d\n", (vm.pc));
+        for (int i = 0; i < NUM_REGISTERS; i++) {
+            if (vm.registers[i] == 0) {
+                continue;
+            }
+            printf("reg %d = %d\n", i, vm.registers[i]);
+        }
+        printf("\n");
 
     }
 
