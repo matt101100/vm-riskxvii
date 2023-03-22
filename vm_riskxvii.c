@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
         // get the current instruction and extract the opcode from it
         uint32_t instruction = vm.instruction_memory[vm.pc];
         uint8_t opcode = get_opcode(instruction);
+        // printf("isntru: %0x\n", instruction);
         /*
          * This array stores the func3 and func7 bytes with
          * func3 = additional_opcode[0], func7 = addtional_opcode[1]
@@ -773,6 +774,7 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
      * Note: +1 since each index in instruction memory is 32 bits (4 bytes)
      * so we should only jump 1 index == jumping 4 bytes
      */
+    // printf("imm: %d\n", immediate);
     vm->registers[target] = vm->pc + 1;
     vm->pc = (vm->pc + (immediate / 4)) ; // immediate is already shifted
 }
