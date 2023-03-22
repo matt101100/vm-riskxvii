@@ -636,7 +636,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // load the 32-bit value into target register
-            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
+            vm->registers[target] = (uint8_t)vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
     }
     vm->pc += 4;
     return 1;
@@ -660,6 +660,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
              * console write char
              * --> output written value as char to stdout
              */
+            printf("here\n");
             printf("%c", vm->registers[source[1]]);
             break;
         
