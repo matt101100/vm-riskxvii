@@ -107,6 +107,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (lbu):
+                printf("here\n");
                 execute_lbu(instruction, &vm);
                 break;
 
