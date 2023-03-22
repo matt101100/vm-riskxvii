@@ -22,6 +22,10 @@ int main(int argc, char *argv[]) {
     }
     fclose(machine_instruction_ptr);
 
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        printf("(i*4): %0x\n", vm.instruction_memory[i]);
+    }
+
     // main virtual machine loop
     int running = 1;
     while (running) {
@@ -180,14 +184,14 @@ int main(int argc, char *argv[]) {
                 return 1;
         }
         // printf("instru: %0x\n", instruction);
-        printf("pc: %d\n", (vm.pc));
-        for (int i = 0; i < NUM_REGISTERS; i++) {
-            if (vm.registers[i] == 0) {
-                continue;
-            }
-            printf("reg %d = %d\n", i, vm.registers[i]);
-        }
-        printf("\n");
+        // printf("pc: %d\n", (vm.pc));
+        // for (int i = 0; i < NUM_REGISTERS; i++) {
+        //     if (vm.registers[i] == 0) {
+        //         continue;
+        //     }
+        //     printf("reg %d = %d\n", i, vm.registers[i]);
+        // }
+        // printf("\n");
 
     }
 
