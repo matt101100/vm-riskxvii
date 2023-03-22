@@ -453,7 +453,9 @@ void execute_add(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, R, source);
 
     // add the nums in source registers and store in target
-    vm->registers[target] = vm->registers[source[0]] + vm->registers[source[1]];
+    if (target != 0) {
+        vm->registers[target] = vm->registers[source[0]] + vm->registers[source[1]];
+    }
 
     vm->pc += 4;
 }
