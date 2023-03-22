@@ -653,6 +653,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
+    printf("mem: %0x\n", memory_address);
     switch (memory_address)
     {
         case (0x0800):
@@ -707,6 +708,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
+    printf("mem: %0x\n", memory_address);
 
     switch (memory_address)
     {
