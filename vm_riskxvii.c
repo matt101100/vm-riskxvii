@@ -587,7 +587,7 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
 
 }
 
-void execute_lbu(uint32_t instruction, virtual_machine *vm) {
+int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     // get registers and immediate
     uint8_t target = get_target_register(instruction);
     uint8_t source[2];

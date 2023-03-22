@@ -49,7 +49,7 @@ void execute_lh(uint32_t instruction, virtual_machine *vm);
 
 int execute_lw(uint32_t instruction, virtual_machine *vm);
 
-void execute_lbu(uint32_t instruction, virtual_machine *vm);
+int execute_lbu(uint32_t instruction, virtual_machine *vm);
 
 void execute_lhu(uint32_t instruction, virtual_machine *vm);
 
