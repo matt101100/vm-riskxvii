@@ -817,6 +817,11 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
      * Note: +1 since each index in instruction memory is 32 bits (4 bytes)
      * so we should only jump 1 index == jumping 4 bytes
      */
+
+    if (target != 0) {
+        // ignore writes to zero register
+        vm->registers[target] = vm->pc + 1;
+    }
     vm->registers[target] = vm->pc + 4;
     vm->pc = (vm->pc + immediate); // immediate is already shifted
 }
