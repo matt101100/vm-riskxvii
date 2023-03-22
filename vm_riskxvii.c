@@ -104,12 +104,10 @@ int main(int argc, char *argv[]) {
             
             case (lw):
                 execute_lw(instruction, &vm);
-                printf("lw\n");
                 break;
             
             case (lbu):
                 execute_lbu(instruction, &vm);
-                printf("lbu\n");
                 break;
 
             case (lhu):
@@ -118,7 +116,6 @@ int main(int argc, char *argv[]) {
             
             case (sb):
                 running = execute_sb(instruction, &vm);
-                printf("sb\n");
                 break;
             
             case (sh):
@@ -127,7 +124,6 @@ int main(int argc, char *argv[]) {
             
             case (sw):
                 running = execute_sw(instruction, &vm);
-                printf("sw\n");
                 break;
             
             case (slt):
@@ -148,12 +144,10 @@ int main(int argc, char *argv[]) {
             
             case (beq):
                 execute_beq(instruction, &vm);
-                printf("beq\n");
                 break;
             
             case (bne):
                 execute_bne(instruction, &vm);
-                printf("bne\n");
                 break;
 
             case (blt):
@@ -185,14 +179,14 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        printf("pc: %d\n", (vm.pc));
-        for (int i = 0; i < NUM_REGISTERS; i++) {
-            if (vm.registers[i] == 0) {
-                continue;
-            }
-            printf("reg %d = %d\n", i, vm.registers[i]);
-        }
-        printf("\n");
+        // printf("pc: %d\n", (vm.pc));
+        // for (int i = 0; i < NUM_REGISTERS; i++) {
+        //     if (vm.registers[i] == 0) {
+        //         continue;
+        //     }
+        //     printf("reg %d = %d\n", i, vm.registers[i]);
+        // }
+        // printf("\n");
 
     }
 
@@ -707,7 +701,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->data_memory[(vm->registers[source[0]] + immediate) / 4] = (uint8_t)vm->registers[source[1]];
+            vm->data_memory[(vm->registers[source[0]] + immediate) / 4] = vm->registers[source[1]];
             break;
     }
     vm->pc += 4;
