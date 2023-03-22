@@ -104,10 +104,12 @@ int main(int argc, char *argv[]) {
             
             case (lw):
                 execute_lw(instruction, &vm);
+                printf("lw\n");
                 break;
             
             case (lbu):
                 execute_lbu(instruction, &vm);
+                printf("lbu\n");
                 break;
 
             case (lhu):
@@ -116,6 +118,7 @@ int main(int argc, char *argv[]) {
             
             case (sb):
                 running = execute_sb(instruction, &vm);
+                printf("sb\n");
                 break;
             
             case (sh):
@@ -124,6 +127,7 @@ int main(int argc, char *argv[]) {
             
             case (sw):
                 running = execute_sw(instruction, &vm);
+                printf("sw\n");
                 break;
             
             case (slt):
@@ -144,10 +148,12 @@ int main(int argc, char *argv[]) {
             
             case (beq):
                 execute_beq(instruction, &vm);
+                printf("beq\n");
                 break;
             
             case (bne):
                 execute_bne(instruction, &vm);
+                printf("bne\n");
                 break;
 
             case (blt):
