@@ -775,7 +775,7 @@ void execute_beq(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, SB, source);
 
     if (vm->registers[source[0]] == vm->registers[source[1]]) {
-        vm->pc += immediate;
+        vm->pc += immediate << 1;
         return;
     }
     vm->pc += 4;
@@ -787,7 +787,7 @@ void execute_bne(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, SB, source);
 
     if (vm->registers[source[0]] != vm->registers[source[1]]) {
-        vm->pc += immediate;
+        vm->pc += immediate << 1;
         return;
     }
     vm->pc += 4;
@@ -813,12 +813,7 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
     // get target and immediate
     uint8_t target = get_target_register(instruction);
     uint32_t immediate = extract_immediate_number(instruction, UJ);
-    /*
-     * The target reg should store the pc of the NEXT instruction
-     * Hence, we +1 and store that
-     * Note: +1 since each index in instruction memory is 32 bits (4 bytes)
-     * so we should only jump 1 index == jumping 4 bytes
-     */
+    // The target register stores the pc of the NEXT instruction
 
     if (target != 0) {
         // ignore writes to zero register
