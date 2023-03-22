@@ -22,10 +22,6 @@ int main(int argc, char *argv[]) {
     }
     fclose(machine_instruction_ptr);
 
-    for (int i = 0; i < MEMORY_SIZE; i++) {
-        printf("%d: %0x\n",i * 4, vm.instruction_memory[i]);
-    }
-
     // main virtual machine loop
     int running = 1;
     while (running) {
