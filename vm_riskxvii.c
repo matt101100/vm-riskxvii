@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
         // get the current instruction and extract the opcode from it
         uint32_t instruction = vm.instruction_memory[vm.pc];
         uint8_t opcode = get_opcode(instruction);
-        // printf("isntru: %0x\n", instruction);
         /*
          * This array stores the func3 and func7 bytes with
          * func3 = additional_opcode[0], func7 = addtional_opcode[1]
@@ -663,7 +662,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->data_memory[(vm->registers[source[0]] + (immediate / 4))] = (uint8_t)vm->registers[source[1]];
+            vm->data_memory[(vm->registers[source[0]] + immediate) / 4] = (uint8_t)vm->registers[source[1]];
             break;
     }
     vm->pc++;
@@ -681,6 +680,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
+
     switch (memory_address)
     {
         case (0x0800):
@@ -717,7 +717,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->data_memory[(vm->registers[source[0]] + (immediate / 4))] = vm->registers[source[1]];
+            vm->data_memory[((vm->registers[source[0]] + immediate) / 4)] = vm->registers[source[1]];
             break;
     }
     vm->pc++;
@@ -774,9 +774,11 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
      * Note: +1 since each index in instruction memory is 32 bits (4 bytes)
      * so we should only jump 1 index == jumping 4 bytes
      */
-    // printf("imm: %d\n", immediate);
     vm->registers[target] = vm->pc + 1;
+    // printf("%f\n", (immediate * 0.5));
     vm->pc = (vm->pc + (immediate / 4)) ; // immediate is already shifted
+    // printf("pc: %d\n", vm->pc);
+    // printf("imm: %d\n", immediate);
 }
 
 void execute_jalr(uint32_t instruction, virtual_machine *vm) {
