@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         uint32_t instruction = vm.instruction_memory[vm.pc / 4];
+        printf("instru: %0x\n", instruction);
         uint8_t opcode = get_opcode(instruction);
         /*
          * This array stores the func3 and func7 bytes with
@@ -635,7 +636,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             break;
         
         default:
-            // load the 32-bit value into target register
+            // load the 8-bit value into target register
             vm->registers[target] = (uint8_t)vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
     }
     vm->pc += 4;
