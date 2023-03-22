@@ -482,7 +482,9 @@ void execute_lui(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, U);
 
     // store the upper 31:12 immediate bits into the target register
-    vm->registers[target] = immediate & 0xFFFFF000;
+    if (target != 0) {
+        vm->registers[target] = immediate & 0xFFFFF000;
+    }
 
     // update pc to move onto next instruction
     vm->pc += 4;
