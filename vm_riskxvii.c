@@ -169,12 +169,12 @@ int main(int argc, char *argv[]) {
             
             case (beq):
                 // execute beq
-                printf("beq\n");
+                execute_beq(instruction, &vm);
                 break;
             
             case (bne):
                 // execute bne
-                printf("bne\n");
+                execute_bne(instruction, &vm);
                 break;
 
             case (blt):
@@ -745,11 +745,27 @@ void execute_sltiu(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_beq(uint32_t instruction, virtual_machine *vm) {
+    uint32_t immediate = extract_immediate_number(instruction, SB);
+    uint8_t source[2];
+    get_source_registers(instruction, SB, source);
 
+    if (vm->registers[source[0]] == vm->registers[source[1]]) {
+        vm->pc += immediate;
+        return;
+    }
+    vm->pc += 4;
 }
 
 void execute_bne(uint32_t instruction, virtual_machine *vm) {
+    uint32_t immediate = extract_immediate_number(instruction, SB);
+    uint8_t source[2];
+    get_source_registers(instruction, SB, source);
 
+    if (vm->registers[source[0]] != vm->registers[source[1]]) {
+        vm->pc += immediate;
+        return;
+    }
+    vm->pc += 4;
 }
 
 void execute_blt(uint32_t instruction, virtual_machine *vm) {
