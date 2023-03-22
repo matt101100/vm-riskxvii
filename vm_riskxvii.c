@@ -27,7 +27,11 @@ int main(int argc, char *argv[]) {
     while (running) {
 
         // get the current instruction and extract the opcode from it
-        uint32_t instruction = vm.instruction_memory[vm.pc];
+        if (vm.pc < 0) {
+            printf("Invalid program position reached.\n");
+            return 1;
+        }
+        uint32_t instruction = vm.instruction_memory[vm.pc / 4];
         uint8_t opcode = get_opcode(instruction);
         /*
          * This array stores the func3 and func7 bytes with
@@ -208,7 +212,7 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        // printf("pc: %d\n", 4 * (vm.pc));
+        // printf("pc: %d\n", (vm.pc));
         // for (int i = 0; i < NUM_REGISTERS; i++) {
         //     if (vm.registers[i] == 0) {
         //         continue;
@@ -483,7 +487,7 @@ void execute_add(uint32_t instruction, virtual_machine *vm) {
     // add the nums in source registers and store in target
     vm->registers[target] = vm->registers[source[0]] + vm->registers[source[1]];
 
-    vm->pc++;
+    vm->pc += 4;
 }
 
 void execute_addi(uint32_t instruction, virtual_machine *vm) {
@@ -497,7 +501,7 @@ void execute_addi(uint32_t instruction, virtual_machine *vm) {
     vm->registers[target] = vm->registers[source[0]] + immediate;
 
     // update pc to move onto next instruction
-    vm->pc++;
+    vm->pc += 4;
 }
 
 void execute_sub(uint32_t instruction, virtual_machine *vm) {
@@ -513,7 +517,7 @@ void execute_lui(uint32_t instruction, virtual_machine *vm) {
     vm->registers[target] = immediate & 0xFFFFF000;
 
     // update pc to move onto next instruction
-    vm->pc++;
+    vm->pc += 4;
 }
 
 void execute_xor(uint32_t instruction, virtual_machine *vm) {
@@ -606,7 +610,7 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
             // load the 32-bit value into target register
             vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
     }
-    vm->pc++;
+    vm->pc += 4;
     return 1;
 
 }
@@ -665,7 +669,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
             vm->data_memory[(vm->registers[source[0]] + immediate) / 4] = (uint8_t)vm->registers[source[1]];
             break;
     }
-    vm->pc++;
+    vm->pc += 4;
     return 1;
 }
 
@@ -720,7 +724,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
             vm->data_memory[((vm->registers[source[0]] + immediate) / 4)] = vm->registers[source[1]];
             break;
     }
-    vm->pc++;
+    vm->pc += 4;
     return 1;
 }
 
@@ -774,11 +778,8 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
      * Note: +1 since each index in instruction memory is 32 bits (4 bytes)
      * so we should only jump 1 index == jumping 4 bytes
      */
-    vm->registers[target] = vm->pc + 1;
-    // printf("%f\n", (immediate * 0.5));
-    vm->pc = (vm->pc + (immediate / 4)) ; // immediate is already shifted
-    // printf("pc: %d\n", vm->pc);
-    // printf("imm: %d\n", immediate);
+    vm->registers[target] = vm->pc + 4;
+    vm->pc = (vm->pc + immediate); // immediate is already shifted
 }
 
 void execute_jalr(uint32_t instruction, virtual_machine *vm) {
