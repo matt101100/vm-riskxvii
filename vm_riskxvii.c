@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sw):
-                execute_sw(instruction, &vm);
+                running = execute_sw(instruction, &vm);
                 break;
             
             case (slt):
