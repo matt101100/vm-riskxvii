@@ -996,12 +996,12 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     uint8_t source[2];
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
+    return 0;
 
-    // save the memory address we are loading from for comparison
+    // // save the memory address we are loading from for comparison
     // uint32_t memory_address = (vm->registers[source[0]] + immediate);
     // char read_char = 0;
     // int read_int = 0;
-     vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
     // switch (memory_address)
     // {
     //     case (0x0812):
@@ -1045,8 +1045,8 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     //         }
     //         vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
     // }
-    vm->pc += 4;
-    return 1;
+    // vm->pc += 4;
+    // return 1;
 }
 
 void execute_lhu(uint32_t instruction, virtual_machine *vm) {
