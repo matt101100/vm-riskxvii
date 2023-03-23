@@ -480,6 +480,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (lbu):
+                printf("here\n");
                 execute_lbu(instruction, &vm);
                 break;
 
@@ -615,7 +616,6 @@ size_t load_data_into_memory(FILE *fp, uint8_t data_memory[]) {
     if (bytes_read < DATA_MEM_SIZE) {
         // file did not contain the valid amount of data 
         // ie: it contained less than 1024 bytes
-        printf("here\n");
         return -1;
     }
     return bytes_read;
