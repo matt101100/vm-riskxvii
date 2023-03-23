@@ -1197,10 +1197,11 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, UJ);
     // The target register stores the pc of the NEXT instruction
 
-    if (target != 0) {
-        // ignore writes to zero register
-        vm->registers[target] = vm->pc + 4;
-    }
+    // if (target != 0) {
+    //     // ignore writes to zero register
+    //     vm->registers[target] = vm->pc + 4;
+    // }
+    vm->registers[target] = vm->pc + 4;
     vm->pc = (vm->pc + immediate); // immediate is already shifted
 }
 
@@ -1211,9 +1212,10 @@ void execute_jalr(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
 
-    if (target != 0) {
-        // ignore writes to zero register
-        vm->registers[target] = vm->pc + 4;
-    }
+    // if (target != 0) {
+    //     // ignore writes to zero register
+    //     vm->registers[target] = vm->pc + 4;
+    // }
+    vm->registers[target] = vm->pc + 4;
     vm->pc = (vm->registers[source[0]] + immediate); // update pc
 }
