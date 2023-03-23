@@ -114,6 +114,9 @@ void translate_mi(uint32_t instruction) {
     }
     printf("rd = r%d, ", target);
     for (int i = 0; i < 2; i++) {
+        if (source[i] < 0) {
+            continue;
+        }
         printf("rs%d = r%d, ", i + 1, source[i]);
     }
     printf("imm = %d\n", immediate);

@@ -39,6 +39,23 @@
 --------------------------------------------------------------------------------
 
 
-0: I = addi, rd = r2, rs1 = r0, imm = 2047
-4: I = jal, rd = r1, imm = 44
-8: 
+0: I = addi, rd = r2, rs1 = r0, rs2 = r31, imm = 2047
+4: I = jal, rd = r1, rs1 = r0, rs2 = r12, imm = 44
+8: I = lui, rd = r15, rs1 = r0, rs2 = r0, imm = 4096
+12: I = sb, rd = r12, rs1 = r15, rs2 = r0, imm = -2036
+16: I = lbu, rd = r15, rs1 = r10, rs2 = r0, imm = 0
+20: I = beq, rd = r24, rs1 = r15, rs2 = r0, imm = 24
+24: I = lui, rd = r14, rs1 = r0, rs2 = r0, imm = 4096
+28: I = addi, rd = r10, rs1 = r10, rs2 = r1, imm = 1
+32: I = sb, rd = r0, rs1 = r14, rs2 = r15, imm = -2048
+36: I = lbu, rd = r15, rs1 = r10, rs2 = r0, imm = 0
+40: I = bne, rd = r21, rs1 = r15, rs2 = r0, imm = -12
+44: I = jalr, rd = r0, rs1 = r1, rs2 = r0, imm = 0
+48: I = addi, rd = r2, rs1 = r2, rs2 = r16, imm = -16
+52: I = sw, rd = r12, rs1 = r2, rs2 = r1, imm = 12
+56: I = addi, rd = r10, rs1 = r0, rs2 = r16, imm = 80
+60: I = jal, rd = r1, rs1 = r31, rs2 = r21, imm = -44
+64: I = addi, rd = r10, rs1 = r0, rs2 = r0, imm = 0
+68: I = lw, rd = r1, rs1 = r2, rs2 = r12, imm = 12
+72: I = addi, rd = r2, rs1 = r2, rs2 = r16, imm = 16
+76: I = jalr, rd = r0, rs1 = r1, rs2 = r0, imm = 0
