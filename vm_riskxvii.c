@@ -16,7 +16,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -28,7 +28,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -40,7 +40,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -57,7 +57,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -69,7 +69,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -81,7 +81,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -93,7 +93,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -105,7 +105,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -117,7 +117,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -129,7 +129,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -141,7 +141,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -153,7 +153,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -165,7 +165,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -177,7 +177,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -189,7 +189,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -201,7 +201,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -213,7 +213,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -223,7 +223,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = sb, ");
         get_source_registers(instruction, S, source);
         immediate = extract_immediate_number(instruction, S);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -233,7 +233,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = sh, ");
         get_source_registers(instruction, S, source);
         immediate = extract_immediate_number(instruction, S);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -243,7 +243,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = sw, ");
         get_source_registers(instruction, S, source);
         immediate = extract_immediate_number(instruction, S);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -255,7 +255,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -267,7 +267,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -279,7 +279,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, R, source);
         immediate = extract_immediate_number(instruction, R);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -291,7 +291,7 @@ void translate_mi(uint32_t instruction) {
         get_source_registers(instruction, I, source);
         immediate = extract_immediate_number(instruction, I);
         printf("rd = r%d, ", target);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -301,7 +301,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = beq, ");
         get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -311,7 +311,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = bne, ");
         get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -321,7 +321,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = blt, ");
         get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -331,7 +331,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = bltu, ");
         get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -341,7 +341,7 @@ void translate_mi(uint32_t instruction) {
         printf("I = bge, ");
         get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
@@ -350,7 +350,7 @@ void translate_mi(uint32_t instruction) {
     } else if (label == bgeu) {
         printf("I = bgeu, ");
         immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             if (source[i] < 0) {
                 continue;
             }
