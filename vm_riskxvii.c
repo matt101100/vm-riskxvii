@@ -32,6 +32,8 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         uint32_t instruction = vm.instruction_memory[vm.pc / 4];
+        translate_mi(instruction);
+        continue;
         uint8_t opcode = get_opcode(instruction);
         /*
          * This array stores the func3 and func7 bytes with
