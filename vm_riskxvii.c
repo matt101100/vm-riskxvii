@@ -559,6 +559,12 @@ int main(int argc, char *argv[]) {
             }
             printf("reg %d = %d\n", i, vm.registers[i]);
         }
+        for (int i = 0; i < MEMORY_SIZE; i++) {
+            if (vm.data_memory[i] == 0) {
+                continue;
+            }
+            printf("data_mem at addr %0x = %d\n", i*4, vm.data_memory[i]);
+        }
         printf("\n");
 
     }
