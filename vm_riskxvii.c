@@ -1130,7 +1130,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
         default:
             // update requested data memory address
             printf("imm: %d\n", immediate);
-            printf("mem_addr = %0x, val_to_store = %d\n", (vm->registers[source[0]] + immediate) / 4, vm->registers[source[1]]);
+            printf("mem_addr = %0x, val_to_store = %d\n", (vm->registers[source[0]] + immediate), vm->registers[source[1]]);
             vm->data_memory[((vm->registers[source[0]] + immediate) / 4)] = vm->registers[source[1]];
             break;
     }
