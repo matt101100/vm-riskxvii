@@ -399,9 +399,12 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         uint32_t instruction = vm.instruction_memory[vm.pc / 4];
-        translate_mi(instruction);
-        vm.pc+=4;
-        continue;
+
+        // !! TESTING ONLY !!
+        // translate_mi(instruction);
+        // vm.pc+=4;
+        // continue;
+
         uint8_t opcode = get_opcode(instruction);
         /*
          * This array stores the func3 and func7 bytes with
@@ -549,14 +552,14 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        // printf("pc: %d\n", (vm.pc));
-        // for (int i = 0; i < NUM_REGISTERS; i++) {
-        //     if (vm.registers[i] == 0) {
-        //         continue;
-        //     }
-        //     printf("reg %d = %d\n", i, vm.registers[i]);
-        // }
-        // printf("\n");
+        printf("pc: %d\n", (vm.pc));
+        for (int i = 0; i < NUM_REGISTERS; i++) {
+            if (vm.registers[i] == 0) {
+                continue;
+            }
+            printf("reg %d = %d\n", i, vm.registers[i]);
+        }
+        printf("\n");
 
     }
 
