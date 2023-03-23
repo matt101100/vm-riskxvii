@@ -994,7 +994,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     // get registers and immediate
     uint8_t target = get_target_register(instruction);
     if (target == 0) {
-        break;
+        return 0;
     }
     uint8_t source[2];
     get_source_registers(instruction, I, source);
