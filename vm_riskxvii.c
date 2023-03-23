@@ -998,53 +998,52 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, I);
 
     // save the memory address we are loading from for comparison
-    // uint32_t memory_address = (vm->registers[source[0]] + immediate);
-    // char read_char = 0;
-    // int read_int = 0;
-     vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
-    // switch (memory_address)
-    // {
-    //     case (0x0812):
-    //         /*
-    //          * Console read char
-    //          * --> Scan stdin for char input and load into target
-    //          */
-    //         if (scanf("%c", &read_char) != 1) {
-    //             // failed to read input
-    //             printf("Error reading input.\n");
-    //             // clears the buffer
-    //             int c;
-    //             while((c = getchar()) != '\n' && c != EOF);
-    //             return 0;
-    //         }
+    uint32_t memory_address = (vm->registers[source[0]] + immediate);
+    char read_char = 0;
+    int read_int = 0;
+    switch (memory_address)
+    {
+        case (0x0812):
+            /*
+             * Console read char
+             * --> Scan stdin for char input and load into target
+             */
+            if (scanf("%c", &read_char) != 1) {
+                // failed to read input
+                printf("Error reading input.\n");
+                // clears the buffer
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
+                return 0;
+            }
             
-    //         // store input into target register
-    //         vm->registers[target] = read_char;
-    //         break;
+            // store input into target register
+            vm->registers[target] = read_char;
+            break;
         
-    //     case (0x0816):
-    //         /*
-    //          * Console read signed int
-    //          * --> Scan stdin for signed int input and load into target
-    //          */
-    //         if (scanf("%d", &read_int) != 1) {
-    //             printf("Error reading input.\n");
-    //             int c;
-    //             while((c = getchar()) != '\n' && c != EOF);
-    //             return 0;
-    //         }
+        case (0x0816):
+            /*
+             * Console read signed int
+             * --> Scan stdin for signed int input and load into target
+             */
+            if (scanf("%d", &read_int) != 1) {
+                printf("Error reading input.\n");
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
+                return 0;
+            }
 
-    //         // store input value into target register
-    //         vm->registers[target] = read_int;
-    //         break;
+            // store input value into target register
+            vm->registers[target] = read_int;
+            break;
         
-    //     default:
-    //         // load the 8-bit value into target register
-    //         if (target == 0) {
-    //             break;
-    //         }
-    //         vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
-    // }
+        default:
+            // load the 8-bit value into target register
+            if (target == 0) {
+                break;
+            }
+            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
+    }
     vm->pc += 4;
     return 1;
 }
