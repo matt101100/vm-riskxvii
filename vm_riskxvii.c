@@ -593,6 +593,7 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
     size_t data_bytes_read = load_data_into_memory(fp, vm->data_memory);
     if (instruction_bytes_read == -1 || data_bytes_read == -1) {
         // file contains invalid data
+        printf("here\n");
         return NULL;
     }
 
@@ -992,15 +993,11 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
 }
 
 int execute_lbu(uint32_t instruction, virtual_machine *vm) {
-    printf("here\n");
     // get registers and immediate
     uint8_t target = get_target_register(instruction);
-    printf("after targ\n");
     uint8_t source[2];
     get_source_registers(instruction, I, source);
-    printf("after source\n");
     uint32_t immediate = extract_immediate_number(instruction, I);
-    printf("after imm\n");
 
     // save the memory address we are loading from for comparison
     uint32_t memory_address = (vm->registers[source[0]] + immediate);
