@@ -70,7 +70,7 @@ struct block {
 typedef struct virtual_machine virtual_machine;
 struct virtual_machine {
     uint32_t instruction_memory[MEMORY_SIZE];
-    uint8_t data_memory[MEMORY_SIZE];
+    uint32_t data_memory[MEMORY_SIZE];
     uint32_t registers[REGISTER_COUNT];
     int pc; // program counter
     block *head;
