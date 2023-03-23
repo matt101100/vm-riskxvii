@@ -64,8 +64,6 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm);
  */
 size_t load_image_into_memory(FILE *fp, uint32_t memory[]);
 
-size_t load_data_into_memory(FILE *fp, uint8_t data_memory[]);
-
 /*
  * Desc: Extracts the opcode from the first 6 bits of a 32-bit instruction
  * Params: a 32-bit instruction binary
