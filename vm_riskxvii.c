@@ -4,373 +4,6 @@
 #include "utils.h"
 #include "vm_methods.h"
 
-void translate_mi(uint32_t instruction) {
-    uint8_t opcode = get_opcode(instruction);
-    int label = determine_instruction_label(opcode, instruction);
-    uint32_t immediate;
-    uint8_t source[2];
-
-    if (label == add) {
-        printf("I = add, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == addi) {
-        printf("I = addi, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sub) {
-        printf("I = sub, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == lui) {
-        printf("I = lui, ");
-        uint8_t target = get_target_register(instruction);
-        immediate = extract_immediate_number(instruction, U);
-        printf("rd = r%d, ", target);
-    } else if (label == xor) {
-        printf("I = xor, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == xori) {
-        printf("I = xori, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == or) {
-        printf("I = or, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == ori) {
-        printf("I = ori, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == and) {
-        printf("I = and, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == andi) {
-        printf("I = andi, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sll) {
-        printf("I = sll, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == srl) {
-        printf("I = srl, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sra) {
-        printf("I = sra, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == lb) {
-        printf("I = lb, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == lh) {
-        printf("I = lh, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == lw) {
-        printf("I = lw, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == lbu) {
-        printf("I = lbu, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == lhu) {
-        printf("I = lhu, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sb) {
-        printf("I = sb, ");
-        get_source_registers(instruction, S, source);
-        immediate = extract_immediate_number(instruction, S);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sh) {
-        printf("I = sh, ");
-        get_source_registers(instruction, S, source);
-        immediate = extract_immediate_number(instruction, S);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sw) {
-        printf("I = sw, ");
-        get_source_registers(instruction, S, source);
-        immediate = extract_immediate_number(instruction, S);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == slt) {
-        printf("I = slt, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == slti) {
-        printf("I = slti, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sltu) {
-        printf("I = sltu, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, R, source);
-        immediate = extract_immediate_number(instruction, R);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == sltiu) {
-        printf("I = sltiu, ");
-        uint8_t target = get_target_register(instruction);
-        get_source_registers(instruction, I, source);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == beq) {
-        printf("I = beq, ");
-        get_source_registers(instruction, SB, source);
-        immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == bne) {
-        printf("I = bne, ");
-        get_source_registers(instruction, SB, source);
-        immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == blt) {
-        printf("I = blt, ");
-        get_source_registers(instruction, SB, source);
-        immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == bltu) {
-        printf("I = bltu, ");
-        get_source_registers(instruction, SB, source);
-        immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == bge) {
-        printf("I = bge, ");
-        get_source_registers(instruction, SB, source);
-        immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == bgeu) {
-        printf("I = bgeu, ");
-        immediate = extract_immediate_number(instruction, SB);
-        for (int i = 0; i < 1; i++) {
-            if (source[i] < 0) {
-                continue;
-            }
-            printf("rs%d = r%d, ", i + 1, source[i]);
-        }
-    } else if (label == jal) {
-        printf("I = jal, ");
-        uint8_t target = get_target_register(instruction);
-        immediate = extract_immediate_number(instruction, UJ);
-        printf("rd = r%d, ", target);
-    } else if (label == jalr) {
-        printf("I = jalr, ");
-        uint8_t target = get_target_register(instruction);
-        immediate = extract_immediate_number(instruction, I);
-        printf("rd = r%d, ", target);
-    }
-    printf("imm = %d\n", immediate);
-
-}
-
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("Invalid number of arguments supplied.\n");
@@ -399,12 +32,6 @@ int main(int argc, char *argv[]) {
             return 1;
         }
         uint32_t instruction = vm.instruction_memory[vm.pc / 4];
-
-        // !! TESTING ONLY !!
-        // translate_mi(instruction);
-        // vm.pc+=4;
-        // continue;
-
         uint8_t opcode = get_opcode(instruction);
         /*
          * This array stores the func3 and func7 bytes with
@@ -552,6 +179,7 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
+        // printf("instru: %0x\n", instruction);
         // printf("pc: %d\n", (vm.pc));
         // for (int i = 0; i < NUM_REGISTERS; i++) {
         //     if (vm.registers[i] == 0) {
@@ -560,12 +188,6 @@ int main(int argc, char *argv[]) {
         //     printf("reg %d = %d\n", i, vm.registers[i]);
         // }
         // printf("\n");
-        // for (int i = 0; i < MEMORY_SIZE; i++) {
-        //     if (vm.data_memory[i] == 0) {
-        //         continue;
-        //     }
-        //     printf("data_mem at addr: %0x, val = %d\n", (i * 8), vm.data_memory[i]);
-        // }
 
     }
 
@@ -575,8 +197,8 @@ int main(int argc, char *argv[]) {
 void initialize_virtual_machine(virtual_machine *vm) {
     // initialize memory and registers to 0
     memset(vm->instruction_memory, 0, MEMORY_SIZE * sizeof(uint32_t));
-    memset(vm->data_memory, 0, DATA_MEM_SIZE * sizeof(uint8_t));
-    memset(vm->registers, 0, NUM_REGISTERS * sizeof(uint32_t));
+    memset(vm->data_memory, 0, MEMORY_SIZE * sizeof(uint32_t));
+    memset(vm->registers, 0, NUM_REGISTERS * sizeof(int));
 
     vm->pc = 0; // start of the instruction memory
     vm->head = NULL; // no other blocks assigned
@@ -590,7 +212,7 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
 
     // read the instruction memory and data memory into their respective arrays
     size_t instruction_bytes_read = load_image_into_memory(fp, vm->instruction_memory);
-    size_t data_bytes_read = load_data_into_memory(fp, vm->data_memory);
+    size_t data_bytes_read = load_image_into_memory(fp, vm->data_memory);
     if (instruction_bytes_read == -1 || data_bytes_read == -1) {
         // file contains invalid data
         return NULL;
@@ -603,16 +225,6 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
 size_t load_image_into_memory(FILE *fp , uint32_t memory[]) {
     size_t bytes_read = fread(memory, sizeof(uint32_t), MEMORY_SIZE, fp);
     if (bytes_read < MEMORY_SIZE) {
-        // file did not contain the valid amount of data 
-        // ie: it contained less than 1024 bytes
-        return -1;
-    }
-    return bytes_read;
-}
-
-size_t load_data_into_memory(FILE *fp, uint8_t data_memory[]) {
-    size_t bytes_read = fread(data_memory, sizeof(uint8_t), DATA_MEM_SIZE, fp);
-    if (bytes_read < DATA_MEM_SIZE) {
         // file did not contain the valid amount of data 
         // ie: it contained less than 1024 bytes
         return -1;
@@ -841,9 +453,7 @@ void execute_add(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, R, source);
 
     // add the nums in source registers and store in target
-    if (target != 0) {
-        vm->registers[target] = vm->registers[source[0]] + vm->registers[source[1]];
-    }
+    vm->registers[target] = vm->registers[source[0]] + vm->registers[source[1]];
 
     vm->pc += 4;
 }
@@ -856,9 +466,7 @@ void execute_addi(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, I);
 
     // add the immediate to source and store at target
-    if (target != 0) {
-        vm->registers[target] = vm->registers[source[0]] + immediate;
-    }
+    vm->registers[target] = vm->registers[source[0]] + immediate;
 
     // update pc to move onto next instruction
     vm->pc += 4;
@@ -978,16 +586,11 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
             if (target == 0) {
                 break;
             }
-            // vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
-
-            // we need to extract the 32-bits from the memory address + up to 3 indicies away
-            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] |
-                                    vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] << 8 |
-                                    vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] << 16 |
-                                    vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] << 24;
+            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
     }
     vm->pc += 4;
     return 1;
+
 }
 
 int execute_lbu(uint32_t instruction, virtual_machine *vm) {
@@ -996,57 +599,56 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     uint8_t source[2];
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
-    return 0;
 
-    // // save the memory address we are loading from for comparison
-    // uint32_t memory_address = (vm->registers[source[0]] + immediate);
-    // char read_char = 0;
-    // int read_int = 0;
-    // switch (memory_address)
-    // {
-    //     case (0x0812):
-    //         /*
-    //          * Console read char
-    //          * --> Scan stdin for char input and load into target
-    //          */
-    //         if (scanf("%c", &read_char) != 1) {
-    //             // failed to read input
-    //             printf("Error reading input.\n");
-    //             // clears the buffer
-    //             int c;
-    //             while((c = getchar()) != '\n' && c != EOF);
-    //             return 0;
-    //         }
+    // save the memory address we are loading from for comparison
+    uint32_t memory_address = (vm->registers[source[0]] + immediate);
+    char read_char = 0;
+    int read_int = 0;
+    switch (memory_address)
+    {
+        case (0x0812):
+            /*
+             * Console read char
+             * --> Scan stdin for char input and load into target
+             */
+            if (scanf("%c", &read_char) != 1) {
+                // failed to read input
+                printf("Error reading input.\n");
+                // clears the buffer
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
+                return 0;
+            }
             
-    //         // store input into target register
-    //         vm->registers[target] = read_char;
-    //         break;
+            // store input into target register
+            vm->registers[target] = read_char;
+            break;
         
-    //     case (0x0816):
-    //         /*
-    //          * Console read signed int
-    //          * --> Scan stdin for signed int input and load into target
-    //          */
-    //         if (scanf("%d", &read_int) != 1) {
-    //             printf("Error reading input.\n");
-    //             int c;
-    //             while((c = getchar()) != '\n' && c != EOF);
-    //             return 0;
-    //         }
+        case (0x0816):
+            /*
+             * Console read signed int
+             * --> Scan stdin for signed int input and load into target
+             */
+            if (scanf("%d", &read_int) != 1) {
+                printf("Error reading input.\n");
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
+                return 0;
+            }
 
-    //         // store input value into target register
-    //         vm->registers[target] = read_int;
-    //         break;
+            // store input value into target register
+            vm->registers[target] = read_int;
+            break;
         
-    //     default:
-    //         // load the 8-bit value into target register
-    //         if (target == 0) {
-    //             break;
-    //         }
-    //         vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
-    // }
-    // vm->pc += 4;
-    // return 1;
+        default:
+            // load the 8-bit value into target register
+            if (target == 0) {
+                break;
+            }
+            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
+    }
+    vm->pc += 4;
+    return 1;
 }
 
 void execute_lhu(uint32_t instruction, virtual_machine *vm) {
@@ -1096,7 +698,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] = (uint8_t)vm->registers[source[1]];
+            vm->data_memory[(vm->registers[source[0]] + immediate) / 4] = (uint8_t)vm->registers[source[1]];
             break;
     }
     vm->pc += 4;
@@ -1114,7 +716,6 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
-
     switch (memory_address)
     {
         case (0x0800):
@@ -1151,15 +752,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            // printf("imm: %d\n", immediate);
-            // printf("mem_addr = %0x, val_to_store = %d\n", (vm->registers[source[0]] + immediate), vm->registers[source[1]]);
-            // vm->data_memory[((vm->registers[source[0]] + immediate) / 8)] = vm->registers[source[1]];
-
-            // mask and shift the 32-bits into 8-bit packets and store based on significance
-            vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] = vm->registers[source[1]] & 0xFF;
-            vm->data_memory[((vm->registers[source[0]] + immediate) - DATA_MEM_SIZE) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
-            vm->data_memory[((vm->registers[source[0]] + immediate) - DATA_MEM_SIZE) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
-            vm->data_memory[((vm->registers[source[0]] + immediate) - DATA_MEM_SIZE) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
+            vm->data_memory[((vm->registers[source[0]] + immediate) / 4)] = vm->registers[source[1]];
             break;
     }
     vm->pc += 4;
@@ -1230,8 +823,9 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
 
     if (target != 0) {
         // ignore writes to zero register
-        vm->registers[target] = vm->pc + 4;
+        vm->registers[target] = vm->pc + 1;
     }
+    vm->registers[target] = vm->pc + 4;
     vm->pc = (vm->pc + immediate); // immediate is already shifted
 }
 
@@ -1244,7 +838,7 @@ void execute_jalr(uint32_t instruction, virtual_machine *vm) {
 
     if (target != 0) {
         // ignore writes to zero register
-        vm->registers[target] = vm->pc + 4;
+        vm->registers[target] = vm->pc + 1;
     }
     vm->pc = (vm->registers[source[0]] + immediate); // update pc
 }
