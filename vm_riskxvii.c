@@ -615,6 +615,7 @@ size_t load_data_into_memory(FILE *fp, uint8_t data_memory[]) {
     if (bytes_read < DATA_MEM_SIZE) {
         // file did not contain the valid amount of data 
         // ie: it contained less than 1024 bytes
+        printf("here\n");
         return -1;
     }
     return bytes_read;
@@ -996,7 +997,6 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     if (target == 0) {
         return 0;
     }
-    target = 1;
     uint8_t source[2];
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
