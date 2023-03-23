@@ -1074,7 +1074,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->data_memory[(vm->registers[source[0]] + immediate) / 4] = (uint8_t)vm->registers[source[1]];
+            vm->data_memory[(vm->registers[source[0]] + immediate) / 8] = (uint8_t)vm->registers[source[1]];
             break;
     }
     vm->pc += 4;
@@ -1131,7 +1131,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
             // update requested data memory address
             printf("imm: %d\n", immediate);
             printf("mem_addr = %0x, val_to_store = %d\n", (vm->registers[source[0]] + immediate), vm->registers[source[1]]);
-            vm->data_memory[((vm->registers[source[0]] + immediate) / 4)] = vm->registers[source[1]];
+            vm->data_memory[((vm->registers[source[0]] + immediate) / 8)] = vm->registers[source[1]];
             break;
     }
     vm->pc += 4;
