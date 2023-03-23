@@ -1199,9 +1199,8 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
 
     if (target != 0) {
         // ignore writes to zero register
-        vm->registers[target] = vm->pc + 1;
+        vm->registers[target] = vm->pc + 4;
     }
-    vm->registers[target] = vm->pc + 4;
     vm->pc = (vm->pc + immediate); // immediate is already shifted
 }
 
@@ -1214,7 +1213,7 @@ void execute_jalr(uint32_t instruction, virtual_machine *vm) {
 
     if (target != 0) {
         // ignore writes to zero register
-        vm->registers[target] = vm->pc + 1;
+        vm->registers[target] = vm->pc + 4;
     }
     vm->pc = (vm->registers[source[0]] + immediate); // update pc
 }
