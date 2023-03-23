@@ -576,7 +576,7 @@ void initialize_virtual_machine(virtual_machine *vm) {
     // initialize memory and registers to 0
     memset(vm->instruction_memory, 0, MEMORY_SIZE * sizeof(uint32_t));
     memset(vm->data_memory, 0, DATA_MEM_SIZE * sizeof(uint8_t));
-    memset(vm->registers, 0, NUM_REGISTERS * sizeof(int));
+    memset(vm->registers, 0, NUM_REGISTERS * sizeof(uint32_t));
 
     vm->pc = 0; // start of the instruction memory
     vm->head = NULL; // no other blocks assigned
@@ -593,7 +593,6 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
     size_t data_bytes_read = load_data_into_memory(fp, vm->data_memory);
     if (instruction_bytes_read == -1 || data_bytes_read == -1) {
         // file contains invalid data
-        printf("here\n");
         return NULL;
     }
 
@@ -989,7 +988,6 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
     }
     vm->pc += 4;
     return 1;
-
 }
 
 int execute_lbu(uint32_t instruction, virtual_machine *vm) {

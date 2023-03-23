@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #define MEMORY_SIZE 256 // number of 4-byte instruction lines in 1024 bytes
-#define DATA_MEM_SIZE 1024
+#define DATA_MEM_SIZE 1023
 #define BLOCK_SIZE 64 // size of a heap block
 #define NUM_REGISTERS 32
 
