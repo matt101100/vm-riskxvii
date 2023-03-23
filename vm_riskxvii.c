@@ -552,20 +552,20 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        // printf("pc: %d\n", (vm.pc));
-        // for (int i = 0; i < NUM_REGISTERS; i++) {
-        //     if (vm.registers[i] == 0) {
-        //         continue;
-        //     }
-        //     printf("reg %d = %d\n", i, vm.registers[i]);
-        // }
-        // printf("\n");
-        // for (int i = 0; i < MEMORY_SIZE; i++) {
-        //     if (vm.data_memory[i] == 0) {
-        //         continue;
-        //     }
-        //     printf("data_mem at addr: %0x, val = %d\n", (i * 8), vm.data_memory[i]);
-        // }
+        printf("pc: %d\n", (vm.pc));
+        for (int i = 0; i < NUM_REGISTERS; i++) {
+            if (vm.registers[i] == 0) {
+                continue;
+            }
+            printf("reg %d = %d\n", i, vm.registers[i]);
+        }
+        printf("\n");
+        for (int i = 0; i < MEMORY_SIZE; i++) {
+            if (vm.data_memory[i] == 0) {
+                continue;
+            }
+            printf("data_mem at addr: %0x, val = %d\n", (i * 8), vm.data_memory[i]);
+        }
 
     }
 
