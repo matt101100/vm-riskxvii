@@ -231,7 +231,7 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == sh) {
         printf("I = sh, ");
-        get_source_registers(instruction, I, source);
+        get_source_registers(instruction, S, source);
         immediate = extract_immediate_number(instruction, S);
         for (int i = 0; i < 2; i++) {
             if (source[i] < 0) {
@@ -241,7 +241,7 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == sw) {
         printf("I = sw, ");
-        get_source_registers(instruction, I, source);
+        get_source_registers(instruction, S, source);
         immediate = extract_immediate_number(instruction, S);
         for (int i = 0; i < 2; i++) {
             if (source[i] < 0) {
@@ -299,7 +299,7 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == beq) {
         printf("I = beq, ");
-        get_source_registers(instruction, I, source);
+        get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
         for (int i = 0; i < 2; i++) {
             if (source[i] < 0) {
@@ -309,7 +309,7 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == bne) {
         printf("I = bne, ");
-        get_source_registers(instruction, I, source);
+        get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
         for (int i = 0; i < 2; i++) {
             if (source[i] < 0) {
@@ -319,7 +319,7 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == blt) {
         printf("I = blt, ");
-        get_source_registers(instruction, I, source);
+        get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
         for (int i = 0; i < 2; i++) {
             if (source[i] < 0) {
@@ -329,7 +329,7 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == bltu) {
         printf("I = bltu, ");
-        get_source_registers(instruction, I, source);
+        get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
         for (int i = 0; i < 2; i++) {
             if (source[i] < 0) {
@@ -339,7 +339,7 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == bge) {
         printf("I = bge, ");
-        get_source_registers(instruction, I, source);
+        get_source_registers(instruction, SB, source);
         immediate = extract_immediate_number(instruction, SB);
         for (int i = 0; i < 2; i++) {
             if (source[i] < 0) {
