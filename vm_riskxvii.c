@@ -1038,7 +1038,6 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             break;
         
         default:
-        return 293584;
             // load the 8-bit value into target register
             // if (target == 0) {
             //     break;
