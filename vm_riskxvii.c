@@ -15,111 +15,240 @@ void translate_mi(uint32_t instruction) {
     if (label == add) {
         printf("I = add, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == addi) {
         printf("I = addi, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == sub) {
         printf("I = sub, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == lui) {
         printf("I = lui, ");
         immediate = extract_immediate_number(instruction, U);
+        printf("rd = r%d, ", target);
+        printf("imm = %d\n", immediate);
     } else if (label == xor) {
         printf("I = xor, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == xori) {
         printf("I = xori, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == or) {
         printf("I = or, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == ori) {
         printf("I = ori, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == and) {
         printf("I = and, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == andi) {
         printf("I = andi, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == sll) {
         printf("I = sll, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == srl) {
         printf("I = srl, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == sra) {
         printf("I = sra, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == lb) {
         printf("I = lb, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == lh) {
         printf("I = lh, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == lw) {
         printf("I = lw, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == lbu) {
         printf("I = lbu, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == lhu) {
         printf("I = lhu, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == sb) {
         printf("I = sb, ");
         immediate = extract_immediate_number(instruction, S);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == sh) {
         printf("I = sh, ");
         immediate = extract_immediate_number(instruction, S);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == sw) {
         printf("I = sw, ");
         immediate = extract_immediate_number(instruction, S);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == slt) {
         printf("I = slt, ");
         immediate = extract_immediate_number(instruction, R);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("rd = r%d, ", target);
     } else if (label == slti) {
         printf("I = slti, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == sltu) {
         printf("I = sltu, ");
         immediate = extract_immediate_number(instruction, R);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
     } else if (label == sltiu) {
         printf("I = sltiu, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        for (int i = 0; i < 1; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == beq) {
         printf("I = beq, ");
         immediate = extract_immediate_number(instruction, SB);
+         for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == bne) {
         printf("I = bne, ");
         immediate = extract_immediate_number(instruction, SB);
+         for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == blt) {
         printf("I = blt, ");
         immediate = extract_immediate_number(instruction, SB);
+         for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == bltu) {
         printf("I = bltu, ");
         immediate = extract_immediate_number(instruction, SB);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == bge) {
         printf("I = bge, ");
         immediate = extract_immediate_number(instruction, SB);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == bgeu) {
         printf("I = bgeu, ");
         immediate = extract_immediate_number(instruction, SB);
+        for (int i = 0; i < 2; i++) {
+            printf("rs%d = r%d, ", i + 1, source[i]);
+        }
+        printf("imm = %d\n", immediate);
     } else if (label == jal) {
         printf("I = jal, ");
         immediate = extract_immediate_number(instruction, UJ);
+        printf("rd = r%d, ", target);
+        printf("imm = %d\n", immediate);
     } else if (label == jalr) {
         printf("I = jalr, ");
         immediate = extract_immediate_number(instruction, I);
+        printf("rd = r%d, ", target);
+        printf("imm = %d\n", immediate);
     }
-    printf("rd = r%d, ", target);
-    for (int i = 0; i < 2; i++) {
-        if (source[i] < 0) {
-            continue;
-        }
-        printf("rs%d = r%d, ", i + 1, source[i]);
-    }
-    printf("imm = %d\n", immediate);
 
 }
 
