@@ -1019,8 +1019,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             }
             
             // store input into target register
-            printf("here\n");
-            vm->registers[target] = read_char;
+            // vm->registers[target] = read_char;
             break;
         
         case (0x0816):
