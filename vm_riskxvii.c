@@ -998,8 +998,6 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
 
-    printf("addr: %d\n", (vm->registers[source[0]] + immediate));
-
     // save the memory address we are loading from for comparison
     uint32_t memory_address = (vm->registers[source[0]] + immediate);
     char read_char = 0;
@@ -1045,7 +1043,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             if (target == 0) {
                 break;
             }
-            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
+            // vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
     }
     vm->pc += 4;
     return 1;
