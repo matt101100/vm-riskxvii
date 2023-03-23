@@ -991,7 +991,7 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
 }
 
 int execute_lbu(uint32_t instruction, virtual_machine *vm) {
-// get registers and immediate
+    // get registers and immediate
     uint8_t target = get_target_register(instruction);
     uint8_t source[2];
     get_source_registers(instruction, I, source);
@@ -1038,13 +1038,10 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             break;
         
         default:
-            // load the 32-bit value into target register
+            // load the 8-bit value into target register
             if (target == 0) {
                 break;
             }
-            // vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
-
-            // we need to extract the 32-bits from the memory address + up to 3 indicies away
             vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
     }
     vm->pc += 4;
