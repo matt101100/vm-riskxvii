@@ -221,7 +221,6 @@ void translate_mi(uint32_t instruction) {
         }
     } else if (label == sb) {
         printf("I = sb, ");
-        uint8_t target = get_target_register(instruction);
         get_source_registers(instruction, S, source);
         immediate = extract_immediate_number(instruction, S);
         for (int i = 0; i < 2; i++) {
