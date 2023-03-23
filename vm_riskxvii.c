@@ -559,12 +559,6 @@ int main(int argc, char *argv[]) {
             }
             printf("reg %d = %d\n", i, vm.registers[i]);
         }
-        for (int i = 0; i < MEMORY_SIZE; i++) {
-            if (vm.data_memory[i] == 0) {
-                continue;
-            }
-            printf("data_mem at addr %0x = %d\n", i*4, vm.data_memory[i]);
-        }
         printf("\n");
 
     }
@@ -1098,6 +1092,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
+
     switch (memory_address)
     {
         case (0x0800):
@@ -1134,6 +1129,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
+            printf("mem_addr = %0x, val_to_store = %d\n", (vm->registers[source[0]] + immediate) / 4, vm->registers[source[1]]);
             vm->data_memory[((vm->registers[source[0]] + immediate) / 4)] = vm->registers[source[1]];
             break;
     }
