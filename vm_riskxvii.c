@@ -1035,7 +1035,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             }
 
             // store input value into target register
-            vm->registers[target] = read_int;
+            // vm->registers[target] = read_int;
             break;
         
         default:
