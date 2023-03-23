@@ -993,6 +993,9 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
 int execute_lbu(uint32_t instruction, virtual_machine *vm) {
     // get registers and immediate
     uint8_t target = get_target_register(instruction);
+    if (target == 0) {
+        break;
+    }
     uint8_t source[2];
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
@@ -1039,11 +1042,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // load the 8-bit value into target register
-            if (target == 0) {
-                break;
-            }
-            printf("KJFNEKJFNDSKFGNDFKGNDFKNGVDKFNGKFDNGKDF\n");
-            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
+            vm->registers[target] = (uint8_t)vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE];
             break;
     }
     vm->pc += 4;
