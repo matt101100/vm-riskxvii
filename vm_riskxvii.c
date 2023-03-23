@@ -1042,7 +1042,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             if (target == 0) {
                 break;
             }
-            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - 2000];
+            vm->registers[target] = vm->data_memory[(vm->registers[0] + immediate) - DATA_MEM_SIZE];
     }
     vm->pc += 4;
     return 1;
