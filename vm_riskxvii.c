@@ -149,6 +149,7 @@ int main(int argc, char *argv[]) {
         }
         uint32_t instruction = vm.instruction_memory[vm.pc / 4];
         translate_mi(instruction);
+        vm.pc+=4;
         continue;
         uint8_t opcode = get_opcode(instruction);
         /*
