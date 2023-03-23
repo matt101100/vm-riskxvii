@@ -480,7 +480,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (lbu):
-                // execute_lbu(instruction, &vm);
+                execute_lbu(instruction, &vm);
                 break;
 
             case (lhu):
