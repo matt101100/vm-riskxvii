@@ -564,7 +564,7 @@ int main(int argc, char *argv[]) {
             if (vm.data_memory[i] == 0) {
                 continue;
             }
-            printf("data_mem at addr: %0x, val = %d\n", (i * 8 * 4), vm.data_memory[i]);
+            printf("data_mem at addr: %0x, val = %d\n", (i * 8), vm.data_memory[i]);
         }
 
     }
