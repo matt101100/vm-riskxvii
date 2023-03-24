@@ -15,7 +15,7 @@ $(TARGET):$(OBJ)
 .SUFFIXES: .c .o
 
 .c.o:
-	 $(CC) $(CFLAGS) $<
+	 $(CC) -s $(CFLAGS) $<
 
 run:
 	./$(TARGET) $(ARGS)

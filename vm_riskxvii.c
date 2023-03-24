@@ -469,11 +469,10 @@ void execute_add(uint32_t instruction, virtual_machine *vm) {
     uint8_t source[2];
     get_operation_resources_type_R(instruction, &target, source);
 
-    // add the nums in source registers and store in target
     if (target != 0) {
-        vm->registers[target] = vm->registers[source[0]] + vm->registers[source[1]];
+        vm->registers[target] = vm->registers[source[0]] 
+                                + vm->registers[source[1]];
     }
-
     vm->pc += 4;
 }
 
@@ -499,9 +498,9 @@ void execute_sub(uint32_t instruction, virtual_machine *vm) {
     get_operation_resources_type_R(instruction, &target, source);
 
     if (target != 0) {
-        vm->registers[target] =  vm->registers[source[0]] - vm->registers[source[1]];
+        vm->registers[target] =  vm->registers[source[0]] 
+                                 - vm->registers[source[1]];
     }
-
     vm->pc += 4;
 }
 
@@ -523,9 +522,11 @@ void execute_xor(uint32_t instruction, virtual_machine *vm) {
     uint8_t target = get_target_register(instruction);
     uint8_t source[2];
     get_source_registers(instruction, R, source);
-
-    vm->registers[target] = vm->registers[source[0]] ^ vm->registers[source[1]];
-
+    
+    if (target != 0) {
+        vm->registers[target] = vm->registers[source[0]] 
+                                ^ vm->registers[source[1]];
+    }
     vm->pc += 4;
 }
 
@@ -537,6 +538,7 @@ void execute_or(uint32_t instruction, virtual_machine *vm) {
     uint8_t target;
     uint8_t source[2];
     get_operation_resources_type_R(instruction, &target, source);
+
     if (target != 0) {
     vm->registers[target] = vm->registers[source[0]] | vm->registers[source[1]];
     }
@@ -551,6 +553,7 @@ void execute_and(uint32_t instruction, virtual_machine *vm) {
     uint8_t target;
     uint8_t source[2];
     get_operation_resources_type_R(instruction, &target, source);
+
     if (target != 0) {
     vm->registers[target] = vm->registers[source[0]] & vm->registers[source[1]];
     }
@@ -563,8 +566,9 @@ void execute_andi(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
 
-    vm->registers[target] = vm->registers[source[0]] & immediate;
-
+    if (target != 0) {
+        vm->registers[target] = vm->registers[source[0]] & immediate;
+    }
     vm->pc += 4;
 }
 
