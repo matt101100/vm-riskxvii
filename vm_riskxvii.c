@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (xori):
-                printf("xori\n");
+                execute_xori(instruction, &vm);
                 break;
             
             case (or):
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (ori):
-                printf("ori\n");
+                execute_ori(instruction, &vm);
                 break;
             
             case (and):
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (bgeu):
-                printf("bgeu\n");
+                execute_bgeu(instruction, &vm);
                 break;
             
             case (jal):
