@@ -456,7 +456,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sll):
-                printf("sll\n");
+                execute_sll(instruction, &vm);
                 break;
             
             case (srl):
@@ -902,7 +902,11 @@ void execute_andi(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_sll(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
 
+    vm->registers[target] = vm->registers[source[0]] << vm->registers[source[1]];
 }
 
 void execute_slr(uint32_t instruction, virtual_machine *vm) {
@@ -1142,11 +1146,6 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
             return 0;
         
         default:
-            // update requested data memory address
-            // printf("imm: %d\n", immediate);
-            // printf("mem_addr = %0x, val_to_store = %d\n", (vm->registers[source[0]] + immediate), vm->registers[source[1]]);
-            // vm->data_memory[((vm->registers[source[0]] + immediate) / 8)] = vm->registers[source[1]];
-
             // mask and shift the 32-bits into 8-bit packets and store based on significance
             vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
             vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
