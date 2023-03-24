@@ -1086,7 +1086,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
              * console write unsigned int
              * --> output written value as unsigned 32-bit decimal number
              */
-            printf("%u", vm->registers[source[1]]);
+            printf("%x", vm->registers[source[1]]);
             break;
         
         case (0x080C):
@@ -1140,7 +1140,7 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
              * console write unsigned int
              * --> output written value as unsigned 32-bit decimal number
              */
-            printf("%u", vm->registers[source[1]]);
+            printf("%x", vm->registers[source[1]]);
             break;
         
         case (0x080C):
