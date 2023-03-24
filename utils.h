@@ -127,6 +127,37 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type);
 uint32_t sign_extend(int32_t num, int original_bit_count);
 
 /*
+ * The following collection of functions all serve the same purpose, but
+ * work slightly differently based on which instruction type uses them. The 
+ * general overview is:
+ * 
+ * Desc: gets all the necessary immediates and registers for executionn
+ * Params: the 32-bit instruction
+ *         a uint8_t pointer to store the target register,
+ *         a uint8_t array to store source registers and 
+ *         a uint32_t pointer to store the immediate
+ * 
+ * They are grouped such that each function prepares the exact resources needed
+ * for operations of that type to execute.
+ */
+
+void get_operation_resources_type_R(uint32_t instruction, uint8_t *target, 
+                             uint8_t source[]);
+
+void get_operation_resources_type_I(uint32_t instruction, uint8_t *target, 
+                             uint8_t source[], 
+                             uint32_t *immediate);
+
+void get_operation_resources_type_S_SB(uint32_t instruction, uint8_t *target, 
+                             uint8_t source[], 
+                             uint32_t *immediate);
+
+void get_operation_resources_type_U_UJ(uint32_t instruction, uint8_t *target, 
+                             uint8_t source[], 
+                             uint32_t *immediate);
+
+
+/*
  * Desc: prints all registers to stdout
  * Params: a pointer to the virtual machine, to access the register bank
  */

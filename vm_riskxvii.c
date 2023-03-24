@@ -393,26 +393,27 @@ int main(int argc, char *argv[]) {
     int running = 1;
     while (running) {
 
-        // get the current instruction and extract the opcode from it
         if (vm.pc < 0 || vm.pc > 1023) {
             printf("Invalid program position reached.\n");
             return 1;
         }
+        
+        // get instruction and opcode
         uint32_t instruction = get_instruction(&vm);
+        uint8_t opcode = get_opcode(instruction);
 
         // !! TESTING ONLY !!
         // translate_mi(instruction);
         // vm.pc+=4;
         // continue;
 
-        uint8_t opcode = get_opcode(instruction);
-        /*
-         * This array stores the func3 and func7 bytes with
-         * func3 = additional_opcode[0], func7 = addtional_opcode[1]
-         */
-        int instruction_label = determine_instruction_label(opcode, instruction);
+        // operation variable declaration
+        uint8_t target = 0;
+        uint8_t sources[2] = { 0 };
+        uint32_t immediate = 0;
 
         // executing instructions
+        int instruction_label = determine_instruction_label(opcode, instruction);
         switch (instruction_label)
         {
             case (add):
@@ -835,13 +836,23 @@ void register_dump(virtual_machine *vm) {
     }
 }
 
+void get_operation_resources_type_R(uint32_t instruction, uint8_t *target, 
+                             uint8_t source[]) {
+    // gets the resources needed to run R-type ops
+    *target = get_target_register(instruction);
+    get_source_registers(instruction, R, source);
+}
+
 // !! executes for each machine instruction defined below !!
 
 void execute_add(uint32_t instruction, virtual_machine *vm) {
-    // get registers
-    uint8_t target = get_target_register(instruction);
+    // // get registers
+    // uint8_t target = get_target_register(instruction);
+    // uint8_t source[2];
+    // get_source_registers(instruction, R, source);
+    uint8_t target;
     uint8_t source[2];
-    get_source_registers(instruction, R, source);
+    get_operation_resources_type_R(instruction, &target, source);
 
     // add the nums in source registers and store in target
     if (target != 0) {
