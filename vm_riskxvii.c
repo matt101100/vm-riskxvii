@@ -531,7 +531,15 @@ void execute_xor(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_xori(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, I, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
 
+    if (target != 0) {
+        vm->registers[target] = vm->registers[source[0]] ^ immediate;
+    }
+    vm->pc += 4;
 }
 
 void execute_or(uint32_t instruction, virtual_machine *vm) {
@@ -546,7 +554,15 @@ void execute_or(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_ori(uint32_t instruction, virtual_machine *vm) {
+        uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, I, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
 
+    if (target != 0) {
+        vm->registers[target] = vm->registers[source[0]] | immediate;
+    }
+    vm->pc += 4;
 }
 
 void execute_and(uint32_t instruction, virtual_machine *vm) {
