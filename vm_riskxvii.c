@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sh):
-                running = execute_store(instruction, sh, &vm)
+                running = execute_store(instruction, sh, &vm);
                 break;
             
             case (sw):
