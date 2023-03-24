@@ -770,29 +770,30 @@ int execute_store(uint32_t instruction, int instruction_label,
             return 0;
         
         default:
-            switch (instruction_label)
-            {
-                case (sb):
-                    // store byte
-                    vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
-                    break;
+            // switch (instruction_label)
+            // {
+            //     case (sb):
+            //         // store byte
+            //         vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
+            //         break;
                 
-                case (sh):
-                    // store half word
-                    // todo
-                    break;
+            //     case (sh):
+            //         // store half word
+            //         // todo
+            //         break;
                 
-                case (sw):
-                    /*
-                     * store word 
-                     * mask and shift to store in 8-bit chunks at adjacent
-                     * indices
-                     */
-                    vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
-                    vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
-                    vm->memory[((vm->registers[source[0]] + immediate)) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
-                    vm->memory[((vm->registers[source[0]] + immediate)) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
-                    break;
+            //     case (sw):
+            //         /*
+            //          * store word 
+            //          * mask and shift to store in 8-bit chunks at adjacent
+            //          * indices
+            //          */
+            //         vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
+            //         vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+            //         vm->memory[((vm->registers[source[0]] + immediate)) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
+            //         vm->memory[((vm->registers[source[0]] + immediate)) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
+            //         break;
+            break;
             }
     }
     vm->pc += 4;
