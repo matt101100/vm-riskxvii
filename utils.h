@@ -62,9 +62,15 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm);
  * Params: pointer to an open file, pointer to the virtual machine
  * Return: the number of bytes read
  */
-size_t load_image_into_memory(FILE *fp, uint32_t memory[]);
+size_t load_image_into_memory(FILE *fp, uint8_t memory[]);
 
-size_t load_data_into_memory(FILE *fp, uint8_t data_memory[]);
+/*
+ * Desc: shifts and masks adjacent memory addresses to get the 32-bit 
+ * instruction
+ * Params: a pointer to the virtual machine, to access memory
+ * Returns: the 32-bit instruction
+ */
+uint32_t get_instruction(virtual_machine *vm);
 
 /*
  * Desc: Extracts the opcode from the first 6 bits of a 32-bit instruction

@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-#define MEMORY_SIZE 256 // number of 4-byte instruction lines in 1024 bytes
-#define DATA_MEM_SIZE 1024
+#define MEMORY_SIZE 2048 // 2^11 bytes of addressable memory
 #define BLOCK_SIZE 64 // size of a heap block
 #define NUM_REGISTERS 32
 
@@ -70,8 +69,7 @@ struct block {
  */
 typedef struct virtual_machine virtual_machine;
 struct virtual_machine {
-    uint32_t instruction_memory[MEMORY_SIZE];
-    uint8_t data_memory[DATA_MEM_SIZE];
+    uint8_t memory[MEMORY_SIZE];
     uint32_t registers[REGISTER_COUNT];
     int pc; // program counter
     block *head;

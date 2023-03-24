@@ -398,7 +398,7 @@ int main(int argc, char *argv[]) {
             printf("Invalid program position reached.\n");
             return 1;
         }
-        uint32_t instruction = vm.instruction_memory[vm.pc / 4];
+        uint32_t instruction = get_instruction(&vm);
 
         // !! TESTING ONLY !!
         // translate_mi(instruction);
@@ -552,21 +552,20 @@ int main(int argc, char *argv[]) {
                 printf("Invalid\n");
                 return 1;
         }
-        printf("pc: %d\n", (vm.pc));
-        for (int i = 0; i < NUM_REGISTERS; i++) {
-            if (vm.registers[i] == 0) {
-                continue;
-            }
-            printf("reg %d = %d\n", i, vm.registers[i]);
-        }
-        printf("\n");
-        for (int i = 0; i < MEMORY_SIZE; i++) {
-            if (vm.data_memory[i] == 0) {
-                continue;
-            }
-            printf("data_mem at addr: %0x, val = %d\n", (i * 8), vm.data_memory[i]);
-        }
-
+        // printf("pc: %d\n", (vm.pc));
+        // for (int i = 0; i < NUM_REGISTERS; i++) {
+        //     if (vm.registers[i] == 0) {
+        //         continue;
+        //     }
+        //     printf("reg %d = %d\n", i, vm.registers[i]);
+        // }
+        // printf("\n");
+        // for (int i = 0; i < MEMORY_SIZE; i++) {
+        //     if (vm.memory[i] == 0) {
+        //         continue;
+        //     }
+        //     printf("data_mem at addr: %0x, val = %d\n", (i * 8), vm.memory[i]);
+        // }
     }
 
     return 0;
@@ -574,8 +573,7 @@ int main(int argc, char *argv[]) {
 
 void initialize_virtual_machine(virtual_machine *vm) {
     // initialize memory and registers to 0
-    memset(vm->instruction_memory, 0, MEMORY_SIZE * sizeof(uint32_t));
-    memset(vm->data_memory, 0, DATA_MEM_SIZE * sizeof(uint8_t));
+    memset(vm->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
     memset(vm->registers, 0, NUM_REGISTERS * sizeof(uint32_t));
 
     vm->pc = 0; // start of the instruction memory
@@ -589,9 +587,8 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
     }
 
     // read the instruction memory and data memory into their respective arrays
-    size_t instruction_bytes_read = load_image_into_memory(fp, vm->instruction_memory);
-    size_t data_bytes_read = load_data_into_memory(fp, vm->data_memory);
-    if (instruction_bytes_read == -1 || data_bytes_read == -1) {
+    size_t bytes_read = load_image_into_memory(fp, vm->memory);
+    if (bytes_read == -1) {
         // file contains invalid data
         return NULL;
     }
@@ -600,27 +597,25 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
 
 }
 
-size_t load_image_into_memory(FILE *fp , uint32_t memory[]) {
-    size_t bytes_read = fread(memory, sizeof(uint32_t), MEMORY_SIZE, fp);
+size_t load_image_into_memory(FILE *fp , uint8_t memory[]) {
+    size_t bytes_read = fread(memory, sizeof(uint8_t), MEMORY_SIZE, fp);
     if (bytes_read < MEMORY_SIZE) {
         // file did not contain the valid amount of data 
-        // ie: it contained less than 1024 bytes
-        return -1;
-    }
-    return bytes_read;
-}
-
-size_t load_data_into_memory(FILE *fp, uint8_t data_memory[]) {
-    size_t bytes_read = fread(data_memory, sizeof(uint8_t), DATA_MEM_SIZE, fp);
-    if (bytes_read < DATA_MEM_SIZE) {
-        // file did not contain the valid amount of data 
-        // ie: it contained less than 1024 bytes
+        // ie: it contained less than 2048 bytes
         return -1;
     }
     return bytes_read;
 }
 
 // NOTE: binary is in little endian so the binary operations account for this
+
+uint32_t get_instruction(virtual_machine* vm) {
+    uint32_t instruction = (vm->memory[vm->pc]) |
+                           ((vm->memory[vm->pc + 1] << 8)) |
+                           ((vm->memory[vm->pc + 2] << 16)) |
+                           ((vm->memory[vm->pc + 3] << 24));
+    return instruction;
+}
 
 uint8_t get_opcode(uint32_t instruction) {
     // apply a bit mask to get the first 6 bits of the 32-bit instruction
@@ -978,13 +973,12 @@ int execute_lw(uint32_t instruction, virtual_machine *vm) {
             if (target == 0) {
                 break;
             }
-            // vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) / 4];
 
             // we need to extract the 32-bits from the memory address + up to 3 indicies away
-            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] |
-                                    vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] << 8 |
-                                    vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] << 16 |
-                                    vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] << 24;
+            vm->registers[target] = vm->memory[(vm->registers[source[0]] + immediate)] |
+                                    vm->memory[(vm->registers[source[0]] + immediate) + 1] << 8 |
+                                    vm->memory[(vm->registers[source[0]] + immediate) + 2] << 16 |
+                                    vm->memory[(vm->registers[source[0]] + immediate) + 3] << 24;
     }
     vm->pc += 4;
     return 1;
@@ -1042,7 +1036,7 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm) {
             if (target == 0) {
                 break;
             }
-            vm->registers[target] = vm->data_memory[(vm->registers[source[0]] + immediate)];
+            vm->registers[target] = vm->memory[(vm->registers[source[0]] + immediate)];
     }
     vm->pc += 4;
     return 1;
@@ -1095,7 +1089,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] = (uint8_t)vm->registers[source[1]];
+            vm->memory[(vm->registers[source[0]] + immediate)] = (uint8_t)vm->registers[source[1]];
             break;
     }
     vm->pc += 4;
@@ -1113,7 +1107,6 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t memory_address = vm->registers[source[0]] + immediate; // to write
-
     switch (memory_address)
     {
         case (0x0800):
@@ -1155,10 +1148,10 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
             // vm->data_memory[((vm->registers[source[0]] + immediate) / 8)] = vm->registers[source[1]];
 
             // mask and shift the 32-bits into 8-bit packets and store based on significance
-            vm->data_memory[(vm->registers[source[0]] + immediate) - DATA_MEM_SIZE] = vm->registers[source[1]] & 0xFF;
-            vm->data_memory[((vm->registers[source[0]] + immediate) - DATA_MEM_SIZE) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
-            vm->data_memory[((vm->registers[source[0]] + immediate) - DATA_MEM_SIZE) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
-            vm->data_memory[((vm->registers[source[0]] + immediate) - DATA_MEM_SIZE) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
+            vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
+            vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+            vm->memory[((vm->registers[source[0]] + immediate)) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
+            vm->memory[((vm->registers[source[0]] + immediate)) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
             break;
     }
     vm->pc += 4;
