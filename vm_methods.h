@@ -39,7 +39,7 @@ void execute_andi(uint32_t instruction, virtual_machine *vm);
 
 void execute_sll(uint32_t instruction, virtual_machine *vm);
 
-void execute_slr(uint32_t instruction, virtual_machine *vm);
+void execute_srl(uint32_t instruction, virtual_machine *vm);
 
 void execute_sra(uint32_t instruction, virtual_machine *vm);
 
