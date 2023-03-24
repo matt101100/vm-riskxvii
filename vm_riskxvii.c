@@ -1275,7 +1275,15 @@ void execute_bge(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_bgeu(uint32_t instruction, virtual_machine *vm) {
+    uint32_t immediate = extract_immediate_number(instruction, SB);
+    uint8_t source[2];
+    get_source_registers(instruction, SB, source);
 
+    if (vm->registers[source[0]] >= vm->registers[source[1]]) {
+        vm->pc += immediate;
+        return;
+    }
+    vm->pc += 4;
 }
 
 void execute_jal(uint32_t instruction, virtual_machine *vm) {
