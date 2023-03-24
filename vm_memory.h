@@ -27,7 +27,7 @@ struct block {
 typedef struct virtual_machine virtual_machine;
 struct virtual_machine {
     uint8_t memory[MEMORY_SIZE];
-    uint32_t registers[REGISTER_COUNT];
+    uint32_t registers[NUM_REGISTERS];
     int pc; // program counter
     block *head;
     
