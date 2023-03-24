@@ -432,7 +432,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (xor):
-                printf("xor\n");
+                execute_xor(instruction, &vm);
                 break;
             
             case (xori):
@@ -440,7 +440,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (or):
-                printf("or\n");
+                execute_or(instruction, &vm);
                 break;
             
             case (ori):
@@ -448,11 +448,11 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (and):
-                printf("and\n");
+                execute_and(instruction, &vm);
                 break;
             
             case (andi):
-                printf("andi\n");
+                execute_andi(instruction, &vm);
                 break;
             
             case (sll):
@@ -532,7 +532,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (bge):
-                printf("bge\n");
+                execute_bge(instruction, &vm);
                 break;
             
             case (bgeu):
@@ -886,7 +886,13 @@ void execute_lui(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_xor(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
 
+    vm->registers[target] = vm->registers[source[0]] ^ vm->registers[source[1]];
+
+    vm->pc += 4;
 }
 
 void execute_xori(uint32_t instruction, virtual_machine *vm) {
