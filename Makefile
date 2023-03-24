@@ -2,7 +2,7 @@ TARGET = vm_riskxvii
 
 CC = gcc
 
-CFLAGS     = -c
+CFLAGS     = -c -Wall -Wvla -Werror -O0 -std=c11
 ASAN_FLAGS = -fsanitize=address
 SRC        = vm_riskxvii.c
 OBJ        = $(SRC:.c=.o)
@@ -10,12 +10,12 @@ OBJ        = $(SRC:.c=.o)
 all:$(TARGET)
 
 $(TARGET):$(OBJ)
-	$(CC) -o $@ $(OBJ)
+	$(CC) -Os -s -o $@ $(OBJ)
 
 .SUFFIXES: .c .o
 
 .c.o:
-	 $(CC) $(CFLAGS) $<
+	 $(CC) -Os -s $(CFLAGS) $<
 
 run:
 	./$(TARGET) $(ARGS)
