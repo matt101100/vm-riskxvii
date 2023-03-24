@@ -102,23 +102,23 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (lb):
-                printf("lb\n");
+                running = execute_load(instruction, lb, &vm);
                 break;
             
             case (lh):
-                printf("lh\n");
+                running = execute_load(instruction, lh, &vm);
                 break;
             
             case (lw):
-                execute_load(instruction, lw, &vm);
+                running = execute_load(instruction, lw, &vm);
                 break;
             
             case (lbu):
-                execute_load(instruction, lbu, &vm);
+                running = execute_load(instruction, lbu, &vm);
                 break;
 
             case (lhu):
-                printf("lhu\n");
+                running = execute_load(instruction, lhu, &vm);
                 break;
             
             case (sb):
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sh):
-                printf("sh\n");
+                running = execute_store(instruction, sh, &vm)
                 break;
             
             case (sw):
@@ -686,135 +686,6 @@ int execute_load(uint32_t instruction, int instruction_label,
     }
     vm->pc += 4;
     return 1;
-}
-
-void execute_lh(uint32_t instruction, virtual_machine *vm) {
-
-}
-
-int execute_lw(uint32_t instruction, virtual_machine *vm) {
-    // get registers and immediate
-    uint8_t target = get_target_register(instruction);
-    uint8_t source[2];
-    get_source_registers(instruction, I, source);
-    uint32_t immediate = extract_immediate_number(instruction, I);
-
-    // save the memory address we are loading from for comparison
-    uint32_t memory_address = (vm->registers[source[0]] + immediate);
-    char read_char = 0;
-    int read_int = 0;
-    switch (memory_address)
-    {
-        case (0x0812):
-            /*
-             * Console read char
-             * --> Scan stdin for char input and load into target
-             */
-            if (scanf("%c", &read_char) != 1) {
-                // failed to read input
-                printf("Error reading input.\n");
-                // clears the buffer
-                int c;
-                while((c = getchar()) != '\n' && c != EOF);
-                return 0;
-            }
-            
-            // store input into target register
-            vm->registers[target] = read_char;
-            break;
-        
-        case (0x0816):
-            /*
-             * Console read signed int
-             * --> Scan stdin for signed int input and load into target
-             */
-            if (scanf("%d", &read_int) != 1) {
-                printf("Error reading input.\n");
-                int c;
-                while((c = getchar()) != '\n' && c != EOF);
-                return 0;
-            }
-
-            // store input value into target register
-            vm->registers[target] = read_int;
-            break;
-        
-        default:
-            // load the 32-bit value into target register
-            if (target == 0) {
-                break;
-            }
-
-            // we need to extract the 32-bits from the memory address + up to 3 indicies away
-            vm->registers[target] = vm->memory[(vm->registers[source[0]] + immediate)] |
-                                    vm->memory[(vm->registers[source[0]] + immediate) + 1] << 8 |
-                                    vm->memory[(vm->registers[source[0]] + immediate) + 2] << 16 |
-                                    vm->memory[(vm->registers[source[0]] + immediate) + 3] << 24;
-    }
-    vm->pc += 4;
-    return 1;
-}
-
-int execute_lbu(uint32_t instruction, virtual_machine *vm) {
-    // get registers and immediate
-    uint8_t target = get_target_register(instruction);
-    uint8_t source[2];
-    get_source_registers(instruction, I, source);
-    uint32_t immediate = extract_immediate_number(instruction, I);
-
-    // save the memory address we are loading from for comparison
-    uint32_t memory_address = (vm->registers[source[0]] + immediate);
-    char read_char = 0;
-    int read_int = 0;
-    switch (memory_address)
-    {
-        case (0x0812):
-            /*
-             * Console read char
-             * --> Scan stdin for char input and load into target
-             */
-            if (scanf("%c", &read_char) != 1) {
-                // failed to read input
-                printf("Error reading input.\n");
-                // clears the buffer
-                int c;
-                while((c = getchar()) != '\n' && c != EOF);
-                return 0;
-            }
-            
-            // store input into target register
-            vm->registers[target] = read_char;
-            break;
-        
-        case (0x0816):
-            /*
-             * Console read signed int
-             * --> Scan stdin for signed int input and load into target
-             */
-            if (scanf("%d", &read_int) != 1) {
-                printf("Error reading input.\n");
-                int c;
-                while((c = getchar()) != '\n' && c != EOF);
-                return 0;
-            }
-
-            // store input value into target register
-            vm->registers[target] = read_int;
-            break;
-        
-        default:
-            // load the 8-bit value into target register
-            if (target == 0) {
-                break;
-            }
-            vm->registers[target] = vm->memory[(vm->registers[source[0]] + immediate)];
-    }
-    vm->pc += 4;
-    return 1;
-}
-
-void execute_lhu(uint32_t instruction, virtual_machine *vm) {
-
 }
 
 int execute_store(uint32_t instruction, int instruction_label,
