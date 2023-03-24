@@ -53,6 +53,9 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm);
 
 void execute_lhu(uint32_t instruction, virtual_machine *vm);
 
+/*
+ * Includes all store ops: sb, sh, sw
+ */
 int execute_store(uint32_t instruction, int instruction_label,
                   virtual_machine *vm);
 
