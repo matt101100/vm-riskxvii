@@ -401,9 +401,9 @@ int main(int argc, char *argv[]) {
         uint32_t instruction = get_instruction(&vm);
 
         // !! TESTING ONLY !!
-        // translate_mi(instruction);
-        // vm.pc+=4;
-        // continue;
+        translate_mi(instruction);
+        vm.pc+=4;
+        continue;
 
         uint8_t opcode = get_opcode(instruction);
         /*
@@ -424,7 +424,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sub):
-                printf("sub\n");
+                execute_sub(instruction, &vm);
                 break;
             
             case (lui):
