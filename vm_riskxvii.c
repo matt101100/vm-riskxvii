@@ -402,7 +402,7 @@ int main(int argc, char *argv[]) {
 
         // !! TESTING ONLY !!
         translate_mi(instruction);
-        vm.pc+=1;
+        vm.pc+=4;
         continue;
 
         uint8_t opcode = get_opcode(instruction);
