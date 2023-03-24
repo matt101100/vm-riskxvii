@@ -549,7 +549,9 @@ int main(int argc, char *argv[]) {
             
             default:
                 // invalid
-                printf("Invalid\n");
+                printf("Instruction not implemented: %x\n", instruction);
+                printf("PC: %x\n", vm.pc);
+                pc_dump(&vm);
                 return 1;
         }
         // printf("pc: %d\n", (vm.pc));
@@ -825,6 +827,12 @@ int determine_instruction_label(uint8_t opcode, uint32_t instruction) {
     }
     // invalid instruction label
     return -1;
+}
+
+void register_dump(virtual_machine *vm) {
+    for (int i = 0; i < NUM_REGISTERS; i++) {
+        printf("R[%d] = %x\n", i, vm->registers[i]);
+    }
 }
 
 // !! executes for each machine instruction defined below !!

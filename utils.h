@@ -126,4 +126,10 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type);
  */
 uint32_t sign_extend(int32_t num, int original_bit_count);
 
+/*
+ * Desc: prints all registers to stdout
+ * Params: a pointer to the virtual machine, to access the register bank
+ */
+void register_dump(virtual_machine *vm);
+
 #endif
