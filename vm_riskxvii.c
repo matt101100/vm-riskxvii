@@ -110,11 +110,11 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (lw):
-                execute_lw(instruction, &vm);
+                execute_load(instruction, lw, &vm);
                 break;
             
             case (lbu):
-                execute_lbu(instruction, &vm);
+                execute_load(instruction, lbu, &vm);
                 break;
 
             case (lhu):
@@ -594,8 +594,98 @@ void execute_sra(uint32_t instruction, virtual_machine *vm) {
 
 }
 
-void execute_lb(uint32_t instruction, virtual_machine *vm) {
+int execute_load(uint32_t instruction, int instruction_label, 
+                  virtual_machine *vm) {
+    // get registers and immediate
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, I, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
 
+    // save the memory address we are loading from for comparison
+    uint32_t memory_address = (vm->registers[source[0]] + immediate);
+    char read_char = 0;
+    int read_int = 0;
+    switch (memory_address)
+    {
+        case (0x0812):
+            /*
+             * Console read char
+             * --> Scan stdin for char input and load into target
+             */
+            if (scanf("%c", &read_char) != 1) {
+                // failed to read input
+                printf("Error reading input.\n");
+                // clears the buffer
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
+                return 0;
+            }
+            
+            // store input into target register
+            vm->registers[target] = read_char;
+            break;
+        
+        case (0x0816):
+            /*
+             * Console read signed int
+             * --> Scan stdin for signed int input and load into target
+             */
+            if (scanf("%d", &read_int) != 1) {
+                printf("Error reading input.\n");
+                int c;
+                while((c = getchar()) != '\n' && c != EOF);
+                return 0;
+            }
+
+            // store input value into target register
+            vm->registers[target] = read_int;
+            break;
+        
+        default:
+            if (target == 0) {
+                break;
+            }
+            
+            switch (instruction_label)
+            {
+                case (lb):
+                    // load byte
+                    vm->registers[target] = sign_extend(vm->memory[vm->registers[source[0]]] + immediate, 8);
+                    break;
+                
+                case (lh):
+                    // load half word -- 16 bits
+                    vm->registers[target] = 
+                    sign_extend(vm->memory[(vm->registers[source[0]] + immediate)] |
+                    vm->memory[(vm->registers[source[0]] + immediate) + 1] << 8, 16);
+                    break;
+                
+                case (lw):
+                    // load word -- 32 bits
+                    vm->registers[target] = sign_extend(vm->memory[(vm->registers[source[0]] + immediate)] |
+                                    vm->memory[(vm->registers[source[0]] + immediate) + 1] << 8 |
+                                    vm->memory[(vm->registers[source[0]] + immediate) + 2] << 16 |
+                                    vm->memory[(vm->registers[source[0]] + immediate) + 3] << 24, 32);
+                    break;
+                
+                case (lbu):
+                    // load byte but treat val as unsigned (don't sign extend)
+                    vm->registers[target] = vm->memory[vm->registers[source[0]]] + immediate;
+                    break;
+
+                
+                case (lhu):
+                    // load half word but treat val as unsigned
+                    vm->registers[target] =
+                    vm->memory[(vm->registers[source[0]] + immediate)] |
+                    vm->memory[(vm->registers[source[0]] + immediate) + 1] << 8;
+                    break;
+            }
+
+    }
+    vm->pc += 4;
+    return 1;
 }
 
 void execute_lh(uint32_t instruction, virtual_machine *vm) {

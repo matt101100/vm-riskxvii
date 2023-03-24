@@ -43,6 +43,12 @@ void execute_srl(uint32_t instruction, virtual_machine *vm);
 
 void execute_sra(uint32_t instruction, virtual_machine *vm);
 
+/*
+ * Includes all load ops: lb, lh, lw, lbu, lhu 
+ */
+int execute_load(uint32_t instruction, int instruction_label,
+                  virtual_machine *vm);
+
 void execute_lb(uint32_t instruction, virtual_machine *vm);
 
 void execute_lh(uint32_t instruction, virtual_machine *vm);
