@@ -25,3 +25,7 @@ test:
 
 clean:
 	rm -f *.o *.obj $(TARGET)
+	rm -f debug
+
+debug:$(TARGET)
+	$(CC) $(ASAN_FLAGS) -o $@ $(OBJ)
