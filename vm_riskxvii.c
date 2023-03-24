@@ -551,7 +551,7 @@ int main(int argc, char *argv[]) {
                 // invalid
                 printf("Instruction not implemented: %x\n", instruction);
                 printf("PC: %x\n", vm.pc);
-                reg_dump(&vm);
+                register_dump(&vm);
                 return 1;
         }
         // printf("pc: %d\n", (vm.pc));
