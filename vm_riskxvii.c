@@ -394,7 +394,7 @@ int main(int argc, char *argv[]) {
     while (running) {
 
         // get the current instruction and extract the opcode from it
-        if (vm.pc < 0) {
+        if (vm.pc < 0 || vm.pc > 1023) {
             printf("Invalid program position reached.\n");
             return 1;
         }
