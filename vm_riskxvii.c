@@ -460,7 +460,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (srl):
-                printf("srl\n");
+                execute_srl(instruction, &vm);
                 break;
             
             case (sra):
