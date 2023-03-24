@@ -53,11 +53,8 @@ int execute_lbu(uint32_t instruction, virtual_machine *vm);
 
 void execute_lhu(uint32_t instruction, virtual_machine *vm);
 
-int execute_sb(uint32_t instruction, virtual_machine *vm);
-
-void execute_sh(uint32_t instruction, virtual_machine *vm);
-
-int execute_sw(uint32_t instruction, virtual_machine *vm);
+int execute_store(uint32_t instruction, int instruction_label,
+                  virtual_machine *vm);
 
 void execute_slt(uint32_t instruction, virtual_machine *vm);
 
@@ -82,8 +79,5 @@ void execute_bgeu(uint32_t instruction, virtual_machine *vm);
 void execute_jal(uint32_t instruction, virtual_machine *vm);
 
 void execute_jalr(uint32_t instruction, virtual_machine *vm);
-
-int execute_store(uint32_t instruction, int instruction_label,
-                  virtual_machine *vm);
 
 #endif
