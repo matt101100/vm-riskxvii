@@ -727,77 +727,77 @@ void execute_lhu(uint32_t instruction, virtual_machine *vm) {
 
 }
 
-// int execute_store(uint32_t instruction, int instruction_label,
-//                   virtual_machine *vm) {
-//     uint8_t source[2];
-//     get_source_registers(instruction, S, source);
-//     uint32_t immediate = extract_immediate_number(instruction, S);
+int execute_store(uint32_t instruction, int instruction_label,
+                  virtual_machine *vm) {
+    // uint8_t source[2];
+    // get_source_registers(instruction, S, source);
+    // uint32_t immediate = extract_immediate_number(instruction, S);
 
-//     uint32_t mem_address = vm->registers[source[0] + immediate]; // to write
-//     switch (mem_address)
-//     {
-//         case (0x0800):
-//             /*
-//              * console write char
-//              * --> output written value as char to stdout
-//              */
-//             printf("%c", vm->registers[source[1]]);
-//             break;
+    // uint32_t mem_address = vm->registers[source[0] + immediate]; // to write
+    // switch (mem_address)
+    // {
+    //     case (0x0800):
+    //         /*
+    //          * console write char
+    //          * --> output written value as char to stdout
+    //          */
+    //         printf("%c", vm->registers[source[1]]);
+    //         break;
         
-//         case (0x0804):
-//             /*
-//              * console write signed int
-//              * --> output written value as signed 32-bit decimal number
-//              */ 
-//             printf("%d", vm->registers[source[1]]);
-//             break;
+    //     case (0x0804):
+    //         /*
+    //          * console write signed int
+    //          * --> output written value as signed 32-bit decimal number
+    //          */ 
+    //         printf("%d", vm->registers[source[1]]);
+    //         break;
         
-//         case (0x0808):
-//             /*
-//              * console write unsigned int
-//              * --> output written value as unsigned 32-bit number in lower-case
-//              * hex format
-//              */
-//             printf("%x", vm->registers[source[1]]);
-//             break;
+    //     case (0x0808):
+    //         /*
+    //          * console write unsigned int
+    //          * --> output written value as unsigned 32-bit number in lower-case
+    //          * hex format
+    //          */
+    //         printf("%x", vm->registers[source[1]]);
+    //         break;
         
-//         case (0x080C):
-//             /*
-//             * Halt
-//             * --> print message to stdout and send a flag signalling end of program
-//             */
-//             printf("CPU Halt Requested\n");
-//             return 0;
+    //     case (0x080C):
+    //         /*
+    //         * Halt
+    //         * --> print message to stdout and send a flag signalling end of program
+    //         */
+    //         printf("CPU Halt Requested\n");
+    //         return 0;
         
-//         default:
-//             switch (instruction_label)
-//             {
-//                 case (sb):
-//                     // store byte
-//                     vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
-//                     break;
+    //     default:
+    //         switch (instruction_label)
+    //         {
+    //             case (sb):
+    //                 // store byte
+    //                 vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
+    //                 break;
                 
-//                 case (sh):
-//                     // store half word
-//                     // todo
-//                     break;
+    //             case (sh):
+    //                 // store half word
+    //                 // todo
+    //                 break;
                 
-//                 case (sw):
-//                     /*
-//                      * store word 
-//                      * mask and shift to store in 8-bit chunks at adjacent
-//                      * indices
-//                      */
-//                     vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
-//                     vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
-//                     vm->memory[((vm->registers[source[0]] + immediate)) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
-//                     vm->memory[((vm->registers[source[0]] + immediate)) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
-//                     break;
-//             }
-//     }
-//     vm->pc += 4;
-//     return 1;
-// }
+    //             case (sw):
+    //                 /*
+    //                  * store word 
+    //                  * mask and shift to store in 8-bit chunks at adjacent
+    //                  * indices
+    //                  */
+    //                 vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
+    //                 vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+    //                 vm->memory[((vm->registers[source[0]] + immediate)) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
+    //                 vm->memory[((vm->registers[source[0]] + immediate)) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
+    //                 break;
+    //         }
+    // }
+    vm->pc += 4;
+    return 1;
+}
 
 void execute_slt(uint32_t instruction, virtual_machine *vm) {
 
