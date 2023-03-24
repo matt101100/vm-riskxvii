@@ -6,16 +6,17 @@ CFLAGS     = -c -Wall -Wvla -Werror -O0 -g -std=c11
 ASAN_FLAGS = -fsanitize=address
 SRC        = vm_riskxvii.c
 OBJ        = $(SRC:.c=.o)
+OPTIMIZE   = -Os
 
 all:$(TARGET)
 
 $(TARGET):$(OBJ)
-	$(CC) $(ASAN_FLAGS) -o $@ $(OBJ)
+	$(CC) -Os -o $@ $(OBJ)
 
 .SUFFIXES: .c .o
 
 .c.o:
-	 $(CC) $(CFLAGS) $(ASAN_FLAGS) $<
+	 $(CC) $(CFLAGS) $<
 
 run:
 	./$(TARGET) $(ARGS)
