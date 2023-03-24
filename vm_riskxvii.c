@@ -778,16 +778,17 @@ int execute_store(uint32_t instruction, int instruction_label,
                     break;
                 
                 case (sh):
-                    // store half word
-                    // todo
-                    break;
-                
-                case (sw):
                     /*
-                     * store word 
+                     * store half word -- 16 bits
                      * mask and shift to store in 8-bit chunks at adjacent
                      * indices
                      */
+                    vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
+                    vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+                    break;
+                
+                case (sw):
+                    // store word -- 32 bits
                     vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
                     vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
                     vm->memory[((vm->registers[source[0]] + immediate)) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
