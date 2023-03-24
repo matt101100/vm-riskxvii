@@ -549,7 +549,7 @@ int main(int argc, char *argv[]) {
             
             default:
                 // invalid
-                printf("Instruction not implemented: 0x%08x\n", instruction);
+                printf("Instruction Not Implemented: 0x%08x\n", instruction);
                 printf("PC = 0x%08x;\n", vm.pc);
                 register_dump(&vm);
                 return 1;
