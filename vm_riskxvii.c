@@ -860,7 +860,15 @@ void execute_addi(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_sub(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
 
+    if (target != 0) {
+        vm->registers[target] =  vm->registers[source[0]] - vm->registers[source[1]];
+    }
+
+    vm->pc += 4;
 }
 
 void execute_lui(uint32_t instruction, virtual_machine *vm) {
@@ -1084,7 +1092,8 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         case (0x0808):
             /*
              * console write unsigned int
-             * --> output written value as unsigned 32-bit decimal number
+             * --> output written value as unsigned 32-bit number in lower-case
+             * hex format
              */
             printf("%x", vm->registers[source[1]]);
             break;
@@ -1138,7 +1147,8 @@ int execute_sw(uint32_t instruction, virtual_machine *vm) {
         case (0x0808):
             /*
              * console write unsigned int
-             * --> output written value as unsigned 32-bit decimal number
+             * --> output written value as unsigned 32-bit num in lower-case
+             * hex format
              */
             printf("%x", vm->registers[source[1]]);
             break;
