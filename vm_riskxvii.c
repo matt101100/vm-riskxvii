@@ -733,7 +733,7 @@ int execute_store(uint32_t instruction, int instruction_label,
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
 
-    uint32_t mem_address = vm->registers[source[0] + immediate]; // to write
+    uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
     switch (mem_address)
     {
         case (0x0800):
@@ -775,6 +775,11 @@ int execute_store(uint32_t instruction, int instruction_label,
                 case (sb):
                     // store byte
                     vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
+                    break;
+                
+                case (sh):
+                    // store half word
+                    // todo
                     break;
                 
                 case (sw):
