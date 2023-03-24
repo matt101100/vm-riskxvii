@@ -10,12 +10,12 @@ OBJ        = $(SRC:.c=.o)
 all:$(TARGET)
 
 $(TARGET):$(OBJ)
-	$(CC) -s -o $@ $(OBJ)
+	$(CC) -Os -s -o $@ $(OBJ)
 
 .SUFFIXES: .c .o
 
 .c.o:
-	 $(CC) -s $(CFLAGS) $<
+	 $(CC) -Os -s $(CFLAGS) $<
 
 run:
 	./$(TARGET) $(ARGS)
