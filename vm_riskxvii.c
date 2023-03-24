@@ -774,7 +774,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             {
                 case (sb):
                     // store byte
-                    vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
+                    // vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
                     break;
                 
                 case (sh):
