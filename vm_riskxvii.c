@@ -1099,7 +1099,7 @@ int execute_sb(uint32_t instruction, virtual_machine *vm) {
         
         default:
             // update requested data memory address
-            vm->memory[(vm->registers[source[0]] + immediate)] = (uint8_t)vm->registers[source[1]];
+            vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
             break;
     }
     vm->pc += 4;
