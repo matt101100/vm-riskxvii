@@ -401,9 +401,9 @@ int main(int argc, char *argv[]) {
         uint32_t instruction = get_instruction(&vm);
 
         // !! TESTING ONLY !!
-        translate_mi(instruction);
-        vm.pc+=4;
-        continue;
+        // translate_mi(instruction);
+        // vm.pc+=4;
+        // continue;
 
         uint8_t opcode = get_opcode(instruction);
         /*
@@ -524,11 +524,11 @@ int main(int argc, char *argv[]) {
                 break;
 
             case (blt):
-                printf("blt\n");
+                execute_blt(instruction, &vm);
                 break;
             
             case (bltu):
-                printf("bltu\n");
+                execute_bltu(instruction, &vm);
                 break;
             
             case (bge):
@@ -1239,11 +1239,27 @@ void execute_bne(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_blt(uint32_t instruction, virtual_machine *vm) {
+    uint32_t immediate = extract_immediate_number(instruction, SB);
+    uint8_t source[2];
+    get_source_registers(instruction, SB, source);
 
+    if (vm->registers[source[0]] < vm->registers[source[1]]) {
+        vm->pc += immediate;
+        return;
+    }
+    vm->pc += 4;
 }
 
 void execute_bltu(uint32_t instruction, virtual_machine *vm) {
+    uint32_t immediate = extract_immediate_number(instruction, SB);
+    uint8_t source[2];
+    get_source_registers(instruction, SB, source);
 
+    if (vm->registers[source[0]] < vm->registers[source[1]]) {
+        vm->pc += immediate;
+        return;
+    }
+    vm->pc += 4;
 }
 
 void execute_bge(uint32_t instruction, virtual_machine *vm) {
