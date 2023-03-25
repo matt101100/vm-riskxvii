@@ -40,11 +40,6 @@ int main(int argc, char *argv[]) {
         // vm.pc+=4;
         // continue;
 
-        // operation variable declaration
-        // uint8_t target = 0;
-        // uint8_t sources[2] = { 0 };
-        // uint32_t immediate = 0;
-
         // executing instructions
         int instruction_label = determine_instruction_label(opcode, instruction);
         switch (instruction_label)
