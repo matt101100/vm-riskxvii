@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (xori):
-                execute_xori(instruction, &vm);
+                execute_logical_immediate(instruction, xori, &vm);
                 break;
             
             case (or):
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (ori):
-                execute_ori(instruction, &vm);
+                execute_logical_immediate(instruction, ori, &vm);
                 break;
             
             case (and):
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (andi):
-                execute_andi(instruction, &vm);
+                execute_logical_immediate(instruction, andi, &vm);
                 break;
             
             case (sll):
@@ -510,6 +510,34 @@ void execute_logical_type_R(uint32_t instruction, int instruction_label,
         case (and):
             vm->registers[target] = vm->registers[source[0]] 
                                 & vm->registers[source[1]];
+            break;
+    }
+    vm->pc += 4;
+}
+
+void execute_logical_immediate(uint32_t instruction, int instruction_label,
+                               virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    if (target == 0) {
+        vm->pc += 4;
+        return;
+    }
+    uint8_t source[2];
+    get_source_registers(instruction, I, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
+
+    switch (instruction_label)
+    {
+        case (xori):
+            vm->registers[target] = vm->registers[source[0]] ^ immediate;
+            break;
+        
+        case (ori):
+            vm->registers[target] = vm->registers[source[0]] | immediate;
+            break;
+        
+        case (andi):
+            vm->registers[target] = vm->registers[source[0]] & immediate;
             break;
     }
     vm->pc += 4;
