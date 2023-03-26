@@ -837,6 +837,9 @@ void execute_blt(uint32_t instruction, virtual_machine *vm) {
     uint8_t source[2];
     get_source_registers(instruction, SB, source);
 
+    int32_t x = vm->registers[source[0]];
+    printf("unsigned: %d, signed: %d\n", vm->registers[source[0]], x);
+
     if ((int32_t)vm->registers[source[0]] < (int32_t)vm->registers[source[1]]) {
         vm->pc += immediate;
         return;
