@@ -485,6 +485,36 @@ void execute_math_type_R(uint32_t instruction, int instruction_label,
     vm->pc += 4;
 }
 
+void execute_logical_type_R(uint32_t instruction, int instruction_label,
+                            virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    if (target == 0) {
+        vm->pc += 4;
+        return;
+    }
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
+
+    switch (instruction_label)
+    {
+        case (xor):
+            vm->registers[target] = vm->registers[source[0]] 
+                                ^ vm->registers[source[1]];
+            break;
+        
+        case (or):
+            vm->registers[target] = vm->registers[source[0]] 
+                                | vm->registers[source[1]];
+            break;
+        
+        case (and):
+            vm->registers[target] = vm->registers[source[0]] 
+                                & vm->registers[source[1]];
+            break;
+    }
+    vm->pc += 4;
+}
+
 void execute_addi(uint32_t instruction, virtual_machine *vm) {
     // get registers and immediate
     uint8_t target = get_target_register(instruction);
