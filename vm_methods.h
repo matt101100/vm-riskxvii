@@ -86,14 +86,6 @@ int execute_load(uint32_t instruction, int instruction_label,
 int execute_store(uint32_t instruction, int instruction_label,
                   virtual_machine *vm);
 
-void execute_slt(uint32_t instruction, virtual_machine *vm);
-
-void execute_slti(uint32_t instruction, virtual_machine *vm);
-
-void execute_sltu(uint32_t instruction, virtual_machine *vm);
-
-void execute_sltiu(uint32_t instruction, virtual_machine *vm);
-
 void execute_beq(uint32_t instruction, virtual_machine *vm);
 
 void execute_bne(uint32_t instruction, virtual_machine *vm);
