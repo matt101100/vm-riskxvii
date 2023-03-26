@@ -801,11 +801,30 @@ void execute_slti(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_sltu(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
 
+    if (vm->registers[source[0]] < vm->registers[source[1]]) {
+        vm->registers[target] = 1;
+    } else {
+        vm->registers[target] = 0;
+    }
+    vm->pc += 4;
 }
 
 void execute_sltiu(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
 
+    if (vm->registers[source[0]] < immediate) {
+        vm->registers[target] = 1;
+    } else {
+        vm->registers[target] = 0;
+    }
+    vm->pc += 4;
 }
 
 void execute_beq(uint32_t instruction, virtual_machine *vm) {
