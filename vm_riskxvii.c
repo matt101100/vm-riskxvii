@@ -777,7 +777,7 @@ void execute_slt(uint32_t instruction, virtual_machine *vm) {
     uint8_t source[2];
     get_source_registers(instruction, R, source);
 
-    if (vm->registers[source[0]] < vm->registers[source[1]]) {
+    if ((int32_t)vm->registers[source[0]] < (int32_t)vm->registers[source[1]]) {
         vm->registers[target] = 1;
     } else {
         vm->registers[target] = 0;
@@ -791,7 +791,7 @@ void execute_slti(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, R, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
 
-    if (vm->registers[source[0]] < immediate) {
+    if ((int32_t)vm->registers[source[0]] < (int32_t)immediate) {
         vm->registers[target] = 1;
     } else {
         vm->registers[target] = 0;
