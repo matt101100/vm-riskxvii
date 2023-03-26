@@ -545,18 +545,6 @@ void execute_lui(uint32_t instruction, virtual_machine *vm) {
     vm->pc += 4;
 }
 
-void execute_xor(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target = get_target_register(instruction);
-    uint8_t source[2];
-    get_source_registers(instruction, R, source);
-    
-    if (target != 0) {
-        vm->registers[target] = vm->registers[source[0]] 
-                                ^ vm->registers[source[1]];
-    }
-    vm->pc += 4;
-}
-
 void execute_xori(uint32_t instruction, virtual_machine *vm) {
     uint8_t target = get_target_register(instruction);
     uint8_t source[2];
@@ -569,17 +557,6 @@ void execute_xori(uint32_t instruction, virtual_machine *vm) {
     vm->pc += 4;
 }
 
-void execute_or(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target;
-    uint8_t source[2];
-    get_operation_resources_type_R(instruction, &target, source);
-
-    if (target != 0) {
-    vm->registers[target] = vm->registers[source[0]] | vm->registers[source[1]];
-    }
-    vm->pc += 4;
-}
-
 void execute_ori(uint32_t instruction, virtual_machine *vm) {
         uint8_t target = get_target_register(instruction);
     uint8_t source[2];
@@ -588,17 +565,6 @@ void execute_ori(uint32_t instruction, virtual_machine *vm) {
 
     if (target != 0) {
         vm->registers[target] = vm->registers[source[0]] | immediate;
-    }
-    vm->pc += 4;
-}
-
-void execute_and(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target;
-    uint8_t source[2];
-    get_operation_resources_type_R(instruction, &target, source);
-
-    if (target != 0) {
-    vm->registers[target] = vm->registers[source[0]] & vm->registers[source[1]];
     }
     vm->pc += 4;
 }

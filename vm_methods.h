@@ -66,18 +66,11 @@ void execute_branch(uint32_t instruction, int instruction_label,
 
 void execute_addi(uint32_t instruction, virtual_machine *vm);
 
-
 void execute_lui(uint32_t instruction, virtual_machine *vm);
-
-void execute_xor(uint32_t instruction, virtual_machine *vm);
 
 void execute_xori(uint32_t instruction, virtual_machine *vm);
 
-void execute_or(uint32_t instruction, virtual_machine *vm);
-
 void execute_ori(uint32_t instruction, virtual_machine *vm);
-
-void execute_and(uint32_t instruction, virtual_machine *vm);
 
 void execute_andi(uint32_t instruction, virtual_machine *vm);
 
