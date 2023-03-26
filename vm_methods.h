@@ -68,18 +68,6 @@ void execute_addi(uint32_t instruction, virtual_machine *vm);
 
 void execute_lui(uint32_t instruction, virtual_machine *vm);
 
-void execute_xori(uint32_t instruction, virtual_machine *vm);
-
-void execute_ori(uint32_t instruction, virtual_machine *vm);
-
-void execute_andi(uint32_t instruction, virtual_machine *vm);
-
-void execute_sll(uint32_t instruction, virtual_machine *vm);
-
-void execute_srl(uint32_t instruction, virtual_machine *vm);
-
-void execute_sra(uint32_t instruction, virtual_machine *vm);
-
 /*
  * Desc: runs the load instruction specified by instruction_label. Also handles
          load-based virtual routines. This includes: lb, lh, lw, lbu, lhu

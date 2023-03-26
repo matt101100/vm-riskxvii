@@ -604,37 +604,6 @@ void execute_shift(uint32_t instruction, int instruction_label,
     vm->pc += 4;
 }
 
-void execute_sll(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target = get_target_register(instruction);
-    uint8_t source[2];
-    get_source_registers(instruction, R, source);
-
-    vm->registers[target] = vm->registers[source[0]] << vm->registers[source[1]];
-    vm->pc += 4;
-}
-
-void execute_srl(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target = get_target_register(instruction);
-    uint8_t source[2];
-    get_source_registers(instruction, R, source);
-
-    vm->registers[target] = vm->registers[source[0]] >> vm->registers[source[1]];
-    vm->pc += 4;
-}
-
-void execute_sra(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target = get_target_register(instruction);
-    uint8_t source[2];
-    get_source_registers(instruction, R, source);
-
-
-    uint32_t num = vm->registers[source[0]];
-    uint32_t shift = vm->registers[source[1]];
-    uint32_t res = (num >> shift) | (num << (sizeof(uint32_t) - shift));
-
-    vm->registers[target] = res;
-}
-
 int execute_load(uint32_t instruction, int instruction_label, 
                   virtual_machine *vm) {
     // get registers and immediate
