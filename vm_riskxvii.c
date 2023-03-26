@@ -846,12 +846,14 @@ void execute_branch(uint32_t instruction, int instruction_label,
                 vm->pc += immediate;
                 return;
             }
+            break;
         
         case (bne):
             if (vm->registers[source[0]] != vm->registers[source[1]]) {
                 vm->pc += immediate;
                 return;
             }
+            break;
         
         case (blt):
             if ((int32_t)vm->registers[source[0]] 
@@ -860,12 +862,14 @@ void execute_branch(uint32_t instruction, int instruction_label,
                 vm->pc += immediate;
                 return;
             }
+            break;
         
         case (bltu):
             if (vm->registers[source[0]] < vm->registers[source[1]]) {
                 vm->pc += immediate;
                 return;
             }
+            break;
         
         case (bge):
             if ((int32_t)vm->registers[source[0]] 
@@ -874,12 +878,14 @@ void execute_branch(uint32_t instruction, int instruction_label,
                 vm->pc += immediate;
                 return;
             }
+            break;
         
         case (bgeu):
             if (vm->registers[source[0]] >= vm->registers[source[1]]) {
                 vm->pc += immediate;
                 return;
             }
+            break;
     }
     vm->pc += 4;
 }
