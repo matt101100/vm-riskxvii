@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (xor):
-                execute_xor(instruction, &vm);
+                execute_logical_type_R(instruction, xor, &vm);
                 break;
             
             case (xori):
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (or):
-                execute_or(instruction, &vm);
+                execute_logical_type_R(instruction, or, &vm);
                 break;
             
             case (ori):
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (and):
-                execute_and(instruction, &vm);
+                execute_logical_type_R(instruction, and, &vm);
                 break;
             
             case (andi):
