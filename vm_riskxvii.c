@@ -129,19 +129,19 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (slt):
-                execute_slt(instruction, &vm);
+                execute_register_set(instruction, slt, &vm);
                 break;
             
             case (slti):
-                execute_slti(instruction, &vm);
+                execute_register_set(instruction, slti, &vm);
                 break;
             
             case (sltu):
-                execute_sltu(instruction, &vm);
+                execute_register_set(instruction, sltu, &vm);
                 break;
             
             case (sltiu):
-                execute_sltiu(instruction, &vm);
+                execute_register_set(instruction, sltiu, &vm);
                 break;
             
             case (beq):
@@ -789,6 +789,48 @@ int execute_store(uint32_t instruction, int instruction_label,
     }
     vm->pc += 4;
     return 1;
+}
+
+void execute_register_set(uint32_t instruction, int instruction_label,
+                          virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
+
+    switch (instruction_label)
+    {
+        case (slt):
+            if ((int32_t)vm->registers[source[0]] 
+                < (int32_t)vm->registers[source[1]]) {
+
+                vm->registers[target] = 1;
+            } else {
+                vm->registers[target] = 0;
+            }
+        
+        case (slti):
+            if ((int32_t)vm->registers[source[0]] < (int32_t)immediate) {
+                vm->registers[target] = 1;
+            } else {
+                vm->registers[target] = 0;
+            }
+        
+        case (sltu):
+            if (vm->registers[source[0]] < vm->registers[source[1]]) {
+                vm->registers[target] = 1;
+            } else {
+                vm->registers[target] = 0;
+            }
+        
+        case (sltiu):
+            if (vm->registers[source[0]] < immediate) {
+                vm->registers[target] = 1;
+            } else {
+                vm->registers[target] = 0;
+            }
+    }
+    vm->pc += 4;
 }
 
 void execute_slt(uint32_t instruction, virtual_machine *vm) {
