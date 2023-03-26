@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sra):
-                printf("sra\n");
+                execute_sra(instruction, &vm);
                 break;
             
             case (lb):
@@ -129,19 +129,19 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (slt):
-                printf("slt\n");
+                execute_slt(instruction, &vm);
                 break;
             
             case (slti):
-                printf("slti\n");
+                execute_slti(instruction, &vm);
                 break;
             
             case (sltu):
-                printf("sltu\n");
+                execute_sltu(instruction, &vm);
                 break;
             
             case (sltiu):
-                printf("sltiu\n");
+                execute_sltiu(instruction, &vm);
                 break;
             
             case (beq):
@@ -602,7 +602,16 @@ void execute_srl(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_sra(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
 
+
+    uint32_t num = vm->registers[source[0]];
+    uint32_t shift = vm->registers[source[1]];
+    uint32_t res = (num >> shift) | (num << (sizeof(uint32_t) - shift));
+
+    vm->registers[target] = res;
 }
 
 int execute_load(uint32_t instruction, int instruction_label, 
