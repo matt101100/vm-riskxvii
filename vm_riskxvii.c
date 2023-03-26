@@ -773,10 +773,30 @@ int execute_store(uint32_t instruction, int instruction_label,
 }
 
 void execute_slt(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
 
+    if (vm->registers[source[0]] < vm->registers[source[1]]) {
+        vm->registers[target] = 1;
+    } else {
+        vm->registers[target] = 0;
+    }
+    vm->pc += 4;
 }
 
 void execute_slti(uint32_t instruction, virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
+    uint32_t immediate = extract_immediate_number(instruction, I);
+
+    if (vm->registers[source[0]] < immediate) {
+        vm->registers[source[0]] = 1;
+    } else {
+        vm->registers[source[0]] = 0;
+    }
+    vm->pc += 4;
 
 }
 
@@ -817,13 +837,14 @@ void execute_blt(uint32_t instruction, virtual_machine *vm) {
     uint8_t source[2];
     get_source_registers(instruction, SB, source);
 
+    printf("un: %d, sign: %d\n", vm->registers[source[0]], (int32_t)vm->registers[source[0]]);
+
     if ((int32_t)vm->registers[source[0]] < (int32_t)vm->registers[source[1]]) {
         vm->pc += immediate;
         return;
     }
     vm->pc += 4;
 }
-//test
 
 void execute_bltu(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, SB);
