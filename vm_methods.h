@@ -86,18 +86,6 @@ int execute_load(uint32_t instruction, int instruction_label,
 int execute_store(uint32_t instruction, int instruction_label,
                   virtual_machine *vm);
 
-void execute_beq(uint32_t instruction, virtual_machine *vm);
-
-void execute_bne(uint32_t instruction, virtual_machine *vm);
-
-void execute_blt(uint32_t instruction, virtual_machine *vm);
-
-void execute_bltu(uint32_t instruction, virtual_machine *vm);
-
-void execute_bge(uint32_t instruction, virtual_machine *vm);
-
-void execute_bgeu(uint32_t instruction, virtual_machine *vm);
-
 void execute_jal(uint32_t instruction, virtual_machine *vm);
 
 void execute_jalr(uint32_t instruction, virtual_machine *vm);
