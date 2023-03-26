@@ -742,10 +742,31 @@ int execute_store(uint32_t instruction, int instruction_label,
             printf("%x", vm->registers[source[1]]);
             break;
         
+        case (0x0824):
+            /*
+             * Dump register banks
+             * --> prints the value of all registers
+             */
+            register_dump(vm);
+            break;
+        
+        case(0x0828):
+            /*
+             * Dump memory word
+             * --> prints the value of M[v], with index v being the value to
+             * store interpreted as a 32-bit unsigned int
+             */
+
+            printf("%d", vm->memory[vm->registers[source[1]]] |
+                         vm->memory[vm->registers[source[1]] + 1] << 8 |
+                         vm->memory[vm->registers[source[1]] + 2] << 16 |
+                         vm->memory[vm->registers[source[1]] + 3] << 24);
+            break;
+        
         case (0x080C):
             /*
             * Halt
-            * --> print message to stdout and send a flag signalling end of program
+            * --> print halt to stdout and send flag signalling end of program
             */
             printf("CPU Halt Requested\n");
             return 0;
