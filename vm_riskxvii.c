@@ -823,6 +823,7 @@ void execute_blt(uint32_t instruction, virtual_machine *vm) {
     }
     vm->pc += 4;
 }
+//test
 
 void execute_bltu(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, SB);
