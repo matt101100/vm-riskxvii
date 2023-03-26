@@ -792,9 +792,9 @@ void execute_slti(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, I);
 
     if (vm->registers[source[0]] < immediate) {
-        vm->registers[source[0]] = 1;
+        vm->registers[target] = 1;
     } else {
-        vm->registers[source[0]] = 0;
+        vm->registers[target] = 0;
     }
     vm->pc += 4;
 
