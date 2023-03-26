@@ -85,15 +85,15 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sll):
-                execute_sll(instruction, &vm);
+                execute_shift(instruction, sll, &vm);
                 break;
             
             case (srl):
-                execute_srl(instruction, &vm);
+                execute_shift(instruction, srl, &vm);
                 break;
             
             case (sra):
-                execute_sra(instruction, &vm);
+                execute_shift(instruction, sra, &vm);
                 break;
             
             case (lb):
@@ -570,6 +570,37 @@ void execute_lui(uint32_t instruction, virtual_machine *vm) {
     }
 
     // update pc to move onto next instruction
+    vm->pc += 4;
+}
+
+void execute_shift(uint32_t instruction, int instruction_label,
+                   virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    if (target == 0) {
+        vm->pc += 4;
+        return;
+    }
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
+
+    uint32_t num = vm->registers[source[0]];
+    uint32_t shift = vm->registers[source[1]];
+
+    switch (instruction_label)
+    {
+        case (sll):
+            vm->registers[target] = num << shift;
+            break;
+        
+        case (srl):
+            vm->registers[target] = num >> shift;
+            break;
+        
+        case (sra):
+            vm->registers[target] = (num >> shift) 
+                                    | (num << (sizeof(uint32_t) - shift));
+            break;
+    }
     vm->pc += 4;
 }
 
