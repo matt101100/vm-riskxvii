@@ -485,18 +485,6 @@ void execute_math_type_R(uint32_t instruction, int instruction_label,
     vm->pc += 4;
 }
 
-void execute_add(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target;
-    uint8_t source[2];
-    get_operation_resources_type_R(instruction, &target, source);
-
-    if (target != 0) {
-        vm->registers[target] = vm->registers[source[0]] 
-                                + vm->registers[source[1]];
-    }
-    vm->pc += 4;
-}
-
 void execute_addi(uint32_t instruction, virtual_machine *vm) {
     // get registers and immediate
     uint8_t target = get_target_register(instruction);
@@ -510,18 +498,6 @@ void execute_addi(uint32_t instruction, virtual_machine *vm) {
     }
 
     // update pc to move onto next instruction
-    vm->pc += 4;
-}
-
-void execute_sub(uint32_t instruction, virtual_machine *vm) {
-    uint8_t target;
-    uint8_t source[2];
-    get_operation_resources_type_R(instruction, &target, source);
-
-    if (target != 0) {
-        vm->registers[target] =  vm->registers[source[0]] 
-                                 - vm->registers[source[1]];
-    }
     vm->pc += 4;
 }
 
