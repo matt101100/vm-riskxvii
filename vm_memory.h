@@ -9,8 +9,8 @@
 
 /*
  * A block of memory to be desginated for use once the instructions ask for
- * memory. Has a linked list structure, with a pointer to he next block in the
- * sequence.
+   memory. Has a linked list structure, with a pointer to he next block in the
+   sequence.
  */
 typedef struct block block;
 struct block {

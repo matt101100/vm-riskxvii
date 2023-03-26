@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
         switch (instruction_label)
         {
             case (add):
-                execute_add(instruction, &vm);
+                execute_math_type_R(instruction, add, &vm);
                 break;
             
             case (addi):
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (sub):
-                execute_sub(instruction, &vm);
+                execute_math_type_R(instruction, sub, &vm);
                 break;
             
             case (lui):
@@ -459,6 +459,32 @@ void get_operation_resources_type_R(uint32_t instruction, uint8_t *target,
 
 // !! executes for each machine instruction defined below !!
 
+void execute_math_type_R(uint32_t instruction, int instruction_label,
+                         virtual_machine *vm) {
+    uint8_t target = get_target_register(instruction);
+    if (target == 0) {
+        // ignore writes to zero register
+        vm->pc += 4;
+        return;
+    }
+    uint8_t source[2];
+    get_source_registers(instruction, R, source);
+
+    switch (instruction_label)
+    {
+        case (add):
+            vm->registers[target] = vm->registers[source[0]] 
+                                    + vm->registers[source[1]];
+            break;
+        
+        case (sub):
+            vm->registers[target] = vm->registers[source[0]]
+                                    - vm->registers[source[1]];
+            break;
+    }
+    vm->pc += 4;
+}
+
 void execute_add(uint32_t instruction, virtual_machine *vm) {
     uint8_t target;
     uint8_t source[2];
@@ -756,8 +782,7 @@ int execute_store(uint32_t instruction, int instruction_label,
              * --> prints the value of M[v], with index v being the value to
              * store interpreted as a 32-bit unsigned int
              */
-
-            printf("%d", vm->memory[vm->registers[source[1]]] |
+            printf("%08x", vm->memory[vm->registers[source[1]]] |
                          vm->memory[vm->registers[source[1]] + 1] << 8 |
                          vm->memory[vm->registers[source[1]] + 2] << 16 |
                          vm->memory[vm->registers[source[1]] + 3] << 24);

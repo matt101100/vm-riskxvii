@@ -59,15 +59,15 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm);
 
 /*
  *Desc: Reads the instructions / data into corresponding memory
- * Params: pointer to an open file, pointer to the virtual machine
+ * Params: pointer to an open file, pointer to the virtual machine struct
  * Return: the number of bytes read
  */
 size_t load_image_into_memory(FILE *fp, uint8_t memory[]);
 
 /*
  * Desc: shifts and masks adjacent memory addresses to get the 32-bit 
- * instruction
- * Params: a pointer to the virtual machine, to access memory
+         instruction
+ * Params: a pointer to the virtual machine struct, to access memory
  * Returns: the 32-bit instruction
  */
 uint32_t get_instruction(virtual_machine *vm);
@@ -81,11 +81,11 @@ uint8_t get_opcode(uint32_t instruction);
 
 /*
  * Desc: Extracts the func3 or func7 bits from a 32-bit instruction
- *       and stores in an array. Note that only R-type instructions have a 
- *       func7 and so the only time two values are read into opcode_arr is when
- *       we have a R-type instruction.
+         and stores in an array. Note that only R-type instructions have a 
+         func7 and so the only time two values are read into opcode_arr is when
+         we have a R-type instruction.
  * Params: a 32-bit instruction binary, an instruction type int enumerated above
- *         and a pointer to the opcode array to update
+           and a pointer to the opcode array to update
  */
 void get_additional_opcode(uint32_t instruction, int instruction_type, 
                               uint8_t aditional_opcodes[]);
@@ -128,17 +128,17 @@ uint32_t sign_extend(int32_t num, int original_bit_count);
 
 /*
  * The following collection of functions all serve the same purpose, but
- * work slightly differently based on which instruction type uses them. The 
- * general overview is:
- * 
+   work slightly differently based on which instruction type uses them. The 
+   general overview is:
+ 
  * Desc: gets all the necessary immediates and registers for executionn
  * Params: the 32-bit instruction
- *         a uint8_t pointer to store the target register,
- *         a uint8_t array to store source registers and 
- *         a uint32_t pointer to store the immediate
- * 
+           a uint8_t pointer to store the target register,
+           a uint8_t array to store source registers and 
+           a uint32_t pointer to store the immediate
+
  * They are grouped such that each function prepares the exact resources needed
- * for operations of that type to execute.
+   for operations of that type to execute.
  */
 
 void get_operation_resources_type_R(uint32_t instruction, uint8_t *target, 
@@ -159,7 +159,7 @@ void get_operation_resources_type_U_UJ(uint32_t instruction, uint8_t *target,
 
 /*
  * Desc: prints all registers to stdout
- * Params: a pointer to the virtual machine, to access the register bank
+ * Params: a pointer to the virtual machine struct, to access the register bank
  */
 void register_dump(virtual_machine *vm);
 
