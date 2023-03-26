@@ -145,27 +145,27 @@ int main(int argc, char *argv[]) {
                 break;
             
             case (beq):
-                execute_beq(instruction, &vm);
+                execute_branch(instruction, beq, &vm);
                 break;
             
             case (bne):
-                execute_bne(instruction, &vm);
+                execute_branch(instruction, bne, &vm);
                 break;
 
             case (blt):
-                execute_blt(instruction, &vm);
+                execute_branch(instruction, blt, &vm);
                 break;
             
             case (bltu):
-                execute_bltu(instruction, &vm);
+                execute_branch(instruction, bltu, &vm);
                 break;
             
             case (bge):
-                execute_bge(instruction, &vm);
+                execute_branch(instruction, bge, &vm);
                 break;
             
             case (bgeu):
-                execute_bgeu(instruction, &vm);
+                execute_branch(instruction, bgeu, &vm);
                 break;
             
             case (jal):
@@ -828,6 +828,57 @@ void execute_register_set(uint32_t instruction, int instruction_label,
                 vm->registers[target] = 1;
             } else {
                 vm->registers[target] = 0;
+            }
+    }
+    vm->pc += 4;
+}
+
+void execute_branch(uint32_t instruction, int instruction_label,
+                    virtual_machine *vm) {
+    uint32_t immediate = extract_immediate_number(instruction, SB);
+    uint8_t source[2];
+    get_source_registers(instruction, SB, source);
+
+    switch (instruction_label)
+    {
+        case (beq):
+            if (vm->registers[source[0]] == vm->registers[source[1]]) {
+                vm->pc += immediate;
+                return;
+            }
+        
+        case (bne):
+            if (vm->registers[source[0]] != vm->registers[source[1]]) {
+                vm->pc += immediate;
+                return;
+            }
+        
+        case (blt):
+            if ((int32_t)vm->registers[source[0]] 
+                < (int32_t)vm->registers[source[1]]) {
+
+                vm->pc += immediate;
+                return;
+            }
+        
+        case (bltu):
+            if (vm->registers[source[0]] < vm->registers[source[1]]) {
+                vm->pc += immediate;
+                return;
+            }
+        
+        case (bge):
+            if ((int32_t)vm->registers[source[0]] 
+                >= (int32_t)vm->registers[source[1]]) {
+
+                vm->pc += immediate;
+                return;
+            }
+        
+        case (bgeu):
+            if (vm->registers[source[0]] >= vm->registers[source[1]]) {
+                vm->pc += immediate;
+                return;
             }
     }
     vm->pc += 4;
