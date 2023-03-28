@@ -835,7 +835,7 @@ int execute_store(uint32_t instruction, int instruction_label,
 
             // if the block has been allocated, remove it from the linked list
             // first, we find the block before the block to be deleted
-            block *current_block = vm->head;
+            current_block = vm->head;
             while (current_block->next != NULL) {
                 if (current_block->next->mem_base_address == vm->registers[source[1]]) {
                     break;
