@@ -815,38 +815,38 @@ int execute_store(uint32_t instruction, int instruction_label,
             // update total amount of allocated memory
             vm->total_allocated_memory += new_block.total_mem_size;
         
-        case (0x0834):
-            /*
-             * Virtual free
-             * frees block of memory starting at byte = to value being stored
-             */
+        // case (0x0834):
+        //     /*
+        //      * Virtual free
+        //      * frees block of memory starting at byte = to value being stored
+        //      */
 
-            // check if the memory to be freed has been allocated before
-            block *current_block = vm->head;
-            while (current_block != NULL) {
-                if (current_block->mem_base_address == vm->registers[source[1]]) {
-                    break;
-                }
-            }
-            if (current_block == NULL) {
-                printf("Invalid free called on non-allocated block.\n");
-                return 1;
-            }
+        //     // check if the memory to be freed has been allocated before
+        //     block *current_block = vm->head;
+        //     while (current_block != NULL) {
+        //         if (current_block->mem_base_address == vm->registers[source[1]]) {
+        //             break;
+        //         }
+        //     }
+        //     if (current_block == NULL) {
+        //         printf("Invalid free called on non-allocated block.\n");
+        //         return 1;
+        //     }
 
-            // if the block has been allocated, remove it from the linked list
-            // first, we find the block before the block to be deleted
-            current_block = vm->head;
-            while (current_block->next != NULL) {
-                if (current_block->next->mem_base_address == vm->registers[source[1]]) {
-                    break;
-                }
-                current_block = current_block->next;
-            }
+        //     // if the block has been allocated, remove it from the linked list
+        //     // first, we find the block before the block to be deleted
+        //     current_block = vm->head;
+        //     while (current_block->next != NULL) {
+        //         if (current_block->next->mem_base_address == vm->registers[source[1]]) {
+        //             break;
+        //         }
+        //         current_block = current_block->next;
+        //     }
 
-            block *temp = current_block;
-            current_block->next = current_block->next->next;
-            temp->next = NULL;
-            current_block = temp;
+        //     block *temp = current_block;
+        //     current_block->next = current_block->next->next;
+        //     temp->next = NULL;
+        //     current_block = temp;
         
         default:
             switch (instruction_label)
