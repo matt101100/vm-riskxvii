@@ -6,6 +6,7 @@
 #define MEMORY_SIZE 2048 // 2^11 bytes of addressable memory
 #define BLOCK_SIZE 64 // size of a heap block
 #define NUM_REGISTERS 32
+#define HEAP_SIZE 1 << 13 // 8192 bytes of allocatable memory
 
 /*
  * A block of memory to be desginated for use once the instructions ask for
@@ -14,9 +15,12 @@
  */
 typedef struct block block;
 struct block {
-    uint8_t block_memory[BLOCK_SIZE]; // 64 byte block for usage as memory
-    int in_use; // 1 = block in use, 0 = free
-    block *next; // pointer to the next block
+    // uint8_t block_memory[BLOCK_SIZE]; // 64 byte block for usage as memory
+    // int in_use; // 1 = block in use, 0 = free
+    int usable_mem_size; // the exact size of requested memory
+    int total_mem_size; // the total size of memory, multiple of 64
+    uint32_t mem_base_address; // the base address for this block
+    block *next; // pointer to the head of the next block
 };
 
 /*
@@ -29,8 +33,9 @@ struct virtual_machine {
     uint8_t memory[MEMORY_SIZE];
     uint32_t registers[NUM_REGISTERS];
     int pc; // program counter
+    uint8_t heap[HEAP_SIZE];
     block *head;
-    
+    int total_allocated_memory; // amount of heap bytes allocated
 };
 
 #endif

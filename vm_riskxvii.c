@@ -1,4 +1,5 @@
 #include <string.h>
+#include <ctype.h>
 
 #include "vm_memory.h"
 #include "utils.h"
@@ -195,6 +196,8 @@ void initialize_virtual_machine(virtual_machine *vm) {
 
     vm->pc = 0; // start of the instruction memory
     vm->head = NULL; // no other blocks assigned
+
+    vm->total_allocated_memory = 0; // no memory allocated at start
 }
 
 FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
@@ -759,6 +762,91 @@ int execute_store(uint32_t instruction, int instruction_label,
             */
             printf("CPU Halt Requested\n");
             return 0;
+        
+        case (0x830):
+            /*
+             * Virtual malloc
+             * --> allocates bytes = value being stored as memory
+             * memory is rounded up to the nearest 64 byte block
+             * pointer to memory chunk stored in register 28
+             */
+            if (isdigit(vm->registers[source[1]]) == 0) {
+                // non-numerical amount of memory requested
+                printf("Invalid memory requested.\n");
+                vm->registers[28] = 0;
+                return 1;
+            } else if (vm->registers[source[1]] <= 0) {
+                // non-valid amount of bytes request
+                printf("Invalid amount of memory requested.\n");
+                vm->registers[28] = 0;
+                return 1;
+            }
+
+            /*
+             * Create the new block and update its fields to store the meta-data
+               of the newly 'allocated' memory
+             */
+            block new_block;
+            new_block.usable_mem_size = vm->registers[source[1]];
+            while(new_block.total_mem_size < vm->registers[source[1]]) {
+                 /*
+                 * increments by 64 until total_mem_size is at least equal to
+                   requested memory amount.
+                 * Ensures total_mem_size is always a multiple of 64
+                 */
+                new_block.total_mem_size += 64;
+            }
+            
+            // update list of nodes with new block at the end
+            if (vm->head == NULL) {
+                vm->head = &new_block;
+            } else {
+                block *current_node = vm->head;
+                while (current_node != NULL) {
+                    current_node = current_node->next;
+                }
+                current_node->next = &new_block;
+            }
+            
+            // store pointer to the first byte of the allocated block
+            vm->registers[28] = 0xb700 + vm->total_allocated_memory;
+            new_block.mem_base_address = 0xb700 + vm->total_allocated_memory;
+
+            // update total amount of allocated memory
+            vm->total_allocated_memory += new_block.total_mem_size;
+        
+        case (0x0834):
+            /*
+             * Virtual free
+             * frees block of memory starting at byte = to value being stored
+             */
+
+            // check if the memory to be freed has been allocated before
+            block *current_block = vm->head;
+            while (current_block != NULL) {
+                if (current_block->mem_base_address == vm->registers[source[1]]) {
+                    break;
+                }
+            }
+            if (current_block == NULL) {
+                printf("Invalid free called on non-allocated block.\n");
+                return 1;
+            }
+
+            // if the block has been allocated, remove it from the linked list
+            // first, we find the block before the block to be deleted
+            block *current_block = vm->head;
+            while (current_block->next != NULL) {
+                if (current_block->next->mem_base_address == vm->registers[source[1]]) {
+                    break;
+                }
+                current_block = current_block->next;
+            }
+
+            block *temp = current_block;
+            current_block->next = current_block->next->next;
+            temp->next = NULL;
+            current_block = temp;
         
         default:
             switch (instruction_label)
