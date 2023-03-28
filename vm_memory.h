@@ -22,7 +22,7 @@ struct block {
 /*
  * Represents the virtual machine
  * contains arrays that store the instruction and data memory as well as the
- * program counter and the head of the heap.
+   program counter and the head of the heap.
  */
 typedef struct virtual_machine virtual_machine;
 struct virtual_machine {
