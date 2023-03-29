@@ -405,9 +405,9 @@ int main(int argc, char *argv[]) {
         uint8_t opcode = get_opcode(instruction);
 
         // !! TESTING ONLY !!
-        translate_mi(instruction);
-        vm.pc+=4;
-        continue;
+        // translate_mi(instruction);
+        // vm.pc+=4;
+        // continue;
 
         // executing instructions
         int instruction_label = determine_instruction_label(opcode, instruction);
@@ -1224,7 +1224,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             {
                 case (sb):
                     // store byte
-                    vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]];
+                    vm->memory[mem_address] = vm->registers[source[1]];
                     break;
                 
                 case (sh):
@@ -1233,16 +1233,16 @@ int execute_store(uint32_t instruction, int instruction_label,
                      * mask and shift to store in 8-bit chunks at adjacent
                      * indices
                      */
-                    vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
-                    vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+                    vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
+                    vm->memory[mem_address + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
                     break;
                 
                 case (sw):
                     // store word -- 32 bits
-                    vm->memory[(vm->registers[source[0]] + immediate)] = vm->registers[source[1]] & 0xFF;
-                    vm->memory[((vm->registers[source[0]] + immediate)) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
-                    vm->memory[((vm->registers[source[0]] + immediate)) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
-                    vm->memory[((vm->registers[source[0]] + immediate)) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
+                    vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
+                    vm->memory[mem_address + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+                    vm->memory[mem_address + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
+                    vm->memory[mem_address + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
                     break;
             }
     }
