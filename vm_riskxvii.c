@@ -784,6 +784,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             block new_block;
             new_block.usable_mem_size = vm->registers[source[1]];
             new_block.next = NULL;
+            new_block.total_mem_size = 0;
             while(new_block.total_mem_size < vm->registers[source[1]]) {
                  /*
                  * increments by 64 until total_mem_size is at least equal to
