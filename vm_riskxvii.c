@@ -780,7 +780,6 @@ int execute_store(uint32_t instruction, int instruction_label,
                 vm->registers[28] = 0;
                 break;
             } else if ((vm->total_allocated_memory + vm->registers[source[1]]) >= HEAP_SIZE) {
-                printf("Not enough heap blocks to fulfil request.\n");
                 vm->registers[28] = 0;
                 break;
             }
