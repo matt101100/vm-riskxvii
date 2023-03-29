@@ -17,8 +17,8 @@ typedef struct block block;
 struct block {
     // uint8_t block_memory[BLOCK_SIZE]; // 64 byte block for usage as memory
     // int in_use; // 1 = block in use, 0 = free
-    int usable_mem_size; // the exact size of requested memory
-    int total_mem_size; // the total size of memory, multiple of 64
+    uint32_t usable_mem_size; // the exact size of requested memory
+    uint32_t total_mem_size; // the total size of memory, multiple of 64
     uint32_t mem_base_address; // the base address for this block
     block *next; // pointer to the head of the next block
 };
@@ -32,10 +32,10 @@ typedef struct virtual_machine virtual_machine;
 struct virtual_machine {
     uint8_t memory[MEMORY_SIZE];
     uint32_t registers[NUM_REGISTERS];
-    int pc; // program counter
+    uint32_t pc; // program counter
     uint8_t heap[HEAP_SIZE];
     block *head;
-    int total_allocated_memory; // amount of heap bytes allocated
+    uint32_t total_allocated_memory; // amount of heap bytes allocated
 };
 
 #endif
