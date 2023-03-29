@@ -805,6 +805,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             }
             
             // store pointer to the first byte of the allocated block
+            printf("alloc'd: %d\n", vm->total_allocated_memory);
             vm->registers[28] = 0xb700 + vm->total_allocated_memory;
             new_block.mem_base_address = 0xb700 + vm->total_allocated_memory;
 
