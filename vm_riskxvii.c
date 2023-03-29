@@ -772,7 +772,7 @@ int execute_store(uint32_t instruction, int instruction_label,
              */
             if (isdigit(vm->registers[source[1]]) == 0) {
                 // non-numerical amount of memory requested
-                printf("Invalid memory requested.\n");
+                printf("Non-numerical input given. No memory allocated.\n");
                 vm->registers[28] = 0;
                 return 1;
             } else if (vm->registers[source[1]] <= 0) {
@@ -802,7 +802,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                 vm->head = &new_block;
             } else {
                 block *current_node = vm->head;
-                while (current_node != NULL) {
+                while (current_node->next != NULL) {
                     current_node = current_node->next;
                 }
                 current_node->next = &new_block;
