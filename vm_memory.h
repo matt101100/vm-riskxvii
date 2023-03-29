@@ -30,10 +30,10 @@ struct block {
  */
 typedef struct virtual_machine virtual_machine;
 struct virtual_machine {
-    uint8_t memory[MEMORY_SIZE];
+    uint8_t memory[MEMORY_SIZE + HEAP_SIZE];
     uint32_t registers[NUM_REGISTERS];
     uint32_t pc; // program counter
-    uint8_t heap[HEAP_SIZE];
+    // uint8_t heap[HEAP_SIZE];
     block *head;
     uint32_t total_allocated_memory; // amount of heap bytes allocated
 };
