@@ -1130,7 +1130,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             printf("CPU Halt Requested\n");
             return 0;
         
-        case (0x830):
+        case (0x0830):
             /*
              * Virtual malloc
              * --> allocates bytes = value being stored as memory

@@ -1,0 +1,54 @@
+I = addi, rd = r2, rs1 = r0, imm = 2047
+I = jal, rd = r1, imm = 64
+I = lui, rd = r15, imm = 4096
+I = sb, rs1 = r15, imm = -2036
+I = lbu, rd = r15, rs1 = r10, imm = 0
+I = beq, rs1 = r15, imm = 24
+I = lui, rd = r14, imm = 4096
+I = addi, rd = r10, rs1 = r10, imm = 1
+I = sb, rs1 = r14, imm = -2048
+I = lbu, rd = r15, rs1 = r10, imm = 0
+I = bne, rs1 = r15, imm = -12
+I = jalr, rd = r0, imm = 0
+I = lui, rd = r15, imm = 4096
+I = addi, rd = r15, rs1 = r15, imm = -2000
+I = sw, rs1 = r15, imm = 0
+I = addi, rd = r10, rs1 = r28, imm = 0
+I = jalr, rd = r0, imm = 0
+I = addi, rd = r2, rs1 = r2, imm = -32
+I = sw, rs1 = r2, imm = 28
+I = sw, rs1 = r2, imm = 24
+I = sw, rs1 = r2, imm = 20
+I = sw, rs1 = r2, imm = 16
+I = sw, rs1 = r2, imm = 12
+I = sw, rs1 = r2, imm = 8
+I = sw, rs1 = r2, imm = 4
+I = addi, rd = r10, rs1 = r0, imm = 216
+I = jal, rd = r1, imm = -88
+I = lui, rd = r9, imm = 4096
+I = addi, rd = r9, rs1 = r9, imm = -2026
+I = lw, rd = r18, rs1 = r9, imm = 0
+I = addi, rd = r10, rs1 = r0, imm = 236
+I = jal, rd = r1, imm = -108
+I = lw, rd = r9, rs1 = r9, imm = 0
+I = bge, rs1 = r0, imm = 44
+I = addi, rd = r8, rs1 = r0, imm = 0
+I = lui, rd = r19, imm = 4096
+I = addi, rd = r21, rs1 = r19, imm = -2000
+I = sw, rs1 = r21, imm = 0
+I = addi, rd = r15, rs1 = r28, imm = 0
+I = sw, rs1 = r19, imm = -2040
+I = addi, rd = r10, rs1 = r0, imm = 244
+I = jal, rd = r1, imm = -148
+I = addi, rd = r8, rs1 = r8, imm = 1
+I = bne, rs1 = r8, imm = -24
+I = addi, rd = r10, rs1 = r0, imm = 0
+I = lw, rd = r1, rs1 = r2, imm = 28
+I = lw, rd = r8, rs1 = r2, imm = 24
+I = lw, rd = r9, rs1 = r2, imm = 20
+I = lw, rd = r18, rs1 = r2, imm = 16
+I = lw, rd = r19, rs1 = r2, imm = 12
+I = lw, rd = r20, rs1 = r2, imm = 8
+I = lw, rd = r21, rs1 = r2, imm = 4
+I = addi, rd = r2, rs1 = r2, imm = 32
+I = jalr, rd = r0, imm = 0
