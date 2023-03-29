@@ -775,9 +775,6 @@ int execute_store(uint32_t instruction, int instruction_label,
                 printf("Invalid amount of memory requested.\n");
                 vm->registers[28] = 0;
                 break;
-            } else if (vm->total_allocated_memory == HEAP_SIZE) {
-                vm->registers[28] = 0;
-                break;
             } else if ((vm->total_allocated_memory + vm->registers[source[1]]) > HEAP_SIZE) {
                 vm->registers[28] = 0;
                 break;
