@@ -815,6 +815,7 @@ int execute_store(uint32_t instruction, int instruction_label,
 
             // update total amount of allocated memory
             vm->total_allocated_memory += new_block.total_mem_size;
+            break;
         
         // case (0x0834):
         //     /*
