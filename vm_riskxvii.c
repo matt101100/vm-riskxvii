@@ -776,7 +776,6 @@ int execute_store(uint32_t instruction, int instruction_label,
                 vm->registers[28] = 0;
                 break;
             } else if (vm->total_allocated_memory == HEAP_SIZE) {
-                printf("No heap memory left to allocate.\n");
                 vm->registers[28] = 0;
                 break;
             } else if ((vm->total_allocated_memory + vm->registers[source[1]]) > HEAP_SIZE) {
