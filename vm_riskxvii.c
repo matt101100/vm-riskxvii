@@ -793,9 +793,6 @@ int execute_store(uint32_t instruction, int instruction_label,
                  */
                 new_block.total_mem_size += 64;
             }
-
-            printf("requested: %d\n", vm->registers[source[1]]);
-            printf("block size: %d\n", new_block.total_mem_size);
             
             // update list of nodes with new block at the end
             if (vm->head == NULL) {
