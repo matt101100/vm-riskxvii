@@ -37,9 +37,9 @@ int main(int argc, char *argv[]) {
         uint8_t opcode = get_opcode(instruction);
 
         // !! TESTING ONLY !!
-        // translate_mi(instruction);
-        // vm.pc+=4;
-        // continue;
+        translate_mi(instruction);
+        vm.pc+=4;
+        continue;
 
         // executing instructions
         int instruction_label = determine_instruction_label(opcode, instruction);
