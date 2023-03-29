@@ -1137,12 +1137,7 @@ int execute_store(uint32_t instruction, int instruction_label,
              * memory is rounded up to the nearest 64 byte block
              * pointer to memory chunk stored in register 28
              */
-            if (isdigit(vm->registers[source[1]]) == 0) {
-                // non-numerical amount of memory requested
-                printf("Non-numerical input given. No memory allocated.\n");
-                vm->registers[28] = 0;
-                return 1;
-            } else if (vm->registers[source[1]] <= 0) {
+            if (vm->registers[source[1]] <= 0) {
                 // non-valid amount of bytes request
                 printf("Invalid amount of memory requested.\n");
                 vm->registers[28] = 0;
