@@ -706,6 +706,7 @@ int execute_store(uint32_t instruction, int instruction_label,
     uint8_t source[2];
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
+    block *current_block;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
     switch (mem_address)
@@ -776,6 +777,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                 vm->registers[28] = 0;
                 break;
             } else if ((vm->total_allocated_memory + vm->registers[source[1]]) > HEAP_SIZE) {
+                // not enough memory left to fulfil request
                 vm->registers[28] = 0;
                 break;
             }
@@ -823,7 +825,7 @@ int execute_store(uint32_t instruction, int instruction_label,
              */
 
             // check if the memory to be freed has been allocated before
-            block *current_block = vm->head;
+            current_block = vm->head;
             while (current_block != NULL) {
                 if (current_block->mem_base_address == vm->registers[source[1]]) {
                     break;

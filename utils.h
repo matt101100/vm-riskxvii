@@ -141,22 +141,6 @@ uint32_t sign_extend(int32_t num, int original_bit_count);
    for operations of that type to execute.
  */
 
-void get_operation_resources_type_R(uint32_t instruction, uint8_t *target, 
-                             uint8_t source[]);
-
-void get_operation_resources_type_I(uint32_t instruction, uint8_t *target, 
-                             uint8_t source[], 
-                             uint32_t *immediate);
-
-void get_operation_resources_type_S_SB(uint32_t instruction, uint8_t *target, 
-                             uint8_t source[], 
-                             uint32_t *immediate);
-
-void get_operation_resources_type_U_UJ(uint32_t instruction, uint8_t *target, 
-                             uint8_t source[], 
-                             uint32_t *immediate);
-
-
 /*
  * Desc: prints all registers to stdout
  * Params: a pointer to the virtual machine struct, to access the register bank
