@@ -708,6 +708,7 @@ int execute_store(uint32_t instruction, int instruction_label,
     uint32_t immediate = extract_immediate_number(instruction, S);
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
+    printf("addr: %d\n", mem_address);
     switch (mem_address)
     {
         case (0x0800):
