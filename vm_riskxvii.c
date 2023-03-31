@@ -892,7 +892,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             // update list of nodes with new block at the end
             if (vm->head == NULL) {
                 vm->head = &new_block;
-
+                
             } else {
                 block *current_node = vm->head;
                 while (current_node->next != NULL) {
@@ -926,14 +926,14 @@ int execute_store(uint32_t instruction, int instruction_label,
 
                 } else {
                     if ((current->mem_base_address == vm->registers[source[1]]) && current) {
-                        // prev->next = current->next;
+                        prev->next = current->next;
                         vm->total_allocated_memory -= current->total_mem_size;
 
                     } else {
                         prev = current;
-                        if (prev == NULL) {
-                            break;
-                        }
+                        // if (prev == NULL) {
+                        //     break;
+                        // }
                         current = current->next;
                     }
                 }
