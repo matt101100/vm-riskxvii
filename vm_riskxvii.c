@@ -1006,7 +1006,7 @@ int execute_load(uint32_t instruction, int instruction_label,
     uint32_t immediate = extract_immediate_number(instruction, I);
 
     // save the memory address we are loading from for comparison
-    uint32_t mem_address = (vm->registers[source[0]] + immediate);
+    uint32_t mem_address = vm->registers[source[0]] + immediate;
     char read_char = 0;
     int read_int = 0;
     switch (mem_address)
