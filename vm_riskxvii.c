@@ -193,10 +193,10 @@ void initialize_virtual_machine(virtual_machine *vm) {
     // initialize memory and registers to 0
     memset(vm->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
     memset(vm->registers, 0, NUM_REGISTERS * sizeof(uint32_t));
+    memset(vm->heap, 0, HEAP_SIZE * sizeof(uint8_t));
 
     vm->pc = 0; // start of the instruction memory
-    vm->head = NULL; // no other blocks assigned
-
+    vm->head = NULL; // no blocks assigned
     vm->total_allocated_memory = 0; // no memory allocated at start
 }
 
@@ -238,7 +238,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     }
 
     block *current_block = vm->head;
-    uint64_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
+    uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
     while (current_block != NULL) {
         block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
         if (mem_address <= block_end_pointer) {

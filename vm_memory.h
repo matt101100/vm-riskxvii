@@ -15,8 +15,6 @@
  */
 typedef struct block block;
 struct block {
-    // uint8_t block_memory[BLOCK_SIZE]; // 64 byte block for usage as memory
-    // int in_use; // 1 = block in use, 0 = free
     uint32_t usable_mem_size; // the exact size of requested memory
     uint32_t total_mem_size; // the total size of memory, multiple of 64
     uint32_t mem_base_address; // the base address for this block
