@@ -601,13 +601,18 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
      * We need to check that mem_address + data_size falls inside a currently
        allocated block, with enough memory to hold that data
      */
+    if (vm->head == NULL) {
+        return 0;
+    }
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address
                                  + current_block->usable_mem_size;
-    while (current_block->next != NULL) {
+    while (current_block->next) {
         if (mem_address + data_size <= block_end_pointer) {
             return 1;
         }
+        block_end_pointer = current_block->mem_base_address
+                                 + current_block->usable_mem_size;
     }
     return 0;
 }
