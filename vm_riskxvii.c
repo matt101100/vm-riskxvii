@@ -249,6 +249,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
     while (current_block != NULL) {
+        block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
 
         if (mem_address <= block_end_pointer) {
             if (data_size <= current_block->usable_mem_size) {
@@ -257,7 +258,6 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         }
 
         current_block = current_block->next;
-        block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
     }
     return 0;
 }
@@ -928,6 +928,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                     if ((current->mem_base_address == vm->registers[source[1]]) && current) {
                         prev->next = current->next;
                         vm->total_allocated_memory -= current->total_mem_size;
+                        break;
 
                     } else {
                         prev = current;
@@ -938,6 +939,14 @@ int execute_store(uint32_t instruction, int instruction_label,
                     }
                 }
             }
+
+            // zero out removed node
+            current->mem_base_address 0;
+            current->next = NULL;
+            current->total_mem_size = 0;
+            current->usable_mem_size 0;
+            break;
+
 
         default:
             switch (instruction_label)
