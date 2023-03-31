@@ -240,7 +240,6 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     if (vm->head == NULL) {
         return 0;
     }
-    printf("here\n");
 
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
@@ -728,6 +727,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lw):
                     // load word -- 32 bits
                     if (mem_address >= 0xb700) {
+                        printf("here\n");
                         if (check_valid_heap_memory_access(mem_address, vm, 4)) {
                             vm->registers[target] = sign_extend(vm->heap[(mem_address - 0xb700)] |
                                         vm->heap[(mem_address - 0xb700) + 1] << 8 |
