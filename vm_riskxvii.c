@@ -784,8 +784,8 @@ int execute_store(uint32_t instruction, int instruction_label,
     uint8_t source[2];
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
-    // block *current;
-    // block *prev;
+    block *current;
+    block *prev;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
     switch (mem_address)
@@ -904,25 +904,25 @@ int execute_store(uint32_t instruction, int instruction_label,
              */
 
             // to deallocate a block, we just need to remove its node from list
-            // current = vm->head;
-            // prev = vm->head;
-            // while (current != NULL) {
-            //     if (current == vm->head && current->mem_base_address == vm->registers[source[1]]) {
-            //         // head was requested for deletion
-            //         vm->head = vm->head->next;
+            current = vm->head;
+            prev = vm->head;
+            while (current != NULL) {
+                if (current == vm->head && current->mem_base_address == vm->registers[source[1]]) {
+                    // head was requested for deletion
+                    vm->head = vm->head->next;
 
-            //     } else {
-            //         if ((current->mem_base_address == vm->registers[source[1]]) && current) {
-            //             prev->next = current->next;
-            //         } else {
-            //             prev = current;
-            //             if (prev == NULL) {
-            //                 break;
-            //             }
-            //             current = current->next;
-            //         }
-            //     }
-            // }
+                } else {
+                    if ((current->mem_base_address == vm->registers[source[1]]) && current) {
+                        prev->next = current->next;
+                    } else {
+                        prev = current;
+                        if (prev == NULL) {
+                            break;
+                        }
+                        current = current->next;
+                    }
+                }
+            }
 
         default:
             switch (instruction_label)
