@@ -249,7 +249,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
                 return 1;
             }
         }
-        // current_block = current_block->next;
+        current_block = current_block->next;
     }
     return 0;
 }
