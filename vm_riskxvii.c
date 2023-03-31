@@ -243,7 +243,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
 
         if (mem_address <= block_end_pointer) {
-            if (data_size <= 10) {
+            if (data_size <= current_block->usable_mem_size) {
                 return 1;
             }
         }
@@ -888,6 +888,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                     current_node = current_node->next;
                 }
                 current_node->next = &new_block;
+                current_node->next->next = NULL;
             }
             
             // store pointer to the first byte of the allocated block
