@@ -1265,17 +1265,45 @@ int execute_store(uint32_t instruction, int instruction_label,
                      * mask and shift to store in 8-bit chunks at adjacent
                      * indices
                      */
-                    vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
-                    vm->memory[mem_address + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
-                    break;
+                    if (mem_address >= 0xb700) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 8)) {
+                            vm->memory[0xb700 - mem_address] = vm->registers[source[1]] & 0xFF;
+                            vm->memory[(0xb700 - mem_address) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+                            break;
+                        }
+                        printf("Illegal Operation: 0x%08x\n", instruction);
+                        printf("PC = 0x%08x;\n", vm->pc);
+                        register_dump(vm);
+                        return 0;
+
+                    } else {
+                        vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
+                        vm->memory[mem_address + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+                        break;
+                    }
                 
                 case (sw):
                     // store word -- 32 bits
-                    vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
-                    vm->memory[mem_address + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
-                    vm->memory[mem_address + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
-                    vm->memory[mem_address + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
-                    break;
+                    if (mem_address >= 0xb700) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 8)) {
+                            vm->memory[0xb700 - mem_address] = vm->registers[source[1]] & 0xFF;
+                            vm->memory[(0xb700 - mem_address) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+                            vm->memory[(0xb700 - mem_address) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
+                            vm->memory[(0xb700 - mem_address) + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
+                            break;
+                        }
+                        printf("Illegal Operation: 0x%08x\n", instruction);
+                        printf("PC = 0x%08x;\n", vm->pc);
+                        register_dump(vm);
+                        return 0;
+
+                    } else {
+                        vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
+                        vm->memory[mem_address + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
+                        vm->memory[mem_address + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
+                        vm->memory[mem_address + 3] = (vm->registers[source[1]] >> 24) & 0xFF; 
+                        break;
+                    }
             }
     }
     vm->pc += 4;
