@@ -234,7 +234,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
        allocated block, with enough memory to hold that data
      */
     if (vm->head == NULL) {
-        return 1;
+        return 0;
     }
 
     block *current_block = vm->head;
@@ -244,12 +244,12 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
 
         if (mem_address <= block_end_pointer) {
             if (data_size <= current_block->usable_mem_size) {
-                return 0;
+                return 1;
             }
         }
         current_block = current_block->next;
     }
-    return 1;
+    return 0;
 }
 
 // NOTE: binary is in little endian so the binary operations account for this
