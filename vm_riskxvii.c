@@ -252,7 +252,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         if (temp == NULL) {
             break;
         }
-        block_end_pointer = temp->mem_base_address + temp->usable_mem_size;
+        block_end_pointer += temp->usable_mem_size;
 
         if (mem_address <= block_end_pointer) {
             if (data_size <= temp->usable_mem_size) {
