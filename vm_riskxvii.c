@@ -1246,14 +1246,14 @@ int execute_store(uint32_t instruction, int instruction_label,
                         // accessing heap memory
                         // check if mem_address falls inside an alloc'd block
                         if (check_valid_heap_memory_access(mem_address, vm, 8)) {
-                            vm->memory[mem_address] = vm->registers[source[1]];
+                            vm->memory[ 0xb700 - mem_address] = vm->registers[source[1]];
                             break;
                         }
                         printf("Illegal Operation: 0x%08x\n", instruction);
                         printf("PC = 0x%08x;\n", vm->pc);
                         register_dump(vm);
                         return 0;
-                        
+
                     } else {
                         vm->memory[mem_address] = vm->registers[source[1]];
                         break;
