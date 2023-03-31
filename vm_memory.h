@@ -46,6 +46,6 @@ struct virtual_machine {
   Return: 0: if memory access to mem_address is invalid, 1 if access is valid
  */
 uint8_t check_valid_heap_memory_access(uint32_t mem_address,
-                                       virtual_machine *vm, uint32_t data_size);
+                                       virtual_machine *vm, uint8_t data_size);
 
 #endif

@@ -228,7 +228,7 @@ size_t load_image_into_memory(FILE *fp , uint8_t memory[]) {
 }
 
 uint8_t check_valid_heap_memory_access(uint32_t mem_address,
-                                       virtual_machine *vm, uint32_t data_size) {
+                                       virtual_machine *vm, uint8_t data_size) {
     /*
      * We need to check that mem_address + data_size falls inside a currently
        allocated block, with enough memory to hold that data
@@ -690,7 +690,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                     // load byte
                     if (mem_address >= 0xb700) {
                         if (check_valid_heap_memory_access(mem_address, vm, 1)) {
-                            vm->registers[target] = sign_extend(vm->heap[0xb700 - mem_address], 8);
+                            vm->registers[target] = sign_extend(vm->heap[0xc700 - mem_address], 8);
                             break;
                         }
                         printf("Illegal Operation: 0x%08x\n", instruction);
