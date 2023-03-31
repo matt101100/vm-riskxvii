@@ -257,7 +257,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
             }
         }
 
-        current_block = current_block->next;
+        block *current_block = current_block->next;
     }
     return 0;
 }
@@ -931,9 +931,9 @@ int execute_store(uint32_t instruction, int instruction_label,
 
                     } else {
                         prev = current;
-                        // if (prev == NULL) {
-                        //     break;
-                        // }
+                        if (prev == NULL) {
+                            break;
+                        }
                         current = current->next;
                     }
                 }
