@@ -237,17 +237,15 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         return 0;
     }
 
-    // block *current_block = vm->head;
-    // uint32_t block_end_pointer = current_block->mem_base_address
-    //                              + current_block->usable_mem_size;
-    // while (current_block->next != NULL) {
-    //     if (mem_address + data_size <= block_end_pointer) {
-    //         return 1;
-    //     }
-    //     current_block = current_block->next;
-    //     block_end_pointer = current_block->mem_base_address
-    //                              + current_block->usable_mem_size;
-    // }
+    block *current_block = vm->head;
+    uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
+    while (current_block->next != NULL) {
+        if (mem_address + data_size <= block_end_pointer) {
+            return 1;
+        }
+        current_block = current_block->next;
+        block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
+    }
     return 0;
 }
 
