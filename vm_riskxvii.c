@@ -696,6 +696,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                         register_dump(vm);
                         return 0;
                     }
+
                     vm->registers[target] = sign_extend(vm->memory[mem_address], 8);
                     break;
                 
@@ -711,6 +712,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                         register_dump(vm);
                         return 0;
                     }
+
                     vm->registers[target] = sign_extend(vm->memory[mem_address] | vm->memory[(mem_address) + 1] << 8, 16);
                     break;
                 
@@ -729,6 +731,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                         register_dump(vm);
                         return 0;
                     }
+
                     vm->registers[target] = sign_extend(vm->memory[mem_address] |
                                         vm->memory[mem_address + 1] << 8 |
                                         vm->memory[mem_address + 2] << 16 |
@@ -747,6 +750,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                         register_dump(vm);
                         return 0;
                     }
+
                     vm->registers[target] = vm->memory[mem_address];
                     break;
 
@@ -765,6 +769,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                         register_dump(vm);
                         return 0;
                     }
+
                     vm->registers[target] =
                     vm->memory[mem_address] |
                     vm->memory[mem_address + 1] << 8;
@@ -899,32 +904,21 @@ int execute_store(uint32_t instruction, int instruction_label,
              * frees block of memory starting at byte = to value being stored
              */
 
-            // check if the memory to be freed has been allocated before
-            current_block = vm->head;
-            while (current_block != NULL) {
-                if (current_block->mem_base_address == vm->registers[source[1]]) {
-                    break;
+            // to deallocate a block, we just need to remove its node from list
+            if (vm->head->mem_base_address == vm->registers[source[1]]) {
+                // deleting head
+                vm->head = vm->head->next;
+            } else {
+                block *current_block = vm->head;
+                while (current_block->next != NULL) {
+                    if (current_block->next->mem_base_address == vm->registers[source[1]]) {
+                        // found block to delete
+                        current_block->next = current_block->next->next;
+                        break;
+                    }
+                    current_block = current_block->next;
                 }
             }
-            if (current_block == NULL) {
-                printf("Invalid free called on non-allocated block.\n");
-                return 1;
-            }
-
-            // if the block has been allocated, remove it from the linked list
-            // first, we find the block before the block to be deleted
-            current_block = vm->head;
-            while (current_block->next != NULL) {
-                if (current_block->next->mem_base_address == vm->registers[source[1]]) {
-                    break;
-                }
-                current_block = current_block->next;
-            }
-
-            block *temp = current_block;
-            current_block->next = current_block->next->next;
-            temp->next = NULL;
-            current_block = temp;
             break;
         
         default:
@@ -944,7 +938,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                         register_dump(vm);
                         return 0;
                     }
-                    
+
                     vm->memory[mem_address] = vm->registers[source[1]];
                     break;
                     
