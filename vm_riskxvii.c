@@ -727,8 +727,8 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lw):
                     // load word -- 32 bits
                     if (mem_address >= 0xb700) {
-                        printf("here\n");
                         if (check_valid_heap_memory_access(mem_address, vm, 4)) {
+                            printf("here\n");
                             vm->registers[target] = sign_extend(vm->heap[(mem_address - 0xb700)] |
                                         vm->heap[(mem_address - 0xb700) + 1] << 8 |
                                         vm->heap[(mem_address - 0xb700) + 2] << 16 |
