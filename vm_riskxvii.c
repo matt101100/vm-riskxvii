@@ -922,6 +922,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                     if ((current->mem_base_address == vm->registers[source[1]]) && current) {
                         prev->next = current->next;
                         vm->total_allocated_memory -= current->total_mem_size;
+                        break;
                     } else {
                         prev = current;
                         if (prev == NULL) {
