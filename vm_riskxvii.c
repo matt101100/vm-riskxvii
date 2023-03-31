@@ -786,7 +786,6 @@ int execute_store(uint32_t instruction, int instruction_label,
     uint8_t source[2];
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
-    block *current_block;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
     switch (mem_address)
