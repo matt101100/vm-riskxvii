@@ -888,7 +888,6 @@ int execute_store(uint32_t instruction, int instruction_label,
                     current_node = current_node->next;
                 }
                 current_node->next = &new_block;
-                current_node->next->next = NULL;
             }
             
             // store pointer to the first byte of the allocated block
@@ -912,10 +911,12 @@ int execute_store(uint32_t instruction, int instruction_label,
                 if (current == vm->head && current->mem_base_address == vm->registers[source[1]]) {
                     // head was requested for deletion
                     vm->head = vm->head->next;
+                    vm->total_allocated_memory -= vm->head->total_mem_size;
 
                 } else {
                     if ((current->mem_base_address == vm->registers[source[1]]) && current) {
                         prev->next = current->next;
+                        vm->total_allocated_memory -= current->total_mem_size;
                     } else {
                         prev = current;
                         if (prev == NULL) {
