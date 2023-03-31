@@ -941,10 +941,10 @@ int execute_store(uint32_t instruction, int instruction_label,
             }
 
             // zero out removed node
-            current->mem_base_address 0;
+            current->mem_base_address =  0;
             current->next = NULL;
             current->total_mem_size = 0;
-            current->usable_mem_size 0;
+            current->usable_mem_size = 0;
             break;
 
 
