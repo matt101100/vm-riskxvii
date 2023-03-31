@@ -46,4 +46,5 @@ struct virtual_machine {
 uint8_t check_valid_heap_memory_access(uint32_t mem_address,
                                        virtual_machine *vm, uint8_t data_size);
 
+
 #endif

@@ -239,7 +239,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
 
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
-    while (current_block != NULL) {
+    while (current_block->next != NULL) {
         block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
         if (mem_address <= block_end_pointer) {
             if (data_size <= current_block->usable_mem_size) {
@@ -912,7 +912,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                     vm->head = vm->head->next;
 
                 } else {
-                    if ((current->mem_base_address == vm->registers[source[1]])) {
+                    if ((current->mem_base_address == vm->registers[source[1]]) && current) {
                         prev->next = current->next;
                     } else {
                         prev = current;
