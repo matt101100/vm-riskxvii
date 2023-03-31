@@ -242,6 +242,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     }
 
     if (mem_address > 0xb700 + HEAP_SIZE) {
+        // reject access out of bounds of heap
         return 0;
     }
 
@@ -891,6 +892,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             // update list of nodes with new block at the end
             if (vm->head == NULL) {
                 vm->head = &new_block;
+                
             } else {
                 block *current_node = vm->head;
                 while (current_node->next != NULL) {
