@@ -236,6 +236,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     if (vm->head == NULL) {
         return 0;
     }
+
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address
                                  + current_block->usable_mem_size;
@@ -245,6 +246,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         }
         block_end_pointer = current_block->mem_base_address
                                  + current_block->usable_mem_size;
+        current_block = current_block->next;
     }
     return 0;
 }
