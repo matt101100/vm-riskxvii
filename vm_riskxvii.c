@@ -239,7 +239,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
 
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
-    while (current_block != NULL) {
+    while (current_block->next != NULL) {
         if (mem_address + data_size <= block_end_pointer) {
             return 1;
         }
@@ -904,7 +904,7 @@ int execute_store(uint32_t instruction, int instruction_label,
             // to deallocate a block, we just need to remove its node from list
             current = vm->head;
             prev = vm->head;
-            while (current != NULL) {
+            while (current->next != NULL) {
                 if (current == vm->head && current->mem_base_address == vm->registers[source[1]]) {
                     // head was requested for deletion
                     vm->head = vm->head->next;
