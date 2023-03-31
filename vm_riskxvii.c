@@ -244,6 +244,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         if (1) {
             return 1;
         }
+        printf("%d\n", block_end_pointer);
         current_block = current_block->next;
         block_end_pointer = current_block->mem_base_address
                                  + current_block->usable_mem_size;
