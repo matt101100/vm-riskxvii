@@ -38,4 +38,6 @@ struct virtual_machine {
     uint32_t total_allocated_memory; // amount of heap bytes allocated
 };
 
+uint8_t check_valid_heap_memory_access(uint32_t mem_address, virtual_machine *vm);
+
 #endif

@@ -1224,8 +1224,13 @@ int execute_store(uint32_t instruction, int instruction_label,
             {
                 case (sb):
                     // store byte
-                    vm->memory[mem_address] = vm->registers[source[1]];
-                    break;
+                    if (mem_address > MEMORY_SIZE - 1) {
+                        // accessing heap memory
+                        
+                    } else {
+                        vm->memory[mem_address] = vm->registers[source[1]];
+                        break;
+                    }
                 
                 case (sh):
                     /*
