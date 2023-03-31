@@ -912,7 +912,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                     vm->head = vm->head->next;
 
                 } else {
-                    if ((current->mem_base_address == vm->registers[source[1]]) && current) {
+                    if ((current->mem_base_address == vm->registers[source[1]])) {
                         prev->next = current->next;
                     } else {
                         prev = current;
