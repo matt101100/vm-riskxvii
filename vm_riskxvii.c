@@ -1,3 +1,7 @@
+// name: Matthew Lazar
+// unikey: mlaz7837
+// SID: 490431454
+
 #include <string.h>
 #include <ctype.h>
 
@@ -244,10 +248,11 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
 
         if (mem_address <= block_end_pointer) {
             if (data_size <= current_block->usable_mem_size) {
+                printf("here\n");
                 return 1;
             }
         }
-        printf("here\n");
+
         current_block = current_block->next;
     }
     return 0;
