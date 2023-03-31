@@ -228,7 +228,7 @@ size_t load_image_into_memory(FILE *fp , uint8_t memory[]) {
 }
 
 uint8_t check_valid_heap_memory_access(uint32_t mem_address,
-                                       virtual_machine *vm, uint8_t data_size) {
+                                       virtual_machine *vm, uint32_t data_size) {
     /*
      * We need to check that mem_address + data_size falls inside a currently
        allocated block, with enough memory to hold that data
@@ -237,7 +237,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         return 0;
     }
 
-    block *current_block = NULL;
+    block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
     while (current_block != NULL) {
         block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
