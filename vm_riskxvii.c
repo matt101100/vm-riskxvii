@@ -883,7 +883,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                 vm->head = &new_block;
             } else {
                 block *current_node = vm->head;
-                while (current_node->next) {
+                while (current_node->next != NULL) {
                     current_node = current_node->next;
                 }
                 current_node->next = &new_block;
