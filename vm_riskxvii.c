@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
     FILE *write_ptr;
     write_ptr = fopen("test.mi", "wb");
     fwrite(vm.memory, MEMORY_SIZE, sizeof(uint8_t), write_ptr);
+    return 0;
 
     // main virtual machine loop
     int running = 1;
