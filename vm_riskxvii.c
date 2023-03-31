@@ -597,7 +597,19 @@ size_t load_image_into_memory(FILE *fp , uint8_t memory[]) {
 
 uint8_t check_valid_heap_memory_access(uint32_t mem_address,
                                        virtual_machine *vm, uint8_t data_size) {
-    return 1;
+    /*
+     * We need to check that mem_address + data_size falls inside a currently
+       allocated block, with enough memory to hold that data
+     */
+    block *current_block = vm->head;
+    uint32_t block_end_pointer = current_block->mem_base_address
+                                 + current_block->usable_mem_size;
+    while (current_block->next) {
+        if (mem_address + data_size <= block_end_pointer) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 // NOTE: binary is in little endian so the binary operations account for this
@@ -1230,11 +1242,17 @@ int execute_store(uint32_t instruction, int instruction_label,
             {
                 case (sb):
                     // store byte
-                    if (mem_address > MEMORY_SIZE - 1) {
+                    if (mem_address >= 0xb700) {
                         // accessing heap memory
                         // check if mem_address falls inside an alloc'd block
-
-
+                        if (check_valid_heap_memory_access(mem_address, vm, 8)) {
+                            vm->memory[mem_address] = vm->registers[source[1]];
+                            break;
+                        }
+                        printf("Illegal Operation: 0x%08x\n", instruction);
+                        printf("PC = 0x%08x;\n", vm->pc);
+                        register_dump(vm);
+                        return 0;
                         
                     } else {
                         vm->memory[mem_address] = vm->registers[source[1]];
