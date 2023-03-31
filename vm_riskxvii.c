@@ -559,7 +559,7 @@ int main(int argc, char *argv[]) {
 
 void initialize_virtual_machine(virtual_machine *vm) {
     // initialize memory and registers to 0
-    memset(vm->memory, 0, (MEMORY_SIZE + HEAP_SIZE) * sizeof(uint8_t));
+    memset(vm->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
     memset(vm->registers, 0, NUM_REGISTERS * sizeof(uint32_t));
 
     vm->pc = 0; // start of the instruction memory
@@ -593,6 +593,11 @@ size_t load_image_into_memory(FILE *fp , uint8_t memory[]) {
         return -1;
     }
     return bytes_read;
+}
+
+uint8_t check_valid_heap_memory_access(uint32_t mem_address,
+                                       virtual_machine *vm, uint8_t data_size) {
+    return 1;
 }
 
 // NOTE: binary is in little endian so the binary operations account for this
@@ -1227,6 +1232,9 @@ int execute_store(uint32_t instruction, int instruction_label,
                     // store byte
                     if (mem_address > MEMORY_SIZE - 1) {
                         // accessing heap memory
+                        // check if mem_address falls inside an alloc'd block
+
+
                         
                     } else {
                         vm->memory[mem_address] = vm->registers[source[1]];

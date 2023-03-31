@@ -30,14 +30,22 @@ struct block {
  */
 typedef struct virtual_machine virtual_machine;
 struct virtual_machine {
-    uint8_t memory[MEMORY_SIZE + HEAP_SIZE];
+    uint8_t memory[MEMORY_SIZE];
     uint32_t registers[NUM_REGISTERS];
     uint32_t pc; // program counter
-    // uint8_t heap[HEAP_SIZE];
+    uint8_t heap[HEAP_SIZE];
     block *head;
     uint32_t total_allocated_memory; // amount of heap bytes allocated
 };
 
-uint8_t check_valid_heap_memory_access(uint32_t mem_address, virtual_machine *vm);
+/*
+ * Desc: Checks if a write to mem_address is to a currently allocated heap block
+ * Params: the memory address to write to / store from, a pointer to the vm
+           struct and an 8-bit integer representing the amount of data to write
+           / store.
+  Return: 0: if memory access to mem_address is invalid, 1 if access is valid
+ */
+uint8_t check_valid_heap_memory_access(uint32_t mem_address,
+                                       virtual_machine *vm, uint8_t data_size);
 
 #endif
