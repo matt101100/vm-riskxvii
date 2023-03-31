@@ -1081,8 +1081,8 @@ int execute_load(uint32_t instruction, int instruction_label,
                         return 0;
                     } else {
                         vm->registers[target] = 
-                        sign_extend(vm->memory[0xb700 - mem_address] |
-                        vm->memory[(0xb700 - mem_address) + 1] << 8, 16);
+                        sign_extend(vm->memory[mem_address] |
+                        vm->memory[(mem_address) + 1] << 8, 16);
                         break;
                     }
                 
@@ -1098,10 +1098,10 @@ int execute_load(uint32_t instruction, int instruction_label,
                         register_dump(vm);
                         return 0;
                     } else {
-                        vm->registers[target] = sign_extend(vm->memory[0xb700 - mem_address] |
-                                        vm->memory[(0xb700 - mem_address) + 1] << 8 |
-                                        vm->memory[(0xb700 - mem_address) + 2] << 16 |
-                                        vm->memory[(0xb700 - mem_address) + 3] << 24, 32);
+                        vm->registers[target] = sign_extend(vm->memory[mem_address] |
+                                        vm->memory[mem_address + 1] << 8 |
+                                        vm->memory[mem_address + 2] << 16 |
+                                        vm->memory[mem_address + 3] << 24, 32);
                         break;
                     }
                 case (lbu):
