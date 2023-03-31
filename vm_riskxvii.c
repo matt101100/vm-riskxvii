@@ -23,6 +23,10 @@ int main(int argc, char *argv[]) {
     }
     fclose(machine_instruction_ptr);
 
+    FILE *write_ptr;
+    write_ptr = fopen("test.mi", "wb");
+    fwrite(vm.memory, MEMORY_SIZE, sizeof(uint8_t), write_ptr);
+
     // main virtual machine loop
     int running = 1;
     while (running) {
@@ -721,7 +725,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lw):
                     // load word -- 32 bits
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 4)) {
                             vm->registers[target] = sign_extend(vm->heap[(0xb700 - mem_address)] |
                                         vm->heap[(0xb700 - mem_address) + 1] << 8 |
                                         vm->heap[(0xb700 - mem_address) + 2] << 16 |
