@@ -705,7 +705,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lh):
                     // load half word -- 16 bits
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 2)) {
                             vm->registers[target] = sign_extend(vm->heap[(0xb700 - mem_address)] | vm->heap[(0xb700 - mem_address) + 1] << 8, 16);
                             break;
                         }
@@ -721,7 +721,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lw):
                     // load word -- 32 bits
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 4)) {
                             vm->registers[target] = sign_extend(vm->heap[(0xb700 - mem_address)] |
                                         vm->heap[(0xb700 - mem_address) + 1] << 8 |
                                         vm->heap[(0xb700 - mem_address) + 2] << 16 |
@@ -760,7 +760,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lhu):
                     // load half word but treat val as unsigned
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 2)) {
                             vm->registers[target] =
                                 vm->memory[0xb700 - mem_address] |
                                 vm->memory[0xb700 - mem_address + 1] << 8;
