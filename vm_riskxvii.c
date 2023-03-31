@@ -241,6 +241,10 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
         return 0;
     }
 
+    if (mem_address > 0xb700 + HEAP_SIZE) {
+        return 0;
+    }
+
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
     while (current_block != NULL) {
@@ -922,7 +926,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                     if ((current->mem_base_address == vm->registers[source[1]]) && current) {
                         prev->next = current->next;
                         vm->total_allocated_memory -= current->total_mem_size;
-                        break;
+
                     } else {
                         prev = current;
                         if (prev == NULL) {
