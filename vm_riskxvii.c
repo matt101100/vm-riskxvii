@@ -1070,19 +1070,40 @@ int execute_load(uint32_t instruction, int instruction_label,
                 
                 case (lh):
                     // load half word -- 16 bits
-                    vm->registers[target] = 
-                    sign_extend(vm->memory[mem_address] |
-                    vm->memory[mem_address + 1] << 8, 16);
-                    break;
+                    if (mem_address >= 0xb700) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                            vm->heap[0xb700 - mem_address] = vm->registers[source[1]];
+                            break;
+                        }
+                        printf("Illegal Operation: 0x%08x\n", instruction);
+                        printf("PC = 0x%08x;\n", vm->pc);
+                        register_dump(vm);
+                        return 0;
+                    } else {
+                        vm->registers[target] = 
+                        sign_extend(vm->memory[0xb700 - mem_address] |
+                        vm->memory[(0xb700 - mem_address) + 1] << 8, 16);
+                        break;
+                    }
                 
                 case (lw):
                     // load word -- 32 bits
-                    vm->registers[target] = sign_extend(vm->memory[mem_address] |
-                                    vm->memory[mem_address + 1] << 8 |
-                                    vm->memory[mem_address + 2] << 16 |
-                                    vm->memory[mem_address + 3] << 24, 32);
-                    break;
-                
+                    if (mem_address >= 0xb700) {
+                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                            vm->heap[0xb700 - mem_address] = vm->registers[source[1]];
+                            break;
+                        }
+                        printf("Illegal Operation: 0x%08x\n", instruction);
+                        printf("PC = 0x%08x;\n", vm->pc);
+                        register_dump(vm);
+                        return 0;
+                    } else {
+                        vm->registers[target] = sign_extend(vm->memory[0xb700 - mem_address] |
+                                        vm->memory[(0xb700 - mem_address) + 1] << 8 |
+                                        vm->memory[(0xb700 - mem_address) + 2] << 16 |
+                                        vm->memory[(0xb700 - mem_address) + 3] << 24, 32);
+                        break;
+                    }
                 case (lbu):
                     // load byte but treat val as unsigned (don't sign extend)
                     vm->registers[target] = vm->memory[mem_address];
