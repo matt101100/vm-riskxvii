@@ -1094,8 +1094,8 @@ int execute_load(uint32_t instruction, int instruction_label,
 int execute_store(uint32_t instruction, int instruction_label,
                   virtual_machine *vm) {
     uint8_t source[2];
-    uint8_t rs2 = vm->registers[source[1]];
     get_source_registers(instruction, S, source);
+    uint8_t rs2 = vm->registers[source[1]];
     uint32_t immediate = extract_immediate_number(instruction, S);
     block *current_block;
 
