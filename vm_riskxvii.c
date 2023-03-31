@@ -249,6 +249,9 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     block *temp = vm->head;
     uint32_t block_end_pointer = temp->mem_base_address + temp->usable_mem_size;
     while (block_end_pointer <= HEAP_SIZE + 0xb700) {
+        if (temp == NULL) {
+            break;
+        }
         block_end_pointer = temp->mem_base_address + temp->usable_mem_size;
 
         if (mem_address <= block_end_pointer) {
