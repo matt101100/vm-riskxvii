@@ -761,9 +761,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                     // load half word but treat val as unsigned
                     if (mem_address >= 0xb700) {
                         if (check_valid_heap_memory_access(mem_address, vm, 2)) {
-                            vm->registers[target] =
-                                vm->memory[0xb700 - mem_address] |
-                                vm->memory[0xb700 - mem_address + 1] << 8;
+                            vm->registers[target] = vm->heap[0xb700 - mem_address] | vm->heap[0xb700 - mem_address + 1] << 8;
                             break;
                         }
                         printf("Illegal Operation: 0x%08x\n", instruction);
@@ -772,9 +770,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                         return 0;
                     }
 
-                    vm->registers[target] =
-                    vm->memory[mem_address] |
-                    vm->memory[mem_address + 1] << 8;
+                    vm->registers[target] = vm->memory[mem_address] | vm->memory[mem_address + 1] << 8;
                     break;
             }
 
@@ -928,25 +924,6 @@ int execute_store(uint32_t instruction, int instruction_label,
                 }
             }
 
-            // if (vm->head->mem_base_address == vm->registers[source[1]]) {
-            //     // deleting head
-            //     vm->head = vm->head->next;
-            // } else {
-            //     block *current_block = vm->head;
-            //     block *prev;
-            //     while (current_block->next != NULL) {
-            //         if (current_block->next->mem_base_address == vm->registers[source[1]]) {
-            //             // found block to delete
-            //             if (current_block->next == NULL)
-            //             current_block->next = current_block->next->next;
-            //             break;
-            //         }
-            //         prev = current_block;
-            //         current_block = current_block->next;
-            //     }
-            // }
-            // break;
-        
         default:
             switch (instruction_label)
             {
