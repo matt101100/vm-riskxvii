@@ -241,7 +241,7 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     uint32_t block_end_pointer = current_block->mem_base_address
                                  + current_block->usable_mem_size;
     while (current_block->next != NULL) {
-        if ((mem_address + data_size) <= block_end_pointer) {
+        if (mem_address + data_size <= block_end_pointer) {
             return 1;
         }
         current_block = current_block->next;
@@ -788,6 +788,8 @@ int execute_store(uint32_t instruction, int instruction_label,
     uint8_t source[2];
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
+    block *current;
+    block *prev;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
     switch (mem_address)
@@ -906,21 +908,44 @@ int execute_store(uint32_t instruction, int instruction_label,
              */
 
             // to deallocate a block, we just need to remove its node from list
-            if (vm->head->mem_base_address == vm->registers[source[1]]) {
-                // deleting head
-                vm->head = vm->head->next;
-            } else {
-                block *current_block = vm->head;
-                while (current_block->next != NULL) {
-                    if (current_block->next->mem_base_address == vm->registers[source[1]]) {
-                        // found block to delete
-                        current_block->next = current_block->next->next;
-                        break;
+            current = vm->head;
+            prev = vm->head;
+            while (current != NULL) {
+                if (current == vm->head && current->mem_base_address == vm->registers[source[1]]) {
+                    // head was requested for deletion
+                    vm->head = vm->head->next;
+
+                } else {
+                    if ((current->mem_base_address == vm->registers[source[1]]) && current) {
+                        prev->next = current->next;
+                    } else {
+                        prev = current;
+                        if (prev == NULL) {
+                            break;
+                        }
+                        current = current->next;
                     }
-                    current_block = current_block->next;
                 }
             }
-            break;
+
+            // if (vm->head->mem_base_address == vm->registers[source[1]]) {
+            //     // deleting head
+            //     vm->head = vm->head->next;
+            // } else {
+            //     block *current_block = vm->head;
+            //     block *prev;
+            //     while (current_block->next != NULL) {
+            //         if (current_block->next->mem_base_address == vm->registers[source[1]]) {
+            //             // found block to delete
+            //             if (current_block->next == NULL)
+            //             current_block->next = current_block->next->next;
+            //             break;
+            //         }
+            //         prev = current_block;
+            //         current_block = current_block->next;
+            //     }
+            // }
+            // break;
         
         default:
             switch (instruction_label)
