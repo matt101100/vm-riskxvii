@@ -559,7 +559,7 @@ int main(int argc, char *argv[]) {
 
 void initialize_virtual_machine(virtual_machine *vm) {
     // initialize memory and registers to 0
-    memset(vm->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
+    memset(vm->memory, 0, (MEMORY_SIZE + HEAP_SIZE) * sizeof(uint8_t));
     memset(vm->registers, 0, NUM_REGISTERS * sizeof(uint32_t));
 
     vm->pc = 0; // start of the instruction memory
@@ -1074,6 +1074,7 @@ int execute_store(uint32_t instruction, int instruction_label,
     uint8_t source[2];
     get_source_registers(instruction, S, source);
     uint32_t immediate = extract_immediate_number(instruction, S);
+    block *current_block;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
     switch (mem_address)
@@ -1192,7 +1193,7 @@ int execute_store(uint32_t instruction, int instruction_label,
              */
 
             // check if the memory to be freed has been allocated before
-            block *current_block = vm->head;
+            current_block = vm->head;
             while (current_block != NULL) {
                 if (current_block->mem_base_address == vm->registers[source[1]]) {
                     break;
