@@ -43,7 +43,8 @@ int main(int argc, char *argv[]) {
         uint8_t opcode = get_opcode(instruction);
 
         // executing instructions
-        int instruction_label = determine_instruction_label(opcode, instruction);
+        int instruction_label = determine_instruction_label(opcode,
+                                                            instruction);
         switch (instruction_label)
         {
             case (add):
@@ -244,9 +245,11 @@ uint8_t check_valid_heap_memory_access(uint32_t mem_address,
     }
 
     block *current_block = vm->head;
-    uint32_t block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
+    uint32_t block_end_pointer = current_block->mem_base_address 
+                                 + current_block->usable_mem_size;
     while (current_block != NULL) {
-        block_end_pointer = current_block->mem_base_address + current_block->usable_mem_size;
+        block_end_pointer = current_block->mem_base_address
+                             + current_block->usable_mem_size;
 
         if (mem_address <= block_end_pointer) {
             if (data_size <= current_block->usable_mem_size) {
@@ -313,14 +316,20 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
     } else if (instruction_type == SB) {
         // imm[12] = instruction[31], imm[10:5] = instruction[30:25]
         // imm[11] = instruction[7], imm[4:1] = instruction[11:8]
-        res = sign_extend(((instruction & 0x80000000) >> 19) | ((instruction & 0x7E000000) >> 20) | ((instruction & 0x80) << 4) | ((instruction & 0xF00) >> 7), 13);
+        res = sign_extend(((instruction & 0x80000000) >> 19)
+                         | ((instruction & 0x7E000000) >> 20)
+                         | ((instruction & 0x80) << 4) 
+                         | ((instruction & 0xF00) >> 7), 13);
     } else if (instruction_type == U) {
         // imm[31:12] = instruction[31:12]
         res = sign_extend((instruction & 0xFFFFF000), 20);
     } else if (instruction_type == UJ) {
         // imm[20] = instruction[31], imm[10:1] = instruction[30:21]
         // imm[11] = instruction[20], imm[19:12] = instruction[19:12]
-        res = sign_extend(((instruction & 0x80000000) >> 11) | ((instruction & 0x7FE00000) >> 20) | ((instruction & 0x100000) >> 9) | ((instruction & 0xFF000)), 20);
+        res = sign_extend(((instruction & 0x80000000) >> 11)
+                         | ((instruction & 0x7FE00000) >> 20) 
+                         | ((instruction & 0x100000) >> 9) 
+                         | ((instruction & 0xFF000)), 20);
     }
 
     return res;
@@ -1102,7 +1111,6 @@ void execute_jal(uint32_t instruction, virtual_machine *vm) {
 }
 
 void execute_jalr(uint32_t instruction, virtual_machine *vm) {
-    // get registers and immediate
     int8_t target = get_target_register(instruction);
     uint8_t source[2];
     get_source_registers(instruction, I, source);
