@@ -147,4 +147,6 @@ uint32_t sign_extend(int32_t num, int original_bit_count);
  */
 void register_dump(virtual_machine *vm);
 
+void free_heap(virtual_machine *vm);
+
 #endif

@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <malloc.h>
 
 #include "vm_memory.h"
 #include "utils.h"
@@ -189,7 +190,7 @@ int main(int argc, char *argv[]) {
                 return 1;
         }
     }
-
+    free_heap(&vm);
     return 0;
 }
 
@@ -485,6 +486,16 @@ int determine_instruction_label(uint8_t opcode, uint32_t instruction) {
 void register_dump(virtual_machine *vm) {
     for (int i = 0; i < NUM_REGISTERS; i++) {
         printf("R[%d] = 0x%08x;\n", i, vm->registers[i]);
+    }
+}
+
+void free_heap(virtual_machine *vm) {
+    block *current = vm->head;
+    block *next = vm->head;
+    while (current) {
+        next = current->next;
+        free(current);
+        current = next;
     }
 }
 
@@ -876,45 +887,80 @@ int execute_store(uint32_t instruction, int instruction_label,
              * Create the new block and update its fields to store the meta-data
                of the newly 'allocated' memory
              */
-            block new_block;
-            new_block.usable_mem_size = vm->registers[source[1]];
-            new_block.next = NULL;
-            new_block.total_mem_size = 0;
-            while(new_block.total_mem_size < vm->registers[source[1]]) {
+
+
+            block *new_block = (block*) calloc(1, sizeof(block));
+            new_block->usable_mem_size = vm->registers[source[1]];
+            new_block->next = NULL;
+            new_block->total_mem_size = 0;
+            while (new_block->total_mem_size < vm->registers[source[1]]) {
                  /*
-                 * increments by 64 until total_mem_size is at least equal to
-                   requested memory amount.
-                 * Ensures total_mem_size is always a multiple of 64
-                 */
-                new_block.total_mem_size += 64;
+                  * increments by 64 until total_mem_size is at least equal to
+                    requested memory amount.
+                  * Ensures total_mem_size is always a multiple of 64
+                  */
+                new_block->total_mem_size += 64;
             }
-            
-            // update list of nodes with new block at the end
+
+            // update list of nodes with new block at end
             if (vm->head == NULL) {
-                vm->head = &new_block;
-                
+                vm->head = new_block;
+
             } else {
-                block *current_node = vm->head;
-                while (current_node->next != NULL) {
-                    current_node = current_node->next;
+                block *current = vm->head;
+                while (current->next) {
+                    // find the last node
+                    current = current->next;
                 }
-                current_node->next = &new_block;
+                current->next = new_block;
             }
-            
-            // store pointer to the first byte of the allocated block
+
+            // store pointer to first byte of allocated memory in r28
             vm->registers[28] = 0xb700 + vm->total_allocated_memory;
-            new_block.mem_base_address = 0xb700 + vm->total_allocated_memory;
+            new_block->mem_base_address = 0xb700 + vm->total_allocated_memory;
 
             // update total amount of allocated memory
-            vm->total_allocated_memory += new_block.total_mem_size;
+            vm->total_allocated_memory += new_block->total_mem_size;
             break;
+
+            // block new_block;
+            // new_block.usable_mem_size = vm->registers[source[1]];
+            // new_block.next = NULL;
+            // new_block.total_mem_size = 0;
+            // while(new_block.total_mem_size < vm->registers[source[1]]) {
+            //      /*
+            //      * increments by 64 until total_mem_size is at least equal to
+            //        requested memory amount.
+            //      * Ensures total_mem_size is always a multiple of 64
+            //      */
+            //     new_block.total_mem_size += 64;
+            // }
+            
+            // // update list of nodes with new block at the end
+            // if (vm->head == NULL) {
+            //     vm->head = &new_block;
+                
+            // } else {
+            //     block *current_node = vm->head;
+            //     while (current_node->next != NULL) {
+            //         current_node = current_node->next;
+            //     }
+            //     current_node->next = &new_block;
+            // }
+            
+            // // store pointer to the first byte of the allocated block
+            // vm->registers[28] = 0xb700 + vm->total_allocated_memory;
+            // new_block.mem_base_address = 0xb700 + vm->total_allocated_memory;
+
+            // // update total amount of allocated memory
+            // vm->total_allocated_memory += new_block.total_mem_size;
+            // break;
         
         case (0x0834):
             /*
              * Virtual free
              * frees block of memory starting at byte = to value being stored
              */
-
             // to deallocate a block, we just need to remove its node from list
             current = vm->head;
             prev = vm->head;
@@ -923,11 +969,13 @@ int execute_store(uint32_t instruction, int instruction_label,
                     // head was requested for deletion
                     vm->head = vm->head->next;
                     vm->total_allocated_memory -= vm->head->total_mem_size;
+                    free(current);
 
                 } else {
                     if ((current->mem_base_address == vm->registers[source[1]]) && current) {
                         prev->next = current->next;
                         vm->total_allocated_memory -= current->total_mem_size;
+                        free(current);
                         break;
 
                     } else {
@@ -940,12 +988,12 @@ int execute_store(uint32_t instruction, int instruction_label,
                 }
             }
 
-            // zero out removed node
-            current->mem_base_address = 0;
-            current->next = NULL;
-            current->total_mem_size = 0;
-            current->usable_mem_size = 0;
-            break;
+            // // zero out removed node
+            // current->mem_base_address = 0;
+            // current->next = NULL;
+            // current->total_mem_size = 0;
+            // current->usable_mem_size = 0;
+            // break;
 
         default:
             switch (instruction_label)
