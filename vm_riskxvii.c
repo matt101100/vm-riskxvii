@@ -554,10 +554,6 @@ void execute_logical_type_R(uint32_t instruction, int instruction_label,
 void execute_logical_immediate(uint32_t instruction, int instruction_label,
                                virtual_machine *vm) {
     uint8_t target = get_target_register(instruction);
-    if (target == 0) {
-        vm->pc += 4;
-        return;
-    }
     uint8_t source[2];
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
@@ -587,9 +583,7 @@ void execute_addi(uint32_t instruction, virtual_machine *vm) {
     uint32_t immediate = extract_immediate_number(instruction, I);
 
     // add the immediate to source and store at target
-    if (target != 0) {
-        vm->registers[target] = vm->registers[source[0]] + immediate;
-    }
+    vm->registers[target] = vm->registers[source[0]] + immediate;
 
     // update pc to move onto next instruction
     vm->pc += 4;
