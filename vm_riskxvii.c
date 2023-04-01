@@ -1034,7 +1034,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                         illegal_operation(instruction, vm);
                         return 0;
                     }
-                    
+
                     vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
                     vm->memory[mem_address + 1] 
                                     = (vm->registers[source[1]] >> 8) & 0xFF;
@@ -1058,6 +1058,12 @@ int execute_store(uint32_t instruction, int instruction_label,
                         return 0;
                     }
 
+                    if (mem_address + 2 > 0x7ff) {
+                        // overflowing upper bound of data memory
+                        illegal_operation(instruction, vm);
+                        return 0;
+                    }
+                    
                     vm->memory[mem_address] = vm->registers[source[1]] & 0xFF;
                     vm->memory[mem_address + 1] 
                                     = (vm->registers[source[1]] >> 8) & 0xFF;
