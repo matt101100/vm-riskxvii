@@ -802,7 +802,11 @@ int execute_store(uint32_t instruction, int instruction_label,
     block *prev;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write to
-    if ()
+    if (mem_address < 1024) {
+        // illegal store to instruction memory
+        illegal_operation(instruction, vm);
+        return 0;
+    }
     switch (mem_address)
     {
         case (0x0800):
