@@ -642,6 +642,10 @@ int execute_load(uint32_t instruction, int instruction_label,
 
     // save the memory address we are loading from for comparison
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to read from
+    if (mem_address > 0x8ff && mem_address < 0xb700) {
+        // attempted load to special address
+        illegal_operation(instruction, vm);
+    }
     // prep variables for storing from stdin
     char read_char = 0;
     int read_int = 0;
@@ -797,7 +801,7 @@ int execute_store(uint32_t instruction, int instruction_label,
         illegal_operation(instruction, vm);
         return 0;
     } else if (mem_address > 0x8ff && mem_address < 0xb700) {
-        // storing to virtual routine addresses
+        // attempted store to special address
         illegal_operation(instruction, vm);
     }
 
