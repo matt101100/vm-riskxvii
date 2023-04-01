@@ -955,6 +955,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                     }
                 }
             }
+            break;
             
 
         default:
