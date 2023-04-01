@@ -147,6 +147,10 @@ uint32_t sign_extend(int32_t num, int original_bit_count);
  */
 void register_dump(virtual_machine *vm);
 
+/*
+ * Desc: frees all malloc'd nodes in the heap linked list
+ * Param: a pointer to the virtual machine struct
+ */
 void free_heap(virtual_machine *vm);
 
 #endif
