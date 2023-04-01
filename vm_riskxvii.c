@@ -731,11 +731,13 @@ int execute_load(uint32_t instruction, int instruction_label,
                         illegal_operation(instruction, vm);
                         return 0;
                     }
+
                     if (mem_address + 2 > 0x7ff) {
                         // overflowing upper bound of data memory
                         illegal_operation(instruction, vm);
                         return 0;
                     }
+
                     vm->registers[target] = sign_extend(vm->memory[mem_address]
                                     | vm->memory[(mem_address) + 1] << 8, 16);
                     break;
@@ -752,6 +754,12 @@ int execute_load(uint32_t instruction, int instruction_label,
                                 
                             break;
                         }
+                        illegal_operation(instruction, vm);
+                        return 0;
+                    }
+
+                    if (mem_address + 4 > 0x7ff) {
+                        // overflowing upper bound of data memory
                         illegal_operation(instruction, vm);
                         return 0;
                     }
@@ -792,6 +800,12 @@ int execute_load(uint32_t instruction, int instruction_label,
                         return 0;
                     }
 
+                    if (mem_address + 2 > 0x7ff) {
+                        // overflowing upper bound of data memory
+                        illegal_operation(instruction, vm);
+                        return 0;
+                    }
+                    
                     vm->registers[target] = vm->memory[mem_address]
                                             | vm->memory[mem_address + 1] << 8;
 
