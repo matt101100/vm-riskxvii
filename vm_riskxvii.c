@@ -946,8 +946,8 @@ int execute_store(uint32_t instruction, int instruction_label,
                     } else {
                         prev = current;
                         if (prev == NULL) {
-                            // node with requested base address not in list
-                            printf("Requested delete of non-allocated block\n");
+                            // requested deletion of unallocated block
+                            illegal_operation(instruction, vm);
                             break;
                         }
                         current = current->next;
