@@ -648,10 +648,10 @@ int execute_load(uint32_t instruction, int instruction_label,
         // attempted load from special address
         illegal_operation(instruction, vm);
     } else if (mem_address >= 0x0800 && mem_address <= 0x080C) {
-        // attempted load from virtual routine address
+        // attempted load from virtual routine address associated with store
         illegal_operation(instruction, vm);
     } else if (mem_address >= 0x0820 && mem_address <= 0x0828) {
-        // attempted load from virtual routine address
+        // attempted load from virtual routine address associated with store
         illegal_operation(instruction, vm);
     }
  
