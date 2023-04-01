@@ -495,13 +495,6 @@ void free_heap(virtual_machine *vm) {
     }
 }
 
-void get_operation_resources_type_R(uint32_t instruction, uint8_t *target, 
-                             uint8_t source[]) {
-    // gets the resources needed to run R-type ops
-    *target = get_target_register(instruction);
-    get_source_registers(instruction, R, source);
-}
-
 // !! executes for each machine instruction defined below !!
 
 void execute_math_type_R(uint32_t instruction, int instruction_label,
@@ -585,12 +578,10 @@ void execute_addi(uint32_t instruction, virtual_machine *vm) {
     // add the immediate to source and store at target
     vm->registers[target] = vm->registers[source[0]] + immediate;
 
-    // update pc to move onto next instruction
     vm->pc += 4;
 }
 
 void execute_lui(uint32_t instruction, virtual_machine *vm) {
-    // get target and immediate
     uint8_t target = get_target_register(instruction);
     uint32_t immediate = extract_immediate_number(instruction, U);
 
