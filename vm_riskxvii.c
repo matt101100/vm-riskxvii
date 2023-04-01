@@ -968,7 +968,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                 if (current == vm->head && current->mem_base_address == vm->registers[source[1]]) {
                     // head was requested for deletion
                     vm->head = vm->head->next;
-                    vm->total_allocated_memory -= vm->head->total_mem_size;
+                    // vm->total_allocated_memory -= vm->head->total_mem_size;
                     free(current);
                     break;
 
