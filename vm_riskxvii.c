@@ -215,7 +215,6 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
         // file contains invalid data
         return NULL;
     }
-
     return fp;
 }
 
@@ -229,7 +228,7 @@ size_t load_image_into_memory(FILE *fp , uint8_t memory[]) {
     return bytes_read;
 }
 
-uint8_t check_valid_heap_memory_access(uint32_t mem_address,
+uint8_t check_heap_memory_access(uint32_t mem_address,
                                        virtual_machine *vm, uint8_t data_size) {
     /*
      * We need to check that mem_address + data_size falls inside a currently
@@ -299,7 +298,6 @@ void get_source_registers(uint32_t instruction, int instruction_type,
         // extract second source register for types R, S, SB but not I
         source_registers[1] = (instruction & 0x1F00000) >> 20;
     }
-
 }
 
 uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
@@ -318,7 +316,7 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
         // imm[11] = instruction[7], imm[4:1] = instruction[11:8]
         res = sign_extend(((instruction & 0x80000000) >> 19)
                          | ((instruction & 0x7E000000) >> 20)
-                         | ((instruction & 0x80) << 4) 
+                         | ((instruction & 0x80) << 4)
                          | ((instruction & 0xF00) >> 7), 13);
     } else if (instruction_type == U) {
         // imm[31:12] = instruction[31:12]
@@ -331,7 +329,6 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
                          | ((instruction & 0x100000) >> 9) 
                          | ((instruction & 0xFF000)), 20);
     }
-
     return res;
 }
 
@@ -684,8 +681,10 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lb):
                     // load byte
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
-                            vm->registers[target] = sign_extend(vm->heap[mem_address - 0xb700], 8);
+                        if (check_heap_memory_access(mem_address, vm, 1)) {
+                            vm->registers[target] = 
+                                sign_extend(vm->heap[mem_address - 0xb700], 8);
+                            
                             break;
                         }
                         printf("Illegal Operation: 0x%08x\n", instruction);
@@ -694,14 +693,19 @@ int execute_load(uint32_t instruction, int instruction_label,
                         return 0;
                     }
 
-                    vm->registers[target] = sign_extend(vm->memory[mem_address], 8);
+                    vm->registers[target] = 
+                        sign_extend(vm->memory[mem_address], 8);
+
                     break;
                 
                 case (lh):
                     // load half word -- 16 bits
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 2)) {
-                            vm->registers[target] = sign_extend(vm->heap[(mem_address - 0xb700)] | vm->heap[(mem_address - 0xb700) + 1] << 8, 16);
+                        if (check_heap_memory_access(mem_address, vm, 2)) {
+                            vm->registers[target] = 
+                            sign_extend(vm->heap[(mem_address - 0xb700)]
+                            | vm->heap[(mem_address - 0xb700) + 1] << 8, 16);
+                            
                             break;
                         }
                         printf("Illegal Operation: 0x%08x\n", instruction);
@@ -716,7 +720,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lw):
                     // load word -- 32 bits
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 4)) {
+                        if (check_heap_memory_access(mem_address, vm, 4)) {
                             vm->registers[target] = sign_extend(vm->heap[(mem_address - 0xb700)] |
                                         vm->heap[(mem_address - 0xb700) + 1] << 8 |
                                         vm->heap[(mem_address - 0xb700) + 2] << 16 |
@@ -738,7 +742,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lbu):
                     // load byte but treat val as unsigned (don't sign extend)
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                        if (check_heap_memory_access(mem_address, vm, 1)) {
                             vm->registers[target] = vm->heap[mem_address - 0xb700];
                             break;
                         }
@@ -755,7 +759,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                 case (lhu):
                     // load half word but treat val as unsigned
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 2)) {
+                        if (check_heap_memory_access(mem_address, vm, 2)) {
                             vm->registers[target] = vm->heap[mem_address - 0xb700] | vm->heap[mem_address - 0xb700 + 1] << 8;
                             break;
                         }
@@ -938,7 +942,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                 case (sb):
                     // store byte
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 1)) {
+                        if (check_heap_memory_access(mem_address, vm, 1)) {
                             vm->heap[mem_address - 0xb700] = vm->registers[source[1]];
                             break;
                         }
@@ -959,7 +963,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                      * indices
                      */
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 2)) {
+                        if (check_heap_memory_access(mem_address, vm, 2)) {
                             vm->heap[mem_address - 0xb700] = vm->registers[source[1]] & 0xFF;
                             vm->heap[(mem_address - 0xb700) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
                             break;
@@ -977,7 +981,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                 case (sw):
                     // store word -- 32 bits
                     if (mem_address >= 0xb700) {
-                        if (check_valid_heap_memory_access(mem_address, vm, 4)) {
+                        if (check_heap_memory_access(mem_address, vm, 4)) {
                             vm->heap[mem_address - 0xb700] = vm->registers[source[1]] & 0xFF;
                             vm->heap[(mem_address - 0xb700) + 1] = (vm->registers[source[1]] >> 8) & 0xFF;
                             vm->heap[(mem_address - 0xb700) + 2] = (vm->registers[source[1]] >> 16) & 0xFF; 
