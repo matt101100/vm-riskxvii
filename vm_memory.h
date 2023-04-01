@@ -6,7 +6,7 @@
 #define MEMORY_SIZE 2048 // 2^11 bytes of addressable memory
 #define BLOCK_SIZE 64 // size of a heap block
 #define NUM_REGISTERS 32
-#define HEAP_SIZE (1 << 13) // 8192 bytes of allocatable memory
+#define HEAP_SIZE 1 << 13 // 8192 bytes of allocatable memory
 
 /*
  * A block of memory to be desginated for use once the instructions ask for
