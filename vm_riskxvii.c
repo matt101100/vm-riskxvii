@@ -642,13 +642,15 @@ int execute_load(uint32_t instruction, int instruction_label,
 
     // save the memory address we are loading from for comparison
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to read from
+
+    // check for illegal memory access
     if (mem_address > 0x8ff && mem_address < 0xb700) {
         // attempted load from special address
         illegal_operation(instruction, vm);
-    } else if (mem_address > 0x0800 && mem_address < 0x080C) {
+    } else if (mem_address >= 0x0800 && mem_address <= 0x080C) {
         // attempted load from virtual routine address
         illegal_operation(instruction, vm);
-    } else if (mem_address > 0x0820 && mem_address < 0x0828) {
+    } else if (mem_address >= 0x0820 && mem_address <= 0x0828) {
         // attempted load from virtual routine address
         illegal_operation(instruction, vm);
     }
@@ -803,12 +805,17 @@ int execute_store(uint32_t instruction, int instruction_label,
     block *prev;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write to
+
+    // check for illegal memory access
     if (mem_address < 1024) {
         // illegal store to instruction memory
         illegal_operation(instruction, vm);
         return 0;
     } else if (mem_address > 0x8ff && mem_address < 0xb700) {
         // attempted store to special address
+        illegal_operation(instruction, vm);
+    } else if (mem_address >= 0x0812 && mem_address <= 0x0816) {
+        // attempted store to virtual routine address associated with load
         illegal_operation(instruction, vm);
     }
 
