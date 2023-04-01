@@ -569,13 +569,12 @@ void execute_logical_immediate(uint32_t instruction, int instruction_label,
 }
 
 void execute_addi(uint32_t instruction, virtual_machine *vm) {
-    // get registers and immediate
     uint8_t target = get_target_register(instruction);
     uint8_t source[2];
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
 
-    // add the immediate to source and store at target
+    // add the immediate to source
     vm->registers[target] = vm->registers[source[0]] + immediate;
 
     vm->pc += 4;
@@ -624,7 +623,6 @@ void execute_shift(uint32_t instruction, int instruction_label,
 
 int execute_load(uint32_t instruction, int instruction_label, 
                   virtual_machine *vm) {
-    // get registers and immediate
     uint8_t target = get_target_register(instruction);
     uint8_t source[2];
     get_source_registers(instruction, I, source);
@@ -632,6 +630,7 @@ int execute_load(uint32_t instruction, int instruction_label,
 
     // save the memory address we are loading from for comparison
     uint32_t mem_address = vm->registers[source[0]] + immediate;
+    // prep variables for storing from stdin
     char read_char = 0;
     int read_int = 0;
     switch (mem_address)
@@ -671,10 +670,6 @@ int execute_load(uint32_t instruction, int instruction_label,
             break;
         
         default:
-            if (target == 0) {
-                break;
-            }
-            
             switch (instruction_label)
             {
                 case (lb):
