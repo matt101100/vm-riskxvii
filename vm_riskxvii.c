@@ -236,9 +236,7 @@ uint8_t check_heap_memory_access(uint32_t mem_address,
      */
     if (vm->head == NULL) {
         return 0;
-    }
-
-    if (mem_address > 0xb700 + HEAP_SIZE) {
+    } else if (mem_address > 0xb700 + HEAP_SIZE) {
         // reject access out of bounds of heap
         return 0;
     }
