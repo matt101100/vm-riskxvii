@@ -3,7 +3,6 @@
 // SID: 490431454
 
 #include <string.h>
-#include <ctype.h>
 #include <malloc.h>
 
 #include "vm_memory.h"
