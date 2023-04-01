@@ -528,10 +528,6 @@ void execute_math_type_R(uint32_t instruction, int instruction_label,
 void execute_logical_type_R(uint32_t instruction, int instruction_label,
                             virtual_machine *vm) {
     uint8_t target = get_target_register(instruction);
-    if (target == 0) {
-        vm->pc += 4;
-        return;
-    }
     uint8_t source[2];
     get_source_registers(instruction, R, source);
 
