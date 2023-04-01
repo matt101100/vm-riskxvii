@@ -491,6 +491,12 @@ void register_dump(virtual_machine *vm) {
     }
 }
 
+void illegal_operation(uint32_t instruction, virtual_machine *vm) {
+    printf("Illegal Operation: 0x%08x\n", instruction);
+    printf("PC = 0x%08x;\n", vm->pc);
+    register_dump(vm);
+}
+
 void free_heap(virtual_machine *vm) {
     block *current = vm->head;
     block *next = vm->head;
@@ -796,6 +802,7 @@ int execute_store(uint32_t instruction, int instruction_label,
     block *prev;
 
     uint32_t mem_address = vm->registers[source[0]] + immediate; // to write to
+    if ()
     switch (mem_address)
     {
         case (0x0800):
@@ -959,9 +966,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                                                     = vm->registers[source[1]];
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
