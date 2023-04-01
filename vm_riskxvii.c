@@ -693,9 +693,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                             
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
@@ -714,9 +712,7 @@ int execute_load(uint32_t instruction, int instruction_label,
 
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
@@ -736,9 +732,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                                 
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
@@ -756,9 +750,7 @@ int execute_load(uint32_t instruction, int instruction_label,
                                                 vm->heap[mem_address - 0xb700];
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
@@ -776,9 +768,7 @@ int execute_load(uint32_t instruction, int instruction_label,
 
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
@@ -992,9 +982,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                                     = (vm->registers[source[1]] >> 8) & 0xFF;
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
@@ -1017,9 +1005,7 @@ int execute_store(uint32_t instruction, int instruction_label,
                                     = (vm->registers[source[1]] >> 24) & 0xFF; 
                             break;
                         }
-                        printf("Illegal Operation: 0x%08x\n", instruction);
-                        printf("PC = 0x%08x;\n", vm->pc);
-                        register_dump(vm);
+                        illegal_operation(instruction, vm);
                         return 0;
                     }
 
