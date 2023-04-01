@@ -35,6 +35,8 @@ int main(int argc, char *argv[]) {
             printf("Invalid program position reached.\n");
             return 1;
         }
+
+        vm.registers[0] = 0; // reset zero register
         
         // get instruction and opcode
         uint32_t instruction = get_instruction(&vm);
@@ -505,11 +507,6 @@ void get_operation_resources_type_R(uint32_t instruction, uint8_t *target,
 void execute_math_type_R(uint32_t instruction, int instruction_label,
                          virtual_machine *vm) {
     uint8_t target = get_target_register(instruction);
-    if (target == 0) {
-        // ignore writes to zero register
-        vm->pc += 4;
-        return;
-    }
     uint8_t source[2];
     get_source_registers(instruction, R, source);
 
