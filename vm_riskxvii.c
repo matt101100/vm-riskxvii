@@ -796,7 +796,7 @@ int execute_store(uint32_t instruction, int instruction_label,
         // illegal store to instruction memory
         illegal_operation(instruction, vm);
         return 0;
-    } else if (mem_address > 0x8ff + 1 && mem_address < 0xb700 - 1) {
+    } else if (mem_address > 0x8ff && mem_address < 0xb700) {
         // storing to virtual routine addresses
         illegal_operation(instruction, vm);
     }
