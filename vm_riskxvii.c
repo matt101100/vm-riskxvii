@@ -244,6 +244,11 @@ uint8_t check_heap_memory_access(uint32_t mem_address,
     block *current_block = vm->head;
     uint32_t block_end_pointer = current_block->mem_base_address 
                                  + current_block->usable_mem_size;
+    if (mem_address + data_size > block_end_pointer) {
+        // attepted access to area outside block
+        return 0;
+    }
+
     while (current_block != NULL) {
         block_end_pointer = current_block->mem_base_address
                              + current_block->usable_mem_size;
