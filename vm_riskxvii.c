@@ -245,7 +245,7 @@ uint8_t check_heap_memory_access(uint32_t mem_address,
     uint32_t block_end_pointer = current_block->mem_base_address 
                                  + current_block->usable_mem_size;
     if (mem_address + data_size > block_end_pointer) {
-        // attepted access to area outside block
+        // attempted access to memory outside block with given base address
         return 0;
     }
 
@@ -731,7 +731,11 @@ int execute_load(uint32_t instruction, int instruction_label,
                         illegal_operation(instruction, vm);
                         return 0;
                     }
-
+                    if (mem_address + 2 > 0x7ff) {
+                        // overflowing upper bound of data memory
+                        illegal_operation(instruction, vm);
+                        return 0;
+                    }
                     vm->registers[target] = sign_extend(vm->memory[mem_address]
                                     | vm->memory[(mem_address) + 1] << 8, 16);
                     break;
