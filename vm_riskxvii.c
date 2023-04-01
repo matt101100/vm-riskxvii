@@ -629,7 +629,7 @@ int execute_load(uint32_t instruction, int instruction_label,
     uint32_t immediate = extract_immediate_number(instruction, I);
 
     // save the memory address we are loading from for comparison
-    uint32_t mem_address = vm->registers[source[0]] + immediate;
+    uint32_t mem_address = vm->registers[source[0]] + immediate; // to read from
     // prep variables for storing from stdin
     char read_char = 0;
     int read_int = 0;
@@ -773,7 +773,7 @@ int execute_store(uint32_t instruction, int instruction_label,
     block *current;
     block *prev;
 
-    uint32_t mem_address = vm->registers[source[0]] + immediate; // to write
+    uint32_t mem_address = vm->registers[source[0]] + immediate; // to write to
     switch (mem_address)
     {
         case (0x0800):
@@ -837,7 +837,7 @@ int execute_store(uint32_t instruction, int instruction_label,
              * pointer to memory chunk stored in register 28
              */
             if (vm->registers[source[1]] <= 0) {
-                // non-valid amount of bytes request
+                // invalid amount of bytes request
                 printf("Invalid amount of memory requested.\n");
                 vm->registers[28] = 0;
                 break;
@@ -851,8 +851,6 @@ int execute_store(uint32_t instruction, int instruction_label,
              * Create the new block and update its fields to store the meta-data
                of the newly 'allocated' memory
              */
-
-
             block *new_block = (block*) calloc(1, sizeof(block));
             new_block->usable_mem_size = vm->registers[source[1]];
             new_block->next = NULL;
@@ -897,13 +895,14 @@ int execute_store(uint32_t instruction, int instruction_label,
             prev = vm->head;
             while (current != NULL) {
                 if (current == vm->head && current->mem_base_address == vm->registers[source[1]]) {
-                    // head was requested for deletion
+                    // head requested for deletion
                     vm->total_allocated_memory -= vm->head->total_mem_size;
                     vm->head = vm->head->next;
                     free(current);
                     break;
 
                 } else {
+                    // non-head node requested for deletion
                     if ((current->mem_base_address == vm->registers[source[1]]) && current) {
                         vm->total_allocated_memory -= current->total_mem_size;
                         prev->next = current->next;
@@ -913,6 +912,8 @@ int execute_store(uint32_t instruction, int instruction_label,
                     } else {
                         prev = current;
                         if (prev == NULL) {
+                            // node with requested base address not in list
+                            printf("Requested delete of non-allocated block\n");
                             break;
                         }
                         current = current->next;
@@ -928,8 +929,6 @@ int execute_store(uint32_t instruction, int instruction_label,
                 case (sb):
                     // store byte
                     if (mem_address >= 0xb700) {
-                        // accessing heap memory
-                        // check if mem_address falls inside an alloc'd block
                         if (check_valid_heap_memory_access(mem_address, vm, 1)) {
                             vm->heap[mem_address - 0xb700] = vm->registers[source[1]];
                             break;
@@ -1094,15 +1093,11 @@ void execute_branch(uint32_t instruction, int instruction_label,
 }
 
 void execute_jal(uint32_t instruction, virtual_machine *vm) {
-    // get target and immediate
     uint8_t target = get_target_register(instruction);
     uint32_t immediate = extract_immediate_number(instruction, UJ);
     // The target register stores the pc of the NEXT instruction
+    vm->registers[target] = vm->pc + 4;
 
-    if (target != 0) {
-        // ignore writes to zero register
-        vm->registers[target] = vm->pc + 4;
-    }
     vm->pc = (vm->pc + immediate); // immediate is already shifted
 }
 
@@ -1113,9 +1108,7 @@ void execute_jalr(uint32_t instruction, virtual_machine *vm) {
     get_source_registers(instruction, I, source);
     uint32_t immediate = extract_immediate_number(instruction, I);
 
-    if (target != 0) {
-        // ignore writes to zero register
-        vm->registers[target] = vm->pc + 4;
-    }
+    vm->registers[target] = vm->pc + 4;
+
     vm->pc = (vm->registers[source[0]] + immediate); // update pc
 }
