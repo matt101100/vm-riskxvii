@@ -648,8 +648,11 @@ int execute_load(uint32_t instruction, int instruction_label,
     } else if (mem_address > 0x0800 && mem_address < 0x080C) {
         // attempted load from virtual routine address
         illegal_operation(instruction, vm);
+    } else if (mem_address > 0x0820 && mem_address < 0x0828) {
+        // attempted load from virtual routine address
+        illegal_operation(instruction, vm);
     }
-
+ 
     // prep variables for storing from stdin
     char read_char = 0;
     int read_int = 0;
