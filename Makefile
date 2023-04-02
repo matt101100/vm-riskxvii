@@ -24,7 +24,7 @@ test:
 	bash test.sh
 
 clean:
-	rm -f *.o *.obj *.c.gcov *.gcda *.gcno debug $(TARGET)
+	rm -f *.o *.obj *.c.gcov *.gcda *.gcno debug out.mi $(TARGET)
 
 debug:$(TARGET)
 	$(CC) $(CLFLAGS) $(ASAN_FLAGS) -o $@ $(OBJ)

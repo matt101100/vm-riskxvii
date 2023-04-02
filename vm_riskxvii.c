@@ -220,11 +220,22 @@ FILE *open_machine_instructions(char filename[], virtual_machine *vm) {
 
 size_t load_image_into_memory(FILE *fp , uint8_t memory[]) {
     size_t bytes_read = fread(memory, sizeof(uint8_t), MEMORY_SIZE, fp);
-    if (bytes_read < MEMORY_SIZE) {
+    if (bytes_read != MEMORY_SIZE) {
         // file did not contain the valid amount of data 
         // ie: it contained less than 2048 bytes
         return -1;
     }
+
+    /*
+     * check file size, determine if the file has been padded to an excessively
+       large size
+     */
+    fseek(fp, 0L, SEEK_END);
+    size_t file_size = ftell(fp);
+    if (file_size != MEMORY_SIZE) {
+        return -1;
+    }
+
     return bytes_read;
 }
 
