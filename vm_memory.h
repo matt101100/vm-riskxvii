@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define MEMORY_SIZE 2048 // 2^11 bytes of addressable memory
+#define MEMORY_SIZE 1 << 11 // 2048 bytes of addressable memory
 #define NUM_REGISTERS 32
 #define HEAP_SIZE 1 << 13 // 8192 bytes of allocatable memory
 
