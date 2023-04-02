@@ -17,8 +17,8 @@ build/
 !*.s  # assembly files
 !*.lst
 !Makefile
-!.in
-!.out
+!*.in
+!*.out
 
 !*.txt
 !*.md
