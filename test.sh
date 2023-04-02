@@ -12,7 +12,7 @@ for TEST in $(find tests -iregex '.*\.in' | xargs basename -s .in); do
     echo ""
     IN=tests/$TEST.in
     OUT=tests/$TEST.out
-    diff $OUT <(./vm_riskxvii $(<$IN)) && echo -e "testing $TEST: ${GREEN}SUCCESS!${NC}" || echo -e "testing $TEST: ${RED}FAILURE.${NC}"
+    diff $OUT <(./vm_riskxvii $(<$IN)) && echo -e "testing $TEST: ${GREEN}SUCCESS!${NC}" || echo -e "testing $TEST: ${RED}FAIL.${NC}"
 done
 gcov vm_riskxvii.c
 echo
