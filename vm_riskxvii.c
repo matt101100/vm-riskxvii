@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 
     // open the instruction file and read the data into instruction memory
     FILE *machine_instruction_ptr = open_machine_instructions(argv[1], &vm);
-    if (machine_instruction_ptr == NULL) {
+     if (machine_instruction_ptr == NULL) {
         printf("Invalid file path provided or error loading image.\n");
         return 1;
     }
