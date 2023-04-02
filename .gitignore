@@ -19,6 +19,7 @@ build/
 !Makefile
 !*.in
 !*.out
+!*.py
 
 !*.txt
 !*.md
