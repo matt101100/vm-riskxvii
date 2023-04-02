@@ -4,7 +4,6 @@
 #include <stdint.h>
 
 #define MEMORY_SIZE 2048 // 2^11 bytes of addressable memory
-#define BLOCK_SIZE 64 // size of a heap block
 #define NUM_REGISTERS 32
 #define HEAP_SIZE 1 << 13 // 8192 bytes of allocatable memory
 
@@ -18,7 +17,7 @@ struct block {
     uint32_t usable_mem_size; // the exact size of requested memory
     uint32_t total_mem_size; // the total size of memory, multiple of 64
     uint32_t mem_base_address; // the base address for this block
-    block *next; // pointer to the head of the next block
+    block *next; // pointer to the next block
 };
 
 /*
