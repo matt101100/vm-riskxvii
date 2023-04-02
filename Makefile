@@ -21,11 +21,10 @@ run:
 	./$(TARGET) $(ARGS)
 
 test:
-	echo what are we testing?!
+	bash test.sh
 
 clean:
-	rm -f *.o *.obj $(TARGET)
-	rm -f debug
+	rm -f *.o *.obj *.c.gcov *.gcda *.gcno debug $(TARGET)
 
 debug:$(TARGET)
 	$(CC) $(CLFLAGS) $(ASAN_FLAGS) -o $@ $(OBJ)
