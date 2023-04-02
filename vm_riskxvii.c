@@ -346,12 +346,24 @@ uint32_t extract_immediate_number(uint32_t instruction, int instruction_type) {
     return res;
 }
 
+/* USYD CODE CITATION ACKNOWLEDGEMENT
+ * I declare that the following lines of code have been copied from the
+ * website titled: " Write your Own Virtual Machine " 
+ * and it is not my own work. It was modified slightly by me.
+ * 
+ * Original URL
+ * https://www.jmeiners.com/lc3-vm/
+ * Last access April, 2023
+*/
+
 uint32_t sign_extend(int32_t num, int original_bit_count) {
     if ((num >> (original_bit_count - 1)) & 1) { // check if the sign bit is set
         num |= (0xFFFFFFFF << original_bit_count); // sign extend if set
     }
     return num;
 }
+
+/* end of copied code */
 
 int determine_instruction_label(uint8_t opcode, uint32_t instruction) {
     uint8_t additional_opcodes[2] = { 0 };
