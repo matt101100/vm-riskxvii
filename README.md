@@ -12,4 +12,14 @@ RISKXVII uses a set of 25 opcodes, with most of them coming from the RISC-V ISA.
 ## Memory Structure
 The VM is implemented with 4096 bytes of memory. It is arranged as follows:
 * 1KB is allocated as instruction memory (between addresses ```0x0000 - 0x03FF```) where instructions to be executed are loaded and stored.
-* 
+* 1KB is allocated as data memory (between addresses ```0x0400 - 0x07FF```) where data can be written to or read from.
+* 2KB is allocated for memory-mapped I/O (between addresses ```0x0800 - 0x0FFF```).
+
+## Building and the Makefile
+The included Makefile can be used to build, test and run the VM and can also be used to clean the workspace of any binaries produced during compliation.
+
+### Building
+You can build the VM by running 
+```
+$ make 
+```
