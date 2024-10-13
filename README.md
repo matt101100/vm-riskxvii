@@ -7,5 +7,9 @@ Each instruction is similar in format to RISC-V instructions, with opcodes, oper
 RISKXVII is a subset of RISC-V. As such, it supports specific instruction types that allow for simple computation, including mathematical operations, logical operations, bitwise shifting operations, load from and store to memory operations and branch and jump operations to allow for control flow. There are also versions of some of these instructions that specify an immediate within the 32-bits. The structure of each 32-bit instruction type (```R, I, S, U```) can be found in *The RISC-V Instruction Set Manual Volume I* on page 40 of the PDF found at https://riscv.org/technical/specifications/.
 
 ## Opcodes
+RISKXVII uses a set of 25 opcodes, with most of them coming from the RISC-V ISA. Note that some of the opcodes are unique to RISKXVII so they may not be all present in the Manual linked above.
 
 ## Memory Structure
+The VM is implemented with 4096 bytes of memory. It is arranged as follows:
+* 1KB is allocated as instruction memory (between addresses ```0x0000 - 0x03FF```) where instructions to be executed are loaded and stored.
+* 
