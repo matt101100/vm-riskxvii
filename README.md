@@ -16,10 +16,16 @@ The VM is implemented with 4096 bytes of memory. It is arranged as follows:
 * 2KB is allocated for memory-mapped I/O (between addresses ```0x0800 - 0x0FFF```).
 
 ## Building and the Makefile
-The included Makefile can be used to build, test and run the VM and can also be used to clean the workspace of any binaries produced during compliation.
+The included Makefile can be used to build, test and run the VM and can also be used to clean the workspace of any binaries produced during compliation. Note that the following commands must be run from the root directory.
 
 ### Building
 You can build the VM by running 
 ```
 $ make 
+```
+
+### Running
+You can run a program on the VM by supplying a ```.mi``` file location as a command line argument. So to run an example in ```./examples```, you can use
+```
+$ ./vm_riskxvii ./examples/hello_world/hello_world.mi
 ```
