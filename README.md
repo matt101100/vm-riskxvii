@@ -29,3 +29,15 @@ You can run a program on the VM by supplying a ```.mi``` file location as a comm
 ```
 $ ./vm_riskxvii ./examples/hello_world/hello_world.mi
 ```
+
+### Testing
+Tests are found in the ```./tests``` directory and can be run all at once using the Makefile by running
+```
+$ make tests
+```
+
+### Cleaning
+Finally, you can remove unwanted binaries by running
+```
+$ make clean
+```
